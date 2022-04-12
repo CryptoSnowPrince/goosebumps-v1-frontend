@@ -1,0 +1,9 @@
+[
+    {
+        "Name": "EMPIRE",
+        "TokenAddress": "0x000000000000000000000000000000000000dEaD",
+        "Decimals": 18,
+        "Logo": "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0x4bf8bce4a541e632b4Fd57Ce4b940e0e21277d53/logo.png",
+        "StakingContract": "0x000000000000000000000000000000000000dEaD"
+    }
+]

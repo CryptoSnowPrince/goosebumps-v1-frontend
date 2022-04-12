@@ -1,0 +1,55 @@
+{
+  "name": "goosebumps",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@ampproject/remapping": "^2.1.2",
+    "@babel/helper-environment-visitor": "^7.16.7",
+    "@pancakeswap-libs/sdk": "^1.0.1",
+    "@usedapp/core": "^0.6.3",
+    "0x.js": "^9.2.0",
+    "bootstrap": "^5.1.3",
+    "bootstrap-icons": "^1.7.2",
+    "ethers": "^5.5.1",
+    "ethers-multicall": "^0.2.1",
+    "linq": "^4.0.0",
+    "moralis": "^0.0.135",
+    "react": "^17.0.2",
+    "react-bootstrap": "^2.0.2",
+    "react-bootstrap-icons": "^1.7.2",
+    "react-dom": "^17.0.2",
+    "react-google-login": "^5.2.2",
+    "react-number-format": "^4.8.0",
+    "react-router": "^6.0.2",
+    "react-router-dom": "^6.0.2",
+    "react-scripts": "^5.0.0",
+    "react-tooltip": "^4.2.21",
+    "s-ago": "^2.2.0",
+    "usedapp": "^1.0.0",
+    "web3": "^1.6.1"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "GENERATE_SOURCEMAP=false react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}

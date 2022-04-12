@@ -1,0 +1,23 @@
+[
+    {
+      "Name": "BNB",
+      "Symbol": "BNB",
+      "Address": "-",
+      "Decimals": 18,
+      "Logo": "https://bscscan.com/token/images/binance_32.png"
+    },
+    {
+      "Name": "Wrapped BNB",
+      "Symbol": "WBNB",
+      "Address": "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c",
+      "Decimals": 18,
+      "Logo": "https://bscscan.com/token/images/binance_32.png"
+    },
+    {
+      "Name": "Empire Token",
+      "Symbol": "EMPIRE",
+      "Address": "0x293c3ee9abacb08bb8ced107987f00efd1539288",
+      "Decimals": 9,
+      "Logo": "https://bscscan.com/token/images/empiretoken_32.png"
+    }
+  ]

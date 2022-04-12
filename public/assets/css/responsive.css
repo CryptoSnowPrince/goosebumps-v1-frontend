@@ -1,0 +1,869 @@
+/* Max width 767px */
+@media only screen and (max-width: 767px) {
+    .left-sidebar {
+        padding: 20px;
+    }
+
+        .left-sidebar h2 {
+            font-size: 25px;
+        }
+
+        .left-sidebar .socil-link {
+            margin-bottom: 15px;
+        }
+
+    .left-sidebar-style .left-sidebar-box ul {
+        padding: 20px;
+    }
+
+        .left-sidebar-style .left-sidebar-box ul li {
+            font-size: 15px;
+        }
+
+    .cahrt-img-bg {
+        margin-bottom: 30px;
+    }
+
+    .table-responsive .d-flex {
+        display: block !important;
+    }
+
+    .table-responsive.tournament-table .table thead tr th {
+        white-space: nowrap;
+    }
+
+    .table-responsive.tournament-table .table tbody tr td {
+        white-space: nowrap;
+        padding: 15px;
+    }
+
+        .table-responsive.tournament-table .table tbody tr td a {
+            font-size: 14px;
+        }
+
+        .table-responsive.tournament-table .table tbody tr td .subtotal-amount {
+            text-align: center;
+            display: block;
+        }
+
+    .multiple-title {
+        font-size: 30px;
+        margin-bottom: 20px;
+    }
+
+    .left-sidebar-style h2 {
+        font-size: 30px;
+    }
+
+    .src-form .form-control {
+        width: 100% !important;
+    }
+
+    .cahrt-img-bg img {
+        height: auto;
+    }
+    /* INDEX TWO STYLE
+    =============================== */
+    .ptb-100 {
+        padding-top: 60px;
+        padding-bottom: 60px;
+    }
+
+    .pt-100 {
+        padding-top: 60px;
+    }
+
+    .pb-70 {
+        padding-bottom: 30px;
+    }
+
+    .pt-70 {
+        padding-top: 30px;
+    }
+
+    .ml-15 {
+        margin-left: 0;
+    }
+
+    .mr-15 {
+        margin-right: 0;
+    }
+
+    .banner-area {
+        padding-top: 140px;
+    }
+
+        .banner-area .pe-0 {
+            padding-right: 12px !important;
+        }
+
+    .banner-content {
+        text-align: center;
+        margin: auto;
+        margin-top: 0;
+        margin-bottom: 10px;
+    }
+
+        .banner-content h1 {
+            font-size: 30px;
+            margin-bottom: 15px;
+        }
+
+        .banner-content p {
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+
+    .default-btn {
+        font-size: 12px;
+        padding: 10px 25px !important;
+    }
+
+    .banner-img {
+        text-align: center;
+    }
+
+    .portfolio-content h2 {
+        font-size: 28px;
+        margin-bottom: 20px;
+    }
+
+    .portfolio-content p {
+        font-size: 14px;
+    }
+
+    .section-title {
+        margin-bottom: 30px;
+    }
+
+        .section-title h2 {
+            font-size: 27px;
+            margin-bottom: 10px;
+        }
+
+        .section-title p {
+            font-size: 14px;
+        }
+
+    .manage-content ul li h3 {
+        font-size: 20px;
+        padding-left: 70px;
+    }
+
+    .manage-content ul li p {
+        font-size: 14px;
+    }
+
+    .manage-img {
+        text-align: center;
+        margin-top: 30px;
+    }
+
+    .single-dex {
+        padding: 20px;
+        margin-bottom: 30px;
+        height: auto;
+    }
+
+        .single-dex h3 {
+            font-size: 20px;
+        }
+
+        .single-dex p {
+            font-size: 14px;
+        }
+
+    .portfolio-tracker-area {
+        padding-top: 0;
+    }
+
+    .portfolio-tracker-img {
+        text-align: center;
+    }
+
+    .portfolio-tracker-content h2 {
+        font-size: 28px;
+        margin-bottom: 10px;
+    }
+
+    .portfolio-tracker-content p {
+        font-size: 14px;
+        margin-bottom: 30px;
+    }
+
+    .portfolio-tracker-content ul li {
+        padding: 20px;
+    }
+
+    .chart-content h2 {
+        font-size: 28px;
+        margin-bottom: 30px;
+    }
+
+    .chart-content ul li p {
+        font-size: 14px;
+        margin-left: 10px;
+    }
+
+    .chart-img {
+        margin-top: 30px;
+        text-align: center;
+    }
+
+    .single-footer-widget p {
+        font-size: 14px;
+    }
+
+    .single-footer-widget h3 {
+        font-size: 20px;
+        margin-bottom: 20px;
+    }
+
+    .single-footer-widget .useful-link li {
+        font-size: 14px;
+    }
+
+    .copy-right-area .copy-right-wrap {
+        text-align: center;
+    }
+
+    .copy-right-area p {
+        font-size: 14px;
+    }
+
+    .copy-right-area ul {
+        text-align: center;
+    }
+
+        .copy-right-area ul li {
+            font-size: 14px;
+            margin-right: 10px;
+        }
+    /* DEX STYLE
+    =============================== */
+    .page-bg-title {
+        padding-top: 140px;
+        padding-bottom: 60px;
+    }
+
+        .page-bg-title h2 {
+            font-size: 35px;
+        }
+
+        .page-bg-title p {
+            font-size: 15px;
+        }
+
+    .coming-soon-content {
+        margin-bottom: 30px;
+    }
+
+        .coming-soon-content h2 {
+            font-size: 30px;
+        }
+
+        .coming-soon-content p {
+            font-size: 15px;
+        }
+
+    .wallet-tabs .tab_content {
+        padding: 20px;
+    }
+
+    .walat-img {
+        margin-bottom: 30px;
+    }
+
+    .coming-soon-content.mb-0.ms-4 {
+        margin-left: 0 !important;
+    }
+
+    .staking-pools-area .table-responsive.tournament-table .table tbody tr td {
+        padding: 15px 8px !important;
+    }
+
+    .staking-pools-area .table-responsive.tournament-table {
+        height: 100%;
+    }
+
+    .single-staking-pools {
+        padding: 20px;
+    }
+
+    /* Change CSS
+  =============================== */
+    .partner-area-chim .col {
+        -webkit-box-flex: 0;
+        -ms-flex: 0 0 100%;
+        flex: 0 0 100%;
+    }
+
+    .partner-item {
+        text-align: center;
+    }
+
+    .right-sidebar.m-used {
+        margin: 20px;
+    }
+
+    .left-sidebar-style .left-sidebar-box.pb-need {
+        padding-bottom: 20px;
+    }
+
+    .right-sidebar h3 {
+        font-size: 17px;
+        padding: 20px 20px;
+    }
+
+    .soon-used-2 label {
+        font-size: 13px;
+    }
+
+        .soon-used-2 label span {
+            margin-left: 0;
+        }
+
+    .mb-30 {
+        margin-bottom: 30px;
+    }
+
+    .sphynx-bsc h2 {
+        padding: 20px;
+    }
+
+    .sphynx-bscs li {
+        padding-left: 20px;
+        padding-right: 20px;
+        margin-bottom: 20px;
+    }
+
+    .swap-wrap .col {
+        flex: 0 0 100%;
+    }
+
+    .res-used .d-flex {
+        display: block !important;
+    }
+}
+
+/* Min width 768px to Max width 991px */
+@media only screen and (min-width: 576px) and (max-width: 991px) {
+    .swap-wrap .col {
+        flex: 0 0 50%;
+    }
+}
+
+/* Min width 768px to Max width 991px */
+@media only screen and (min-width: 768px) and (max-width: 991px) {
+    .left-sidebar {
+        padding: 20px;
+    }
+
+        .left-sidebar h2 {
+            font-size: 25px;
+        }
+
+        .left-sidebar .socil-link {
+            margin-bottom: 15px;
+        }
+
+    .left-sidebar-style .left-sidebar-box ul {
+        padding: 20px;
+    }
+
+        .left-sidebar-style .left-sidebar-box ul li {
+            font-size: 15px;
+        }
+
+    .cahrt-img-bg {
+        margin-bottom: 30px;
+    }
+
+    .table-responsive .d-flex {
+        display: block !important;
+    }
+
+    .table-responsive.tournament-table .table thead tr th {
+        white-space: nowrap;
+    }
+
+    .table-responsive.tournament-table .table tbody tr td {
+        white-space: nowrap;
+        padding: 15px;
+    }
+
+        .table-responsive.tournament-table .table tbody tr td a {
+            font-size: 14px;
+        }
+
+        .table-responsive.tournament-table .table tbody tr td .subtotal-amount {
+            text-align: center;
+            display: block;
+        }
+
+    .multiple-title {
+        font-size: 30px;
+        margin-bottom: 20px;
+    }
+
+    .left-sidebar-style h2 {
+        font-size: 30px;
+    }
+
+    .src-form .form-control {
+        width: 100% !important;
+    }
+
+    .cahrt-img-bg img {
+        height: auto;
+    }
+    /* INDEX TWO STYLE
+    =============================== */
+    .ptb-100 {
+        padding-top: 60px;
+        padding-bottom: 60px;
+    }
+
+    .pt-100 {
+        padding-top: 60px;
+    }
+
+    .pb-70 {
+        padding-bottom: 30px;
+    }
+
+    .pt-70 {
+        padding-top: 30px;
+    }
+
+    .ml-15 {
+        margin-left: 0;
+    }
+
+    .mr-15 {
+        margin-right: 0;
+    }
+
+    .banner-area {
+        padding-top: 140px;
+    }
+
+        .banner-area .pe-0 {
+            padding-right: 12px !important;
+        }
+
+    .banner-content {
+        text-align: center;
+        margin: auto;
+        margin-top: 0;
+        margin-bottom: 10px;
+    }
+
+        .banner-content h1 {
+            font-size: 30px;
+            margin-bottom: 15px;
+        }
+
+        .banner-content p {
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+
+    .default-btn {
+        font-size: 12px;
+        padding: 14px 25px !important;
+    }
+
+    .banner-img {
+        text-align: center;
+    }
+
+    .portfolio-content h2 {
+        font-size: 28px;
+        margin-bottom: 20px;
+    }
+
+    .portfolio-content p {
+        font-size: 14px;
+    }
+
+    .section-title {
+        margin-bottom: 30px;
+    }
+
+        .section-title h2 {
+            font-size: 27px;
+            margin-bottom: 10px;
+        }
+
+        .section-title p {
+            font-size: 14px;
+        }
+
+    .manage-content ul li h3 {
+        font-size: 20px;
+        padding-left: 70px;
+    }
+
+    .manage-content ul li p {
+        font-size: 14px;
+    }
+
+    .manage-img {
+        text-align: center;
+        margin-top: 30px;
+    }
+
+    .single-dex {
+        padding: 20px;
+        margin-bottom: 30px;
+        height: auto;
+    }
+
+        .single-dex h3 {
+            font-size: 20px;
+        }
+
+        .single-dex p {
+            font-size: 14px;
+        }
+
+    .portfolio-tracker-area {
+        padding-top: 0;
+    }
+
+    .portfolio-tracker-img {
+        text-align: center;
+    }
+
+    .portfolio-tracker-content h2 {
+        font-size: 28px;
+        margin-bottom: 10px;
+    }
+
+    .portfolio-tracker-content p {
+        font-size: 14px;
+        margin-bottom: 30px;
+    }
+
+    .portfolio-tracker-content ul li {
+        padding: 20px;
+    }
+
+    .chart-content h2 {
+        font-size: 28px;
+        margin-bottom: 30px;
+    }
+
+    .chart-content ul li p {
+        font-size: 14px;
+        margin-left: 10px;
+    }
+
+    .chart-img {
+        margin-top: 30px;
+        text-align: center;
+    }
+
+    .single-footer-widget p {
+        font-size: 14px;
+    }
+
+    .single-footer-widget h3 {
+        font-size: 20px;
+        margin-bottom: 20px;
+    }
+
+    .single-footer-widget .useful-link li {
+        font-size: 14px;
+    }
+
+    .copy-right-area .copy-right-wrap {
+        text-align: center;
+    }
+
+    .copy-right-area p {
+        font-size: 14px;
+    }
+
+    .copy-right-area ul {
+        text-align: center;
+    }
+
+        .copy-right-area ul li {
+            font-size: 14px;
+            margin-right: 10px;
+        }
+    /* DEX STYLE
+  =============================== */
+    .page-bg-title {
+        padding-top: 140px;
+        padding-bottom: 60px;
+    }
+
+        .page-bg-title h2 {
+            font-size: 35px;
+        }
+
+        .page-bg-title p {
+            font-size: 15px;
+        }
+
+    .coming-soon-content {
+        margin-bottom: 30px;
+    }
+
+        .coming-soon-content h2 {
+            font-size: 30px;
+        }
+
+        .coming-soon-content p {
+            font-size: 15px;
+        }
+
+    .wallet-tabs .tab_content {
+        padding: 20px;
+    }
+
+    .walat-img {
+        margin-bottom: 30px;
+    }
+
+    .coming-soon-content.mb-0.ms-4 {
+        margin-left: 0 !important;
+    }
+
+    .staking-pools-area .table-responsive.tournament-table .table tbody tr td {
+        padding: 15px 8px !important;
+    }
+
+    .staking-pools-area .table-responsive.tournament-table {
+        height: 100%;
+    }
+
+    .single-staking-pools {
+        padding: 20px;
+    }
+
+    .coming-soon-content {
+        max-width: 100%;
+    }
+
+    .walat-img {
+        text-align: center;
+    }
+
+    /* Change CSS
+  =============================== */
+    .partner-area-chim .col {
+        -webkit-box-flex: 0;
+        -ms-flex: 0 0 33%;
+        flex: 0 0 33%;
+    }
+
+    .partner-item {
+        text-align: center;
+    }
+
+    .mb-30 {
+        margin-bottom: 30px;
+    }
+}
+
+/* Min width 992px to Max width 1199px */
+@media only screen and (min-width: 992px) and (max-width: 1199px) {
+    .left-sidebar {
+        padding: 20px;
+    }
+
+        .left-sidebar h2 {
+            font-size: 30px;
+        }
+
+    .left-sidebar-style .left-sidebar-box ul {
+        padding: 20px;
+    }
+
+        .left-sidebar-style .left-sidebar-box ul li {
+            font-size: 15px;
+        }
+
+    .cahrt-img-bg img {
+        height: auto;
+    }
+
+    .navbar .default-btn {
+        padding: 10px 8px;
+    }
+
+    .banner-content {
+        max-width: 455px;
+    }
+
+        .banner-content h1 {
+            font-size: 45px;
+        }
+
+    .single-dex {
+        padding: 20px;
+    }
+    /* DEX STYLE
+    =============================== */
+    .single-staking-pools {
+        padding: 20px;
+    }
+}
+
+/* Min width 1200px to Max width 1320px */
+@media only screen and (min-width: 1200px) and (max-width: 1320px) {
+    .custom-nav-area ul li .link {
+        font-size: 14px;
+        margin-right: 10px;
+    }
+}
+
+/* Mobile and iPad Navbar */
+@media only screen and (max-width: 1199px) {
+    .custom-nav-area {
+        text-align: center;
+    }
+
+        .custom-nav-area .nav-wrap .d-flex {
+            display: block !important;
+        }
+
+        .src-form {
+            padding-left: 0 !important;
+            margin-left: 0 !important;
+            border-left: none !important;
+        }
+
+        .custom-nav-area ul li .link {
+            font-size: 15px;
+            margin-right: 10px;
+        }
+
+        .src-form .form-control {
+            width: 100% !important;
+        }
+
+    .offcanvas {
+        background-color: #131721;
+    }
+
+    .custom-nav-area ul li .btns {
+        display: block;
+        margin-top: 25px;
+    }
+
+    .offcanvas-header .btn-close i {
+        color: #ffff !important;
+        font-size: 20px !important;
+    }
+
+    .btn-close {
+        opacity: 1;
+    }
+
+    .custom-nav-area {
+        padding: 10px 20px;
+    }
+
+    .offcanvas-start {
+        width: 100%;
+    }
+}
+
+/* Only Mobil Menu Max width 991px For INDEX TWO*/
+@media only screen and (max-width: 991px) {
+    /** For Index Two CSS
+    =====================**/
+    .navbar-toggler {
+        line-height: 1;
+        padding: 0;
+        border-radius: 0;
+    }
+
+        .navbar-toggler.menu-icon {
+            width: 40px;
+            padding: 4px 0;
+            cursor: pointer;
+            position: relative;
+        }
+
+            .navbar-toggler.menu-icon:focus {
+                -webkit-box-shadow: none;
+                box-shadow: none;
+            }
+
+            .navbar-toggler.menu-icon span {
+                width: 100%;
+                height: 4px;
+                display: block;
+                background-color: #ffffff;
+                margin: 6px 0;
+                -webkit-transition: .5s;
+                transition: .5s;
+            }
+
+            .navbar-toggler.menu-icon.active span {
+                position: absolute;
+                width: calc(100% - 16px);
+                top: calc(50% - 8px);
+            }
+
+                .navbar-toggler.menu-icon.active span:nth-child(1) {
+                    -webkit-transform: rotate(45deg);
+                    transform: rotate(45deg);
+                }
+
+                .navbar-toggler.menu-icon.active span:nth-child(3) {
+                    -webkit-transform: rotate(-45deg);
+                    transform: rotate(-45deg);
+                }
+
+                .navbar-toggler.menu-icon.active span:nth-child(2) {
+                    -webkit-transform: rotate(-45deg);
+                    transform: rotate(-45deg);
+                    display: none;
+                }
+
+    .navbar {
+        background: #000;
+    }
+
+        .navbar .navbar-nav {
+            padding-bottom: 30px;
+        }
+
+            .navbar .navbar-nav .nav-item:first-child .nav-link {
+                margin-left: 13px;
+            }
+
+            .navbar .navbar-nav .nav-item .nav-link {
+                padding-top: 10px;
+            }
+
+            .navbar .navbar-nav .nav-item .nav-link {
+                margin-left: 0;
+                margin-right: 0;
+            }
+
+            .navbar .navbar-nav .nav-item:first-child .nav-link {
+                margin-left: 0;
+            }
+}
+
+/* For Index Two CSS Continuer Custom Width Area Style */
+@media only screen and (min-width: 1200px) and (max-width: 7000px) {
+    .container {
+        max-width: 1170px;
+        margin: auto;
+    }
+}
+
+@media only screen and (min-width: 1500px) and (max-width: 7000px) {
+    .limit-list.used-h {
+        height: 212px !important;
+    }
+}

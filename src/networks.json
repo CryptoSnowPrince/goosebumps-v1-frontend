@@ -1,0 +1,98 @@
+﻿[
+  {
+    "Display": "BSC",
+    "Name": "bsc",
+    "SwapApi": "https://bsc.api.0x.org/",
+    "Currency": {
+      "Name": "BNB",
+      "Address": "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c",
+      "Decimals":  18
+    },
+    "USD": {
+      "Address": "0xe9e7cea3dedca5984780bafc599bd69add087d56",
+      "Pair": "0x58f876857a02d6762e0101bb5c46a8c1ed44dc16",
+      "Decimals": 18
+    },
+    "USDs": [
+      "0xe9e7cea3dedca5984780bafc599bd69add087d56",
+      "0x55d398326f99059ff775485246999027b3197955",
+      "0x8ac76a51cc950d9822d68b83fe1ad97b32cd580d",
+      "0x23396cf899ca06c4472205fc903bdb4de249d6fc",
+      "0x334b3ecb4dca3593bccc3c7ebd1a1c1d1780fbf1",
+      "0x1af3f329e8be154074d8769d1ffa4ee058b1dbc3",
+      "0x14016e85a25aeb13065688cafb43044c2ef86784",
+      "0xb7f8cd00c5a06c0537e2abff0b58033d02e5e094"
+    ],
+    "RPC": "https://bsc-dataseed1.defibit.io/",
+    "Explorer": "https://bscscan.com/"
+  },
+  {
+    "Display": "BSC Testnet",
+    "Name": "bsc_testnet",
+    "SwapApi": "https://bsc.api.0x.org/",
+    "Currency": {
+      "Name": "BNB",
+      "Address": "0x094616f0bdfb0b526bd735bf66eca0ad254ca81f",
+      "Decimals": 18
+    },
+    "USD": {
+      "Address": "0x8301f2213c0eed49a7e28ae4c3e91722919b8b47",
+      "Pair": "0x2fa498d3bd0c08ecac72e921ffe09f6f7471485c",
+      "Decimals": 18
+    },
+    "USDs": [
+      "0x8301f2213c0eed49a7e28ae4c3e91722919b8b47",
+      "0x1413874e27d8d575dac0be8aca645a60826d051f"
+    ],
+    "RPC": "https://data-seed-prebsc-1-s1.binance.org:8545/",
+    "Explorer": "https://testnet.bscscan.com/"
+  },
+  {
+    "Display": "Ethereum",
+    "Name": "ethereum",
+    "SwapApi": "https://api.0x.org/",
+    "Currency": {
+      "Name": "ETH",
+      "Address": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+      "Decimals": 18
+    },
+    "USD": {
+      "Address": "0xdac17f958d2ee523a2206206994597c13d831ec7",
+      "Pair": "0x0d4a11d5eeaac28ec3f61d100daf4d40471f1852",
+      "Decimals": 6
+    },
+    "USDs": [
+      "0xdac17f958d2ee523a2206206994597c13d831ec7",
+      "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+      "0x4fabb145d64652a948d72533023f6e7a623c7c53",
+      "0xa47c8bf37f92abed4a126bda807a7b7498661acd",
+      "0x6b175474e89094c44da98b954eedeac495271d0f",
+      "0x0000000000085d4780b73119b644ae5ecd22b376",
+      "0x8e870d67f660d95d5be530380d0ec0bd388289e1"
+    ],
+    "RPC": "https://mainnet.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161",
+    "Explorer": "https://etherscan.io/"
+  },
+  {
+    "Display": "Matic",
+    "Name": "matic",
+    "SwapApi": "https://polygon.api.0x.org/",
+    "Currency": {
+      "Name": "MATIC",
+      "Address": "0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270",
+      "Decimals": 18
+    },
+    "USD": {
+      "Address": "0x2791bca1f2de4661ed88a30c99a7a9449aa84174",
+      "Pair": "0x5e58e0ced3a272caeb8ba00f4a4c2805df6be495",
+      "Decimals": 6
+    },
+    "USDs": [
+      "0x2791bca1f2de4661ed88a30c99a7a9449aa84174",
+      "0xc2132d05d31c914a87c6611c10748aeb04b58e8f",
+      "0x8f3cf7ad23cd3cadbd9735aff958023239c6a063"
+    ],
+    "RPC": "https://rpc-mainnet.matic.network/",
+    "Explorer": "https://polygonscan.com/"
+  }
+]
