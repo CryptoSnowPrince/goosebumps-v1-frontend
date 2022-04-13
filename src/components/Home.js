@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import HomePageText from '../constants/home.json';
+console.log(HomePageText);
 
 export class Home extends Component {
     static displayName = Home.name;
@@ -12,8 +14,7 @@ export class Home extends Component {
                         <div className="row">
                             <div className="col-lg-6">
                                 <div className="banner-content">
-                                    <h1>CHANGES</h1>
-                                    {/* <h1>Manage Your Crypto and Portfolio From One Place</h1> */}
+                                    <h1>Manage Your Crypto and Portfolio From One Place</h1>
                                     <p>Goosebumps powered by Empire Token is a decentralized exchange with a unique portfolio tracking and charting system.</p>
                                     <div className="banner-btn">
                                         <Link to="/portfolio-tracker" className="default-btn">Portfolio Tracker</Link>
