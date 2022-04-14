@@ -172,7 +172,7 @@ export class Home extends Component {
                 <div className="col-lg-6">
                   <div className="chart-content">
                     <h2>Get a bird's eye view of your investments</h2>
-                    <h5>Using Goosebumps is an easy way to track your assets across different wallets. Watch the prices change in real-time, and get alerts when they change color!</h5>
+                    <h4 >Using Goosebumps is an easy way to track your assets across different wallets. Watch the prices change in real-time, and get alerts when they change color!</h4>
                     <ul>
                       <li className="d-flex align-items-start">
                         <img src="./assets/images/index-2/check-icon.png" alt="goosebumps" />
