@@ -36,13 +36,13 @@
       "Decimals": 18
     },
     "USD": {
-      "Address": "0x8301f2213c0eed49a7e28ae4c3e91722919b8b47",
+      "Address": "0x78867BbEeF44f2326bF8DDd1941a4439382EF2A7",
       "Pair": "0x2fa498d3bd0c08ecac72e921ffe09f6f7471485c",
       "Decimals": 18
     },
     "USDs": [
-      "0x8301f2213c0eed49a7e28ae4c3e91722919b8b47",
-      "0x1413874e27d8d575dac0be8aca645a60826d051f"
+      "0x78867BbEeF44f2326bF8DDd1941a4439382EF2A7",
+      "0x7ef95a0FEE0Dd31b22626fA2e10Ee6A223F8a684"
     ],
     "RPC": "https://data-seed-prebsc-1-s1.binance.org:8545/",
     "Explorer": "https://testnet.bscscan.com/"
