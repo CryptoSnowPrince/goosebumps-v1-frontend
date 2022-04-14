@@ -5,11 +5,12 @@ import linq from "linq";
 
 
 const DEX = (props) => {
-    const network = linq.from(networks).where(x => x.Name === "bsc").single();
+    const network = linq.from(networks).where(x => x.Name === "bsctestnet").single();
+    console.log(network);
 
     return (
         <div className="dex">
-            <Exchange network={network} fromSymbol="WBNB" fromAddress="0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c" toSymbol="EMPIRE" toAddress="0x293c3ee9abacb08bb8ced107987f00efd1539288" />
+            <Exchange network={network} fromSymbol="WBNB" fromAddress="0xae13d989daC2f0dEbFf460aC112a837C89BAa7cd" toSymbol="GBFT" toAddress="0xA6454bbA55F46Ef488c599c44867DF5eE3D6F543" />
         </div>
     );
 }
