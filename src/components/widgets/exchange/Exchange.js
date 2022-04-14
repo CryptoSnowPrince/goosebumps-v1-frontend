@@ -1,15 +1,16 @@
 import React, { useEffect, useState, useCallback } from 'react';
+// import { Web3 } from 'web3';
 import { useEthers } from '@usedapp/core';
 import { singer, ethers, BigNumber } from 'ethers';
 import { Contract, Provider } from 'ethers-multicall';
 import { ConnectButton } from '../ConnectButton';
 //import { ChainId, Token, TokenAmount, Fetcher, Pair, Route, Trade, TradeType, Percent } from '@pancakeswap-libs/sdk';
-//import Web3 from 'web3';
 import tokenAbi from '../../../abis/token';
 import { Requester } from "../../../requester";
 import numberHelper from "../../../numberHelper";
 import NumberFormat from "react-number-format";
 import { TokenSelectModal } from './TokenSelectModal';
+// console.log("Web3:", Web3);
 
 const Exchange = (props) => {
     const { account } = useEthers();
@@ -180,6 +181,7 @@ const Exchange = (props) => {
     };
 
     const resetBalances = () => {
+        console.log("resetBalances");
         setFrom(Object.assign({}, from));
         setTo(Object.assign({}, to));
     };
