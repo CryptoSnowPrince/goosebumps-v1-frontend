@@ -411,6 +411,7 @@ const Exchange = (props) => {
                                         <input id="from" type="text" className="form-control me-2" placeholder="0" autoComplete="off" onChange={e => onAmountChange(e, "from")} min="0" max={from.balance} value={from.amount} />
                                         <div className="input-group-addon">
                                             <button type="button" className="default-btn" onClick={() => setShowTokenSelectModal("from")}>{from.symbol}</button>
+                                            {/* <button type="button" className="default-btn" onClick={() => setShowTokenSelectModal("from")}>{from.symbol}</button> */}
                                         </div>
                                     </div>
                                 </div>
