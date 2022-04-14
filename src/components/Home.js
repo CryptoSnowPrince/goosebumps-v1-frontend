@@ -191,7 +191,6 @@ export class Home extends Component {
                       </li>
                       <p>Goosebumps Charts takes away the headache of checking multiple wallets for new transactions. Track all of your wallets in one place for less headache and stress!
                       </p>
-
                     </ul>
                   </div>
                 </div>
