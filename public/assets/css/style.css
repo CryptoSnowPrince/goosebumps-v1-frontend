@@ -293,6 +293,10 @@ Navbar Area Style
             background: none;
             color: #fff;
             border-radius: 14px;
+            
+        }
+        .src-form .network .form-select option {
+            background-color: #052533;
         }
 
         .src-form .network i {
