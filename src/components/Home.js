@@ -208,8 +208,10 @@ export class Home extends Component {
                     <ul>
                       <li className="d-flex align-items-start align-items-center">
                         <img src="./assets/images/index-2/noti-icon.png" alt="goosebumps" />
-                        <h4>{HomePageText.section6.subtitle1}</h4>
-                        <p>{HomePageText.section6.description1}</p>
+                        <div>
+                          <h4>{HomePageText.section6.subtitle1}</h4>
+                          <p>{HomePageText.section6.description1}</p>
+                        </div>
                       </li>
                       {/* <li className="d-flex align-items-start align-items-center">
                         <img src="./assets/images/index-2/src-icon.png" alt="goosebumps" />
@@ -217,9 +219,12 @@ export class Home extends Component {
                       </li> */}
                       <li className="d-flex align-items-start align-items-center">
                         <img src="./assets/images/index-2/pai-icon.png" alt="goosebumps" />
-                        <h4>Indicators for user activity
-                        </h4>
-                        <p>Don’t get lost and keep track of your trading activity, anytime, anywhere.</p>
+                        <div>
+                          <h4>Indicators for user activity
+                          </h4>
+                          <p>Don’t get lost and keep track of your trading activity, anytime, anywhere.</p>
+                        </div>
+
                       </li>
                     </ul>
                   </div>
