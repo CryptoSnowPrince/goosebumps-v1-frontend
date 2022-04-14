@@ -40,12 +40,5 @@
     "Address": "0x238CD26cccc1C714201Fc8bf49d453a39f494209",
     "Decimals": 18,
     "Logo": "https://bscscan.com/token/images/binance_32.png"
-  },
-  {
-    "Name": "Empire Token",
-    "Symbol": "EMPIRE",
-    "Address": "0x293c3ee9abacb08bb8ced107987f00efd1539288",
-    "Decimals": 9,
-    "Logo": "https://bscscan.com/token/images/empiretoken_32.png"
   }
 ]
