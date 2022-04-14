@@ -40,8 +40,17 @@ export class Home extends Component {
                             </div>
                             <div className="col-lg-6">
                                 <div className="portfolio-content">
-                                    <h2>The Most Trusted Portfolio Manager Platform</h2>
-                                    <p>Manage all your DeFi and crypto from one place – a single wallet to buy, sell, swap, track, and earn on your crypto! Our industry-leading security protocols make Goosebumps Wallet one of the world's most secure crypto and DeFi wallets.</p>
+                                    <h2>{HomePageText.section2.title}</h2>
+                                    <p>{HomePageText.section2.abstract}</p>
+                                    <div>
+
+                                        <h3>{HomePageText.section2.subtitle1}</h3>
+                                        <p>{HomePageText.section2.description1}</p>
+                                    </div>
+                                    <div>
+                                        <h3>{HomePageText.section2.subtitle2}</h3>
+                                        <p>{HomePageText.section2.description2}</p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -63,22 +72,22 @@ export class Home extends Component {
                                             <li>
                                                 <h3>
                                                     <img src="./assets/images/index-2/dashboard-icon.png" alt="goosebumps" />
-															One Dashboard for Everything
-										</h3>
+                                                    One Dashboard for Everything
+                                                </h3>
                                                 <p>Track every asset you have from one dashboard, and stay on top of your game.</p>
                                             </li>
                                             <li>
                                                 <h3>
                                                     <img src="./assets/images/index-2/portfolio-icon.png" alt="goosebumps" />
 																Seamless Portfolio> Management
-										</h3>
+                                                </h3>
                                                 <p>Take a look at your total crypto investing picture and start taking steps to improve it.</p>
                                             </li>
                                             <li>
                                                 <h3 className="quick">
                                                     <img src="./assets/images/index-2/usd-icon.png" alt="goosebumps" />
-																	Quick & Secure
-										</h3>
+                                                    Quick & Secure
+                                                </h3>
                                                 <p>Getting started with Goosebumps only takes a few minutes, and it’s completely free and secure.</p>
                                             </li>
                                         </ul>
