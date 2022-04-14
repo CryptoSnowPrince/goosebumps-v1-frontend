@@ -28,11 +28,11 @@
   },
   {
     "Display": "BSC Testnet",
-    "Name": "bsc_testnet",
+    "Name": "bsctestnet",
     "SwapApi": "https://bsc.api.0x.org/",
     "Currency": {
-      "Name": "BNB",
-      "Address": "0x094616f0bdfb0b526bd735bf66eca0ad254ca81f",
+      "Name": "WBNB",
+      "Address": "0xae13d989daC2f0dEbFf460aC112a837C89BAa7cd",
       "Decimals": 18
     },
     "USD": {
