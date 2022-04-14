@@ -43,11 +43,11 @@ export class Home extends Component {
                                     <h2>{HomePageText.section2.title}</h2>
                                     <p>{HomePageText.section2.abstract}</p>
                                     <div>
-
                                         <h3>{HomePageText.section2.subtitle1}</h3>
                                         <p>{HomePageText.section2.description1}</p>
                                     </div>
                                     <div>
+                                        <p> </p>
                                         <h3>{HomePageText.section2.subtitle2}</h3>
                                         <p>{HomePageText.section2.description2}</p>
                                     </div>
@@ -187,13 +187,14 @@ export class Home extends Component {
                             <div className="row align-items-center">
                                 <div className="col-lg-5">
                                     <div className="portfolio-tracker-content ml-15">
-                                        <h2>Portfolio Tracker</h2>
-                                        <p>The portfolio tracker must have its own section with a unique design and the following functionalities</p>
+                                        <h2>{HomePageText.section6.title}</h2>
+                                        <p>{HomePageText.section6.abstract}</p>
 
                                         <ul>
                                             <li className="d-flex align-items-start align-items-center">
                                                 <img src="./assets/images/index-2/noti-icon.png" alt="goosebumps" />
-                                                <p>Has the option to have a single chart or up to 8 charts in one window</p>
+                                                <h4>{HomePageText.section6.subtitle1}</h4>
+                                                <p>{HomePageText.section6.description1}</p>
                                             </li>
                                             <li className="d-flex align-items-start align-items-center">
                                                 <img src="./assets/images/index-2/src-icon.png" alt="goosebumps" />

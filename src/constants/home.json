@@ -10,5 +10,15 @@
     },
     "section3": {},
     "section4": {},
-    "section5": {}
+    "section5": {},
+    "section6": {
+        "title": "Charting your success",
+        "abstract": "Portfolio Tracker is a simple yet powerful portfolio tracker created by professional traders and engineers. We use the latest technologies to make sure you’re always on the top of our game.",
+        "subtitle1": "Trade history",
+        "description1": "View a detailed trade history of your trades, including the price at the time, the date it was made, and the total profit or loss.",
+        "subtitle2": "Indicators for user activity",
+        "description2": "Don’t get lost and keep track of your trading activity, anytime, anywhere.",
+        "subtitle3": "Indicators for user activity",
+        "description3": "Don’t get lost and keep track of your trading activity, anytime, anywhere."
+    }
 }
