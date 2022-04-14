@@ -89,7 +89,7 @@ export class Home extends Component {
                 </div>
                 <div className="col-lg-4">
                   <div className="manage-img ml-15">
-                    <img src="./assets/images/index-2/manage-img.png" alt="goosebumps" />
+                    <img src="./assets/images/index-2/manage-img.png" alt="goosebumps" style={{marginBottom: "40px"}} />
                   </div>
                 </div>
                 <div className="col-lg-4">

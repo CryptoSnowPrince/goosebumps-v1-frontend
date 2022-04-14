@@ -1015,7 +1015,7 @@ Portfolio Tracker Area Style
             margin-bottom: 0;
         }
 
-        .portfolio-tracker-content ul li p {
+        .portfolio-tracker-content ul li p,.portfolio-tracker-content ul li h4 {
             margin-bottom: 0;
             margin-left: 20px;
         }
