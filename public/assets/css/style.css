@@ -1058,9 +1058,11 @@ Chart Tracker Area Style
 
 .chart-content h2 {
     font-size: 40px;
-    margin-bottom: 50px;
+    /* margin-bottom: 50px; */
 }
-
+.chart-content h5{
+    margin-bottom: 10px;
+}
 .chart-content ul {
     padding-left: 0;
     margin-bottom: 0;
@@ -1068,7 +1070,7 @@ Chart Tracker Area Style
 }
 
     .chart-content ul li {
-        margin-bottom: 30px;
+        margin-bottom: 10px;
     }
 
         .chart-content ul li:last-child {
@@ -1080,7 +1082,7 @@ Chart Tracker Area Style
             top: 6px;
         }
 
-        .chart-content ul li p {
+        .chart-content ul li h5 {
             margin-left: 20px;
         }
 
