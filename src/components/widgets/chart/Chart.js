@@ -44,7 +44,7 @@ const Chart = (props) => {
             //locale: Intl.DateTimeFormat().resolvedOptions().locale
         });
 
-        return () => tvWidget?.remove();
+        return () => tvWidget.remove();
     }, [props]);
 
     return (

@@ -1,5 +1,5 @@
 //import { useEthers } from '@usedapp/core'
-
+import React from 'react';
 const InfoSVG = () => {
 
     return (

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import NumberFormat from "react-number-format";
 import PairHelper from "./../../../pairHelper";
 import numberHelper from "./../../../numberHelper";

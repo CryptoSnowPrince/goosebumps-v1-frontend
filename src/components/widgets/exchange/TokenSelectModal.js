@@ -1,5 +1,5 @@
 import { Modal } from "react-bootstrap";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 const TokenSelectModal = (props) => {
     const [init, setInit] = useState(true);
