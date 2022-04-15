@@ -17,7 +17,7 @@ const PortfolioTracker = () => {
     const [currentParams, setParams] = useState();
     const network = params.networkName ? linq.from(networks).where(x => x.Name === params.networkName).single() : null;
 
-    const addresses = params.addresses.split(',');
+    const addresses = params.addresses?.split(',');
 
     if (params !== currentParams && tokens) {
         setTokens();
