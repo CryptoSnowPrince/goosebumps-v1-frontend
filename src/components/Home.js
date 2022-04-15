@@ -43,13 +43,13 @@ export class Home extends Component {
                   <h2>{HomePageText.section2.title}</h2>
                   <p>{HomePageText.section2.abstract}</p>
                   <div>
-                    <h3>{HomePageText.section2.subtitle1}</h3>
-                    <p>{HomePageText.section2.description1}</p>
+                    <h5>{HomePageText.section2.subtitle1}</h5>
+                    <p style={{fontSize: "14px"}}>{HomePageText.section2.description1}</p>
                   </div>
                   <div>
                     <p> </p>
-                    <h3>{HomePageText.section2.subtitle2}</h3>
-                    <p>{HomePageText.section2.description2}</p>
+                    <h5>{HomePageText.section2.subtitle2}</h5>
+                    <p style={{fontSize: "14px"}}>{HomePageText.section2.description2}</p>
                   </div>
                 </div>
               </div>
@@ -121,7 +121,7 @@ export class Home extends Component {
             <div className="container">
               <div className="section-title">
                 <h2>Dex</h2>
-                <p>Goosebumps supports the most popular cryptocurrency platforms, including Binance, Coinbase, and 400 others.</p>
+                <p>Goosebumps supports over 1000 cryptocurrencies across different chains!</p>
               </div>
 
               <div className="row">
@@ -129,7 +129,7 @@ export class Home extends Component {
                   <div className="single-dex">
                     <img src="./assets/images/index-2/bit-icon.png" alt="goosebumps" />
                     <h3>Swap and Add Liquidity</h3>
-                    <p>Chart Trading activity Trading indicators Trading history</p>
+                    <p>With the features Goosebumps provides you such as advanced charting and portfolio tracking, DeFi will gain a completely new perspective for you. Watch your assets easily, buy on the bid and sell on the ask. </p>
                   </div>
                 </div>
 
@@ -137,7 +137,7 @@ export class Home extends Component {
                   <div className="single-dex">
                     <img src="./assets/images/index-2/rate-icon.png" alt="goosebumps" />
                     <h3>Cross-chain Swap</h3>
-                    <p>Chart Trading activity Trading indicators Trading history</p>
+                    <p>It is a smart contract technology that allows your tokens to be exchanged between two distinct blockchain ecosystems. It enables you to exchange tokens directly on another blockchain without the need for an intermediary or central authority.</p>
                   </div>
                 </div>
 
@@ -145,7 +145,7 @@ export class Home extends Component {
                   <div className="single-dex">
                     <img src="./assets/images/index-2/lock-icon.png" alt="goosebumps" />
                     <h3>Staking pools </h3>
-                    <p>A staking pool allows multiple stakeholders to combine their computational resources as a way to increase</p>
+                    <p>A staking pool allows you to pool your computational resources in order to increase chances of winning. Staking Pools offers its staking power in the process of verifying and validating new blocks, increasing the community's chances of earning block rewards.</p>
                   </div>
                 </div>
 
@@ -153,7 +153,7 @@ export class Home extends Component {
                   <div className="single-dex">
                     <img src="./assets/images/index-2/chart-icon.png" alt="goosebumps" />
                     <h3>Farming pools</h3>
-                    <p>Yield farming works with a liquidity provider and a liquidity pool that powers a DeFi market</p>
+                    <p>Farming pools are the driving force behind a marketplace where anyone can lend or borrow tokens. It helps you to maximize returns through the use of DeFi. Users are charged fees for using, which are used to compensate liquidity providers for staking their own tokens in the pool.</p>
                   </div>
                 </div>
               </div>
@@ -176,20 +176,20 @@ export class Home extends Component {
                     <ul>
                       <li className="d-flex align-items-start">
                         <img src="./assets/images/index-2/check-icon.png" alt="goosebumps" />
-                        <h5>Stay on top of your portfolio</h5>
+                        <h6>Stay on top of your portfolio</h6>
                       </li>
-                      <p>Our goal is to give you a single view of your portfolios across multiple, different wallets. Watch the prices change in real time with alerts on when they change color.</p>
+                      <p style={{fontSize: "14px"}}>Our goal is to give you a single view of your portfolios across multiple, different wallets. Watch the prices change in real time with alerts on when they change color.</p>
                       <li className="d-flex align-items-start">
                         <img src="./assets/images/index-2/check-icon.png" alt="goosebumps" />
-                        <h5>Track all your coins at once
-                        </h5>
+                        <h6>Track all your coins at once
+                        </h6>
                       </li>
-                      <p>Track coins across different wallets that are on different chains. Track the price history of each coin all in one monitor for easy viewing.</p>
+                      <p style={{fontSize: "14px"}}>Track coins across different wallets that are on different chains. Track the price history of each coin all in one monitor for easy viewing.</p>
                       <li className="d-flex align-items-start">
                         <img src="./assets/images/index-2/check-icon.png" alt="goosebumps" />
-                        <h5>No more headaches, no more stress!</h5>
+                        <h6>No more headaches, no more stress!</h6>
                       </li>
-                      <p>Goosebumps Charts takes away the headache of checking multiple wallets for new transactions. Track all of your wallets in one place for less headache and stress!
+                      <p style={{fontSize: "14px"}}>Goosebumps Charts takes away the headache of checking multiple wallets for new transactions. Track all of your wallets in one place for less headache and stress!
                       </p>
                     </ul>
                   </div>

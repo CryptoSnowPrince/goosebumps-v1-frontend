@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Requester } from "../requester";
 import { StakeEmpire } from "./widgets/StakeEmpire";

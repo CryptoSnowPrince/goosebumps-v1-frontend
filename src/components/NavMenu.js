@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Navbar, Container, Nav, NavItem } from "react-bootstrap";
 import { ConnectButton } from './widgets/ConnectButton';
@@ -20,9 +20,9 @@ const NavMenu = () => {
     const loginSuccess = (response) => {
         console.log(response);
         setUser({
-            email: response?.profileObj.email,
-            name: response?.profileObj.name,
-            imageUrl: response?.profileObj.imageUrl
+            email: response.profileObj.email,
+            name: response.profileObj.name,
+            imageUrl: response.profileObj.imageUrl
         });
         setAuthenticated(true);
     }

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import linq from "linq";
 import { Requester } from "../requester";
@@ -17,7 +17,7 @@ const PortfolioTracker = () => {
     const [currentParams, setParams] = useState();
     const network = params.networkName ? linq.from(networks).where(x => x.Name === params.networkName).single() : null;
 
-    const addresses = params.addresses?.split(',');
+    const addresses = params.addresses.split(',');
 
     if (params !== currentParams && tokens) {
         setTokens();
@@ -218,11 +218,11 @@ const PortfolioTracker = () => {
                                             {
                                                 token.info.isETH
                                                     ? <>
-                                                        <NumberFormat value={token.info.supply?.circulation * (token.info.price * ethPrice)} decimalScale="0" decimalSeparator="" displayType="text" thousandSeparator="," prefix="$" />
+                                                        <NumberFormat value={token.info.supply.circulation * (token.info.price * ethPrice)} decimalScale="0" decimalSeparator="" displayType="text" thousandSeparator="," prefix="$" />
                                                         <br />
-                                                        <span className="text-secondary">(<NumberFormat value={token.info.supply?.circulation * token.info.price} decimalSeparator="" decimalScale="0" displayType="text" thousandSeparator="," suffix={" " + token.pair.sellCurrency.symbol} />)</span>
+                                                        <span className="text-secondary">(<NumberFormat value={token.info.supply.circulation * token.info.price} decimalSeparator="" decimalScale="0" displayType="text" thousandSeparator="," suffix={" " + token.pair.sellCurrency.symbol} />)</span>
                                                     </>
-                                                    : <NumberFormat value={token.info.supply?.circulation * token.info.price} decimalScale="0" decimalSeparator="" displayType="text" thousandSeparator="," suffix={" " + token.pair.sellCurrency.symbol} />
+                                                    : <NumberFormat value={token.info.supply.circulation * token.info.price} decimalScale="0" decimalSeparator="" displayType="text" thousandSeparator="," suffix={" " + token.pair.sellCurrency.symbol} />
                                             }
                                         </td>
                                         <td>

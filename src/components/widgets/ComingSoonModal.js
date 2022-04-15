@@ -1,3 +1,4 @@
+import React from 'react';
 import { Modal } from "react-bootstrap";
 
 const ComingSoonModal = (props) => {
@@ -8,7 +9,7 @@ const ComingSoonModal = (props) => {
     return (
         <Modal show="true" onHide={props.hide}>
             <div className="bg-dark border border-info">
-                <Modal.Header className="border-info">
+            <Modal.Header className="border-info">
                     <Modal.Title>Info</Modal.Title>
                     <button type="button" className="default-btn btn-sq" onClick={props.hide}><i className="fa fa-times"></i></button>
                 </Modal.Header>

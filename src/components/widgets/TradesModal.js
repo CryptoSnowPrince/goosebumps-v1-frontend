@@ -1,3 +1,4 @@
+import React from "react";
 import { Modal } from "react-bootstrap";
 import NumberFormat from "react-number-format";
 

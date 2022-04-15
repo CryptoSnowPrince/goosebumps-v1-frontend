@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Exchange } from "./widgets/exchange/Exchange";
 import networks from "./../networks";
 import linq from "linq";
