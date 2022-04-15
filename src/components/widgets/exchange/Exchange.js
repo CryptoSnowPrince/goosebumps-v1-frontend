@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react';
-// import { Web3 } from 'web3';
+import { Web3 } from 'web3';
 import { useEthers } from '@usedapp/core';
 import { singer, ethers, BigNumber } from 'ethers';
 import { Contract, Provider } from 'ethers-multicall';
@@ -130,8 +130,8 @@ const Exchange = (props) => {
         setError();
         setConfirmed();
 
-        const _from = overrideFrom ?? from;
-        const _to = overrideTo ?? to;
+        const _from = overrideFrom ? overrideFrom : from;
+        const _to = overrideTo ? overrideTo : to;
 
         if (pendingQuote) {
             clearTimeout(pendingQuote);
@@ -139,7 +139,7 @@ const Exchange = (props) => {
 
         if (_from.amount > 0) {
             setPendingQuote(setTimeout(() => {
-                updateQuote(_from.address, _from.decimals, _to.address, _to.decimals, _from.amount, overrideSlippage ?? slippage, "from").then(quote => {
+                updateQuote(_from.address, _from.decimals, _to.address, _to.decimals, _from.amount, overrideSlippage ? overrideSlippage : slippage, "from").then(quote => {
                     setReady(true);
                 });
                 setPendingQuote();
@@ -147,7 +147,7 @@ const Exchange = (props) => {
         }
         else if (_to.amount > 0) {
             setPendingQuote(setTimeout(() => {
-                updateQuote(_from.address, _from.decimals, _to.address, _to.decimals, _to.amount, overrideSlippage ?? slippage, "to").then(quote => {
+                updateQuote(_from.address, _from.decimals, _to.address, _to.decimals, _to.amount, overrideSlippage ? overrideSlippage : slippage, "to").then(quote => {
                     setReady(true);
                 });
                 setPendingQuote();
@@ -274,7 +274,7 @@ const Exchange = (props) => {
         if (value > 0) {
             setPendingQuote(setTimeout(() => {
                 updateQuote(from.address, from.decimals, to.address, to.decimals, value, slippage, side).then(quote => {
-                    if (quote?.price > 0) {
+                    if (quote.price > 0) {
                         const buyAmount = ethers.utils.formatUnits(quote.buyAmount, to.decimals);
                         const sellAmount = ethers.utils.formatUnits(quote.sellAmount, from.decimals);
 
