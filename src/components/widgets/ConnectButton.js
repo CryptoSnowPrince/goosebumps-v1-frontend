@@ -1,8 +1,12 @@
 //import { useEthers } from '@usedapp/core'
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useReducer } from 'react';
 import { Mainnet, DAppProvider, useEtherBalance, useEthers, Config } from '@usedapp/core'
 import Web3Modal from "web3modal";
+import { providers/*, ethers*/ } from "ethers";
+import WalletConnectProvider from "@walletconnect/web3-provider";
 import config from '../../constants/config'
+import linq from "linq";
+import networks from "../../networks";
 
 const network = linq.from(networks).where(x => x.Name === "bsctestnet").single();
 let web3Modal;
@@ -29,7 +33,8 @@ if (typeof window !== "undefined") {
 const initialState = {
     provider: null,
     web3Provider: null,
-    address: null,
+    signer: null,
+    account: null,
     chainId: null,
 };
 
@@ -40,7 +45,8 @@ function reducer(state, action) {
                 ...state,
                 provider: action.provider,
                 web3Provider: action.web3Provider,
-                address: action.address,
+                singer: action.singer,
+                account: action.account,
                 chainId: action.chainId,
             };
         case "SET_ADDRESS":
@@ -62,7 +68,7 @@ function reducer(state, action) {
 const ConnectButton = (props) => {
     const [state, dispatch] = useReducer(reducer, initialState);
 
-    const { provider, web3Provider } = state;
+    const { account, provider, web3Provider } = state;   
 
     const connect = useCallback(async function () {
         try {
@@ -81,12 +87,15 @@ const ConnectButton = (props) => {
 
             const web3Provider = new providers.Web3Provider(provider);
             const signer = web3Provider.getSigner();
+            console.log("signer:", signer);
+            const account = await signer.getAddress();
 
             dispatch({
                 type: "SET_WEB3_PROVIDER",
                 provider,
                 web3Provider,
-                show_address,
+                signer,
+                account,
                 chainId: network.chainId,
             });
         } catch (error) {
@@ -112,9 +121,6 @@ const ConnectButton = (props) => {
     }, []);
     const disconnect = useCallback(async function () {
         await web3Modal.clearCachedProvider();
-        // setSigner(null);
-        setShowAccountAddress(null);
-        setAccount(null);
         dispatch({
             type: "RESET_WEB3_PROVIDER",
         });

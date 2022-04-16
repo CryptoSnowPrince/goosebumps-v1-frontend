@@ -3,7 +3,6 @@ import { Exchange } from "./widgets/exchange/Exchange";
 import networks from "./../networks";
 import linq from "linq";
 
-
 const DEX = (props) => {
     const network = linq.from(networks).where(x => x.Name === "bsctestnet").single();
     console.log(network);
