@@ -89,6 +89,7 @@ const ConnectButton = (props) => {
             const signer = web3Provider.getSigner();
             console.log("signer:", signer);
             const account = await signer.getAddress();
+            console.log("account:", account);
 
             dispatch({
                 type: "SET_WEB3_PROVIDER",
