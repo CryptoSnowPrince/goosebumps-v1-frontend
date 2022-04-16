@@ -52,7 +52,7 @@ function reducer(state, action) {
         case "SET_ADDRESS":
             return {
                 ...state,
-                address: action.address,
+                account: action.account,
             };
         case "SET_CHAIN_ID":
             return {
@@ -87,9 +87,7 @@ const ConnectButton = (props) => {
 
             const web3Provider = new providers.Web3Provider(provider);
             const signer = web3Provider.getSigner();
-            console.log("signer:", signer);
             const account = await signer.getAddress();
-            console.log("account:", account);
 
             dispatch({
                 type: "SET_WEB3_PROVIDER",
@@ -137,7 +135,7 @@ const ConnectButton = (props) => {
                 connect();
                 dispatch({
                     type: "SET_ADDRESS",
-                    address: accounts[0],
+                    account: accounts[0],
                 });
             };
 
