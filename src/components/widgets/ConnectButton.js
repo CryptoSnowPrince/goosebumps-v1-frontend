@@ -65,6 +65,7 @@ function reducer(state, action) {
             throw new Error();
     }
 }
+
 const ConnectButton = (props) => {
     const [state, dispatch] = useReducer(reducer, initialState);
 
