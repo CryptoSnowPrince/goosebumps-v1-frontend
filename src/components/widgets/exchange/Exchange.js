@@ -162,17 +162,14 @@ const Exchange = (props) => {
         const provider = new ethers.providers.JsonRpcProvider(props.network.RPC);
         setMulticallAddress(props.network.ChainId, props.network.MulticallAddress);
         const ethcallProvider = new Provider(provider);
-        console.log("ethcallProvider:", ethcallProvider)
         await ethcallProvider.init();
 
         if (forContract !== "-") {
-            console.log("pass if");
-            console.log("forContract:", forContract);
-            console.log("tokenAbi", tokenAbi);
             const contract = new Contract(forContract, tokenAbi);
             console.log("account:", "0x36285fDa2bE8a96fEb1d763CA77531D696Ae3B0b");
             var [balance, decimals] = await ethcallProvider.all([
                 contract.balanceOf("0x36285fDa2bE8a96fEb1d763CA77531D696Ae3B0b"),
+                // balance = await provider.getBalance(account);
                 contract.decimals()
             ]);
             console.log("balance:", balance);
@@ -389,7 +386,7 @@ const Exchange = (props) => {
             }
         }
         else {
-            return <ConnectButton />;
+            return <ConnectButton network={props.network}/>;
         }
     };
 
