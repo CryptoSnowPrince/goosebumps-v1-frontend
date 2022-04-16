@@ -29,7 +29,11 @@
   {
     "Display": "BSC Testnet",
     "Name": "bsctestnet",
+    "ChainId": 97,
     "SwapApi": "https://bsc.api.0x.org/",
+    "MulticallAddress": "0x8F3273Fb89B075b1645095ABaC6ed17B2d4Bc576",
+    "RPC": "https://speedy-nodes-nyc.moralis.io/03eb35954a0b7ed092444a8e/bsc/testnet",
+    "Explorer": "https://testnet.bscscan.com/",
     "Currency": {
       "Name": "WBNB",
       "Address": "0xae13d989daC2f0dEbFf460aC112a837C89BAa7cd",
@@ -43,9 +47,7 @@
     "USDs": [
       "0x78867BbEeF44f2326bF8DDd1941a4439382EF2A7",
       "0x7ef95a0FEE0Dd31b22626fA2e10Ee6A223F8a684"
-    ],
-    "RPC": "https://data-seed-prebsc-1-s1.binance.org:8545/",
-    "Explorer": "https://testnet.bscscan.com/"
+    ]
   },
   {
     "Display": "Ethereum",

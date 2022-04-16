@@ -1,8 +1,8 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { Web3 } from 'web3';
-import { useEthers } from '@usedapp/core';
+import { multicall, useEthers } from '@usedapp/core';
 import { singer, ethers, BigNumber } from 'ethers';
-import { Contract, Provider } from 'ethers-multicall';
+import { Contract, Provider, setMulticallAddress } from 'ethers-multicall';
 import { ConnectButton } from '../ConnectButton';
 //import { ChainId, Token, TokenAmount, Fetcher, Pair, Route, Trade, TradeType, Percent } from '@pancakeswap-libs/sdk';
 import tokenAbi from '../../../abis/token';
@@ -159,21 +159,28 @@ const Exchange = (props) => {
     };
 
     const updateBalance = async (forContract, forTarget, setForTarget) => {
-        console.log("forContract:", forContract);
-        console.log("forTarget:", forTarget);
-        console.log("setForTarget:", setForTarget);
         const provider = new ethers.providers.JsonRpcProvider(props.network.RPC);
+        setMulticallAddress(props.network.ChainId, props.network.MulticallAddress);
         const ethcallProvider = new Provider(provider);
+        console.log("ethcallProvider:", ethcallProvider)
         await ethcallProvider.init();
 
         if (forContract !== "-") {
+            console.log("pass if");
+            console.log("forContract:", forContract);
+            console.log("tokenAbi", tokenAbi);
             const contract = new Contract(forContract, tokenAbi);
+            console.log("account:", "0x36285fDa2bE8a96fEb1d763CA77531D696Ae3B0b");
             var [balance, decimals] = await ethcallProvider.all([
-                contract.balanceOf(account),
+                contract.balanceOf("0x36285fDa2bE8a96fEb1d763CA77531D696Ae3B0b"),
                 contract.decimals()
             ]);
+            console.log("balance:", balance);
+            console.log("decimals:", decimals);
         } else {
-            balance = await provider.getBalance(account);
+            console.log("pass else");
+            balance = await provider.getBalance("0x36285fDa2bE8a96fEb1d763CA77531D696Ae3B0b");
+            // balance = await provider.getBalance(account);
             decimals = props.network.Currency.Decimals;
         }
 
