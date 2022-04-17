@@ -14,7 +14,9 @@ const rootElement = document.getElementById('root');
 ReactDOM.render(
   <DAppProvider>
     <BrowserRouter basename={baseUrl}>
-      <App />
+      <Provider store={store}>
+        <App />
+      </Provider>
     </BrowserRouter>
   </DAppProvider>
   , rootElement);
