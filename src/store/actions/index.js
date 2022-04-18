@@ -70,3 +70,6 @@ export const filterStatus = action('nft/FILTER_STATUS')();
 export const filterItemsType = action('nft/FILTER_ITEMS_TYPE')();
 export const filterCollections = action('nft/FILTER_COLLECTIONS')();
 export const filterNftTitle = action('nft/FILTER_NFT_TITLE')();
+
+export const setProvider = action('auth/SET_PROVIDER')();
+export const setAccount = action('auth/SET_ACCOUNT')();

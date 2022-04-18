@@ -9,6 +9,10 @@ export const hotCollectionsState = (state) => state.hotCollection.hotCollections
 export const authorsState = (state) => state.authors.authorList;
 export const authorRankingsState = (state) => state.authors.authorRanking;
 
+// Auth Selectors
+export const accountState = (state) => state.auth.account;
+export const providerState = (state) => state.auth.provider;
+
 //blogs
 export const blogsState = (state) => state.blogs.blogPosts;
 export const recentPostsState = (state) => state.blogs.recentPosts;
