@@ -1,6 +1,6 @@
 //import { useEthers } from '@usedapp/core'
 import React, { useCallback, useEffect, useReducer } from 'react';
-import { useSelector,useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { Mainnet, DAppProvider, useEtherBalance, useEthers, Config } from '@usedapp/core'
 import Web3Modal from "web3modal";
 import { providers/*, ethers*/ } from "ethers";
@@ -9,7 +9,7 @@ import config from '../../constants/config'
 import linq from "linq";
 import networks from "../../networks";
 import * as selector from '../../store/selectors';
-import { setProvider, setAccount } from '../../store/actions';
+import * as action from '../../store/actions';
 
 const network = linq.from(networks).where(x => x.Name === "bsctestnet").single();
 let web3Modal;
@@ -70,20 +70,19 @@ function reducer(state, action) {
 }
 
 const ConnectButton = (props) => {
-    const [state, dispatch] = useReducer(reducer, initialState);
-    
-    const dispatch1 = useDispatch();
+    const [state, dispatch2] = useReducer(reducer, initialState);
+
+    const dispatch = useDispatch();
 
     const myAccount = useSelector(selector.accountState);
 
-    const { account, provider, web3Provider } = state;   
+    const { account, provider, web3Provider } = state;
 
-    useEffect(()=>{
-        console.log("my account",myAccount);
+    useEffect(() => {
+        console.log("my account", myAccount);
     }, [myAccount]);
 
     const connect = useCallback(async function () {
-        dispatch1(setAccount("timestamp"));
         try {
             const provider = await web3Modal.connect();
             if (window.ethereum) {
@@ -102,7 +101,7 @@ const ConnectButton = (props) => {
             const signer = web3Provider.getSigner();
             const account = await signer.getAddress();
 
-            dispatch({
+            dispatch2({
                 type: "SET_WEB3_PROVIDER",
                 provider,
                 web3Provider,
@@ -110,6 +109,11 @@ const ConnectButton = (props) => {
                 account,
                 chainId: network.chainId,
             });
+            dispatch(action.setProvider(provider));
+            dispatch(action.setWeb3Provider(web3Provider));
+            dispatch(action.setSigner(signer));
+            dispatch(action.setAccount(account));
+            dispatch(action.setChainId(network.chainId));
         } catch (error) {
             if (error.code === 4902) {
                 try {
@@ -133,7 +137,7 @@ const ConnectButton = (props) => {
     }, []);
     const disconnect = useCallback(async function () {
         await web3Modal.clearCachedProvider();
-        dispatch({
+        dispatch2({
             type: "RESET_WEB3_PROVIDER",
         });
     }, []);
@@ -146,10 +150,11 @@ const ConnectButton = (props) => {
         if (provider) {
             const handleAccountsChanged = (accounts) => {
                 connect();
-                dispatch({
+                dispatch2({
                     type: "SET_ADDRESS",
                     account: accounts[0],
                 });
+                dispatch(action.setAccount(accounts[0]));
             };
 
             // https://docs.ethers.io/v5/concepts/best-practices/#best-practices--network-changes

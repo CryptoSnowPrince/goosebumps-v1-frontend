@@ -21,6 +21,8 @@ const states = (state = defaultState, action) => {
       return { ...state, account: action.payload };
     case getType(actions.setChainId):
       return { ...state, chainId: action.payload };
+    case getType(actions.setInit):
+      return defaultState;
     default:
       return state;
   }
