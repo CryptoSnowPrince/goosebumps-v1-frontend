@@ -13,11 +13,10 @@ import { TokenSelectModal } from './TokenSelectModal';
 import { useSelector, useDispatch } from 'react-redux';
 import * as selector from '../../../store/selectors';
 import * as action from '../../../store/actions';
-import { getFullDisplayBalance, formatBigNumber } from '../../../utils/number';
+import { getFullDisplayBalance, formatNumberWithoutComma } from '../../../utils/number';
 // console.log("Web3:", Web3);
 
 const Exchange = (props) => {
-    console.log(Number(123456.123).toLocaleString(undefined, { notation: "compact", compactDisplay: "long", maximumFractionDigits: 8 }))
     const account = useSelector(selector.accountState);
     const [connected, setConnected] = useState();
     const [loading, setLoading] = useState();
@@ -414,7 +413,7 @@ const Exchange = (props) => {
                                             <label htmlFor="from" className="w-100">From</label>
                                         </div>
                                         <div className="col text-end">
-                                            <button data-balance={from.balance} onClick={e => fillMaxAmount(e, "from")} type="button" className="w-100 text-end badge btn text-white">Balance: {Number(from.balance).toFixed(8)}</button>
+                                            <button data-balance={from.balance} onClick={e => fillMaxAmount(e, "from")} type="button" className="w-100 text-end badge btn text-white">Balance: {formatNumberWithoutComma(Number(from.balance))}</button>
                                         </div>
                                     </div>
                                     <div className="input-group">
@@ -433,7 +432,7 @@ const Exchange = (props) => {
                                             <label htmlFor="from" className="w-100">To</label>
                                         </div>
                                         <div className="col text-end">
-                                            <button data-balance={to.balance} onClick={e => fillMaxAmount(e, "to")} type="button" className="w-100 text-end badge btn text-white">Balance: {Number(to.balance).toLocaleString(undefined, { notation: "standard", maximumFractionDigits: 8 })}</button>
+                                            <button data-balance={to.balance} onClick={e => fillMaxAmount(e, "to")} type="button" className="w-100 text-end badge btn text-white">Balance: {formatNumberWithoutComma(Number(to.balance))}</button>
                                         </div>
                                     </div>
                                     <div className="input-group">

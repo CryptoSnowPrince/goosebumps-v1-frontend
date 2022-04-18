@@ -26,7 +26,7 @@ export const getFullDisplayBalance = (balance: BigNumber, decimals = 18, display
   return getBalanceAmount(balance, decimals).toFixed(displayDecimals)
 }
 
-export const formatNumber = (number: number, minPrecision = 2, maxPrecision = 2) => {
+export const formatNumber = (number, minPrecision = 2, maxPrecision = 2) => {
   const options = {
     minimumFractionDigits: minPrecision,
     maximumFractionDigits: maxPrecision,
@@ -41,6 +41,10 @@ export const formatNumber = (number: number, minPrecision = 2, maxPrecision = 2)
 export const formatBigNumber = (number: ethers.BigNumber, displayDecimals = 18, decimals = 18) => {
   const remainder = number.mod(ethers.BigNumber.from(10).pow(decimals - displayDecimals))
   return formatUnits(number.sub(remainder), decimals)
+}
+
+export const formatNumberWithoutComma = (number, minPrecision = 1, maxPrecision = 8) => {
+  return formatNumber(number, minPrecision, maxPrecision).toString().replaceAll(',', '');
 }
 
 /**
