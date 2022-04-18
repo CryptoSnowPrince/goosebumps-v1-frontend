@@ -33,54 +33,57 @@ if (typeof window !== "undefined") {
     });
 }
 
-const initialState = {
-    provider: null,
-    web3Provider: null,
-    signer: null,
-    account: null,
-    chainId: null,
-};
+// const initialState = {
+//     provider: null,
+//     web3Provider: null,
+//     signer: null,
+//     account: null,
+//     chainId: null,
+// };
 
-function reducer(state, action) {
-    switch (action.type) {
-        case "SET_WEB3_PROVIDER":
-            return {
-                ...state,
-                provider: action.provider,
-                web3Provider: action.web3Provider,
-                singer: action.singer,
-                account: action.account,
-                chainId: action.chainId,
-            };
-        case "SET_ADDRESS":
-            return {
-                ...state,
-                account: action.account,
-            };
-        case "SET_CHAIN_ID":
-            return {
-                ...state,
-                chainId: action.chainId,
-            };
-        case "RESET_WEB3_PROVIDER":
-            return initialState;
-        default:
-            throw new Error();
-    }
-}
+// function reducer(state, action) {
+//     switch (action.type) {
+//         case "SET_WEB3_PROVIDER":
+//             return {
+//                 ...state,
+//                 provider: action.provider,
+//                 web3Provider: action.web3Provider,
+//                 singer: action.singer,
+//                 account: action.account,
+//                 chainId: action.chainId,
+//             };
+//         case "SET_ADDRESS":
+//             return {
+//                 ...state,
+//                 account: action.account,
+//             };
+//         case "SET_CHAIN_ID":
+//             return {
+//                 ...state,
+//                 chainId: action.chainId,
+//             };
+//         case "RESET_WEB3_PROVIDER":
+//             return initialState;
+//         default:
+//             throw new Error();
+//     }
+// }
 
 const ConnectButton = (props) => {
-    const [state, dispatch2] = useReducer(reducer, initialState);
+    // const [state, dispatch2] = useReducer(reducer, initialState);
 
     const dispatch = useDispatch();
 
-    const myAccount = useSelector(selector.accountState);
+    const account = useSelector(selector.accountState);
+    const provider = useSelector(selector.providerState);
 
-    const { account, provider, web3Provider } = state;
+    // const { account, provider, web3Provider } = state;
 
     useEffect(() => {
-        console.log("my account", myAccount);
-    }, [myAccount]);
+        if (account !== '') {
+            console.log("my account: ", account);
+        }
+    }, [account]);
 
     const connect = useCallback(async function () {
         try {
@@ -101,14 +104,14 @@ const ConnectButton = (props) => {
             const signer = web3Provider.getSigner();
             const account = await signer.getAddress();
 
-            dispatch2({
-                type: "SET_WEB3_PROVIDER",
-                provider,
-                web3Provider,
-                signer,
-                account,
-                chainId: network.chainId,
-            });
+            // dispatch2({
+            //     type: "SET_WEB3_PROVIDER",
+            //     provider,
+            //     web3Provider,
+            //     signer,
+            //     account,
+            //     chainId: network.chainId,
+            // });
             dispatch(action.setProvider(provider));
             dispatch(action.setWeb3Provider(web3Provider));
             dispatch(action.setSigner(signer));
@@ -137,9 +140,10 @@ const ConnectButton = (props) => {
     }, []);
     const disconnect = useCallback(async function () {
         await web3Modal.clearCachedProvider();
-        dispatch2({
-            type: "RESET_WEB3_PROVIDER",
-        });
+        // dispatch2({
+        //     type: "RESET_WEB3_PROVIDER",
+        // });
+        dispatch(action.setInit());
     }, []);
     useEffect(() => {
         if (web3Modal.cachedProvider) {
@@ -150,10 +154,10 @@ const ConnectButton = (props) => {
         if (provider) {
             const handleAccountsChanged = (accounts) => {
                 connect();
-                dispatch2({
-                    type: "SET_ADDRESS",
-                    account: accounts[0],
-                });
+                // dispatch2({
+                //     type: "SET_ADDRESS",
+                //     account: accounts[0],
+                // });
                 dispatch(action.setAccount(accounts[0]));
             };
 
