@@ -1,5 +1,6 @@
 //import { useEthers } from '@usedapp/core'
 import React, { useCallback, useEffect, useReducer } from 'react';
+import { useSelector,useDispatch } from 'react-redux';
 import { Mainnet, DAppProvider, useEtherBalance, useEthers, Config } from '@usedapp/core'
 import Web3Modal from "web3modal";
 import { providers/*, ethers*/ } from "ethers";
@@ -7,6 +8,8 @@ import WalletConnectProvider from "@walletconnect/web3-provider";
 import config from '../../constants/config'
 import linq from "linq";
 import networks from "../../networks";
+import * as selector from '../../store/selectors';
+import { setProvider, setAccount } from '../../store/actions';
 
 const network = linq.from(networks).where(x => x.Name === "bsctestnet").single();
 let web3Modal;
@@ -68,10 +71,15 @@ function reducer(state, action) {
 
 const ConnectButton = (props) => {
     const [state, dispatch] = useReducer(reducer, initialState);
+    
+    const dispatch1 = useDispatch();
+
+    const myAccount = useSelector(selector.accountState);
 
     const { account, provider, web3Provider } = state;   
 
     const connect = useCallback(async function () {
+        dispatch1(setAccount('asdsdfsfd'));
         try {
             const provider = await web3Modal.connect();
             if (window.ethereum) {
@@ -120,6 +128,7 @@ const ConnectButton = (props) => {
         }
     }, []);
     const disconnect = useCallback(async function () {
+        console.log(myAccount);
         await web3Modal.clearCachedProvider();
         dispatch({
             type: "RESET_WEB3_PROVIDER",
