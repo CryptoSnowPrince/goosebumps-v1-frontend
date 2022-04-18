@@ -8,6 +8,7 @@ export const defaultState = {
 };
 
 const states = (state = defaultState, action) => {
+  console.log("action payload: ", action.payload);
   switch (action.type) {
 
     case getType(actions.setProvider):

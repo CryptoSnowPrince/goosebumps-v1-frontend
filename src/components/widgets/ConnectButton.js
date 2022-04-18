@@ -78,8 +78,16 @@ const ConnectButton = (props) => {
 
     const { account, provider, web3Provider } = state;   
 
+    useEffect(()=>{
+        console.log("my account",myAccount);
+    }, [myAccount]);
+
     const connect = useCallback(async function () {
-        dispatch1(setAccount('asdsdfsfd'));
+        const timestamp = Date.now().toString();
+        console.log("typeof timestamp: ", typeof timestamp)
+        dispatch1(setAccount(timestamp));
+        // dispatch1(setAccount(timestamp.toString()));
+        console.log(`dispatch=${timestamp}`)
         try {
             const provider = await web3Modal.connect();
             if (window.ethereum) {
@@ -128,7 +136,6 @@ const ConnectButton = (props) => {
         }
     }, []);
     const disconnect = useCallback(async function () {
-        console.log(myAccount);
         await web3Modal.clearCachedProvider();
         dispatch({
             type: "RESET_WEB3_PROVIDER",
