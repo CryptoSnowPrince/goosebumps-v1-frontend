@@ -10,10 +10,14 @@ import { Requester } from "../../../requester";
 import numberHelper from "../../../numberHelper";
 import NumberFormat from "react-number-format";
 import { TokenSelectModal } from './TokenSelectModal';
+import { useSelector, useDispatch } from 'react-redux';
+import * as selector from '../../../store/selectors';
+import * as action from '../../../store/actions';
 // console.log("Web3:", Web3);
 
 const Exchange = (props) => {
-    const { account } = useEthers();
+    const account = useSelector(selector.accountState);
+    // const { account } = useEthers();
     const [connected, setConnected] = useState();
     const [loading, setLoading] = useState();
     const [ready, setReady] = useState();
@@ -159,25 +163,27 @@ const Exchange = (props) => {
     };
 
     const updateBalance = async (forContract, forTarget, setForTarget) => {
+        console.log("pass");
         const provider = new ethers.providers.JsonRpcProvider(props.network.RPC);
         setMulticallAddress(props.network.ChainId, props.network.MulticallAddress);
         const ethcallProvider = new Provider(provider);
         await ethcallProvider.init();
 
         if (forContract !== "-") {
+            console.log("pass if");
             const contract = new Contract(forContract, tokenAbi);
-            console.log("account:", "0x36285fDa2bE8a96fEb1d763CA77531D696Ae3B0b");
+            // console.log("account:", "0x36285fDa2bE8a96fEb1d763CA77531D696Ae3B0b");
             var [balance, decimals] = await ethcallProvider.all([
-                contract.balanceOf("0x36285fDa2bE8a96fEb1d763CA77531D696Ae3B0b"),
-                // balance = await provider.getBalance(account);
+                // contract.balanceOf("0x36285fDa2bE8a96fEb1d763CA77531D696Ae3B0b"),
+                contract.balanceOf(account),
                 contract.decimals()
             ]);
             console.log("balance:", balance);
             console.log("decimals:", decimals);
         } else {
             console.log("pass else");
-            balance = await provider.getBalance("0x36285fDa2bE8a96fEb1d763CA77531D696Ae3B0b");
-            // balance = await provider.getBalance(account);
+            // balance = await provider.getBalance("0x36285fDa2bE8a96fEb1d763CA77531D696Ae3B0b");
+            balance = await provider.getBalance(account);
             decimals = props.network.Currency.Decimals;
         }
 

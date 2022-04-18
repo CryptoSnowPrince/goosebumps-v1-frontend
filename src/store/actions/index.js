@@ -1,6 +1,6 @@
 import { 
-    createAction as action, 
-    createAsyncAction as asyncAction 
+    createAction as action,
+    // createAsyncAction as asyncAction 
 } from 'typesafe-actions';
 
 // Wallet connect
@@ -12,5 +12,5 @@ export const setChainId = action('auth/SET_CHAINID')();
 export const setInit = action('auth/SET_INIT')();
 
 // Select chain
-export const setSelChain = action('network/SET_CHAIN');
-export const setSelChainInit = action('network/SET_INIT');
+export const setSelChain = action('selChain/SET_CHAIN')();
+export const setSelChainInit = action('selChain/SET_INIT')();

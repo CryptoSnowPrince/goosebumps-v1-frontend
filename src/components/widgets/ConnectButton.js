@@ -42,7 +42,7 @@ const ConnectButton = (props) => {
 
     useEffect(() => {
         if (account !== '') {
-            console.log("my account: ", account);
+            console.log("account: ", account);
         }
     }, [account]);
 
