@@ -5,3 +5,6 @@ import {
 
 export const setProvider = action('auth/SET_PROVIDER')();
 export const setAccount = action('auth/SET_ACCOUNT')();
+export const setWeb3Provider = action('auth/SET_WEB3PROVIDER')();
+export const setSigner = action('auth/SET_SIGNER')();
+export const setChainId = action('auth/SET_CHAINID')();

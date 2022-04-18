@@ -83,11 +83,7 @@ const ConnectButton = (props) => {
     }, [myAccount]);
 
     const connect = useCallback(async function () {
-        const timestamp = Date.now().toString();
-        console.log("typeof timestamp: ", typeof timestamp)
-        dispatch1(setAccount(timestamp));
-        // dispatch1(setAccount(timestamp.toString()));
-        console.log(`dispatch=${timestamp}`)
+        dispatch1(setAccount("timestamp"));
         try {
             const provider = await web3Modal.connect();
             if (window.ethereum) {
