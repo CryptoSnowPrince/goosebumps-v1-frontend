@@ -386,7 +386,7 @@ const Exchange = (props) => {
             }
         }
         else {
-            return <ConnectButton network={props.network}/>;
+            return <ConnectButton />;
         }
     };
 
