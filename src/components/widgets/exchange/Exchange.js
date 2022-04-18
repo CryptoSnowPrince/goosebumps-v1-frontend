@@ -241,8 +241,6 @@ const Exchange = (props) => {
     const invert = () => {
         const newFrom = Object.assign({}, to);
         const newTo = Object.assign({}, from);
-        console.log("newFrom:", newFrom);
-        console.log("newTo:", newTo);
         setFrom(newFrom);
         setTo(newTo);
         resetQuote(newFrom, newTo);
