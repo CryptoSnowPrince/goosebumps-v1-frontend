@@ -13,9 +13,11 @@ import { TokenSelectModal } from './TokenSelectModal';
 import { useSelector, useDispatch } from 'react-redux';
 import * as selector from '../../../store/selectors';
 import * as action from '../../../store/actions';
+import { getFullDisplayBalance, formatBigNumber } from '../../../utils/number';
 // console.log("Web3:", Web3);
 
 const Exchange = (props) => {
+    console.log(Number(123456.123).toLocaleString(undefined, { notation: "compact", compactDisplay: "long", maximumFractionDigits: 8 }))
     const account = useSelector(selector.accountState);
     const [connected, setConnected] = useState();
     const [loading, setLoading] = useState();
@@ -162,21 +164,18 @@ const Exchange = (props) => {
     };
 
     const updateBalance = async (forContract, forTarget, setForTarget) => {
-        console.log("pass");
         const provider = new ethers.providers.JsonRpcProvider(props.network.RPC);
         setMulticallAddress(props.network.ChainId, props.network.MulticallAddress);
         const ethcallProvider = new Provider(provider);
         await ethcallProvider.init();
 
         if (forContract !== "-") {
-            console.log("pass if");
             const contract = new Contract(forContract, tokenAbi);
             var [balance, decimals] = await ethcallProvider.all([
                 contract.balanceOf(account),
                 contract.decimals()
             ]);
         } else {
-            console.log("pass else");
             balance = await provider.getBalance(account);
             decimals = props.network.Currency.Decimals;
         }
@@ -415,14 +414,13 @@ const Exchange = (props) => {
                                             <label htmlFor="from" className="w-100">From</label>
                                         </div>
                                         <div className="col text-end">
-                                            <button data-balance={from.balance} onClick={e => fillMaxAmount(e, "from")} type="button" className="w-100 text-end badge btn text-white">Balance: {from.balance}</button>
+                                            <button data-balance={from.balance} onClick={e => fillMaxAmount(e, "from")} type="button" className="w-100 text-end badge btn text-white">Balance: {Number(from.balance).toFixed(8)}</button>
                                         </div>
                                     </div>
                                     <div className="input-group">
                                         <input id="from" type="text" className="form-control me-2" placeholder="0" autoComplete="off" onChange={e => onAmountChange(e, "from")} min="0" max={from.balance} value={from.amount} />
                                         <div className="input-group-addon">
                                             <button type="button" className="default-btn" onClick={() => setShowTokenSelectModal("from")}>{from.symbol}</button>
-                                            {/* <button type="button" className="default-btn" onClick={() => setShowTokenSelectModal("from")}>{from.symbol}</button> */}
                                         </div>
                                     </div>
                                 </div>
@@ -435,7 +433,7 @@ const Exchange = (props) => {
                                             <label htmlFor="from" className="w-100">To</label>
                                         </div>
                                         <div className="col text-end">
-                                            <button data-balance={to.balance} onClick={e => fillMaxAmount(e, "to")} type="button" className="w-100 text-end badge btn text-white">Balance: {to.balance}</button>
+                                            <button data-balance={to.balance} onClick={e => fillMaxAmount(e, "to")} type="button" className="w-100 text-end badge btn text-white">Balance: {Number(to.balance).toLocaleString(undefined, { notation: "standard", maximumFractionDigits: 8 })}</button>
                                         </div>
                                     </div>
                                     <div className="input-group">
