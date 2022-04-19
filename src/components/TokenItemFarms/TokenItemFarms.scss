@@ -1,4 +1,4 @@
-#TokenItem {
+#TokenItemFarm {
   .first {
     background-color: #18283a;
   }
@@ -16,7 +16,13 @@
   }
   .first {
     .title {
-      font-size: 26px;
+      font-size: 22px;
+    }
+    .earned {
+      font-size: 13px;
+    }
+    .earned-value {
+      font-size: 17px;
     }
   }
   .token-avatar {
