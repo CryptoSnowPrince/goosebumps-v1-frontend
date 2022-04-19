@@ -20,9 +20,9 @@ const NavMenu = () => {
     const loginSuccess = (response) => {
         console.log(response);
         setUser({
-            email: response.profileObj.email,
-            name: response.profileObj.name,
-            imageUrl: response.profileObj.imageUrl
+            email: response?.profileObj.email,
+            name: response?.profileObj.name,
+            imageUrl: response?.profileObj.imageUrl
         });
         setAuthenticated(true);
     }
@@ -94,8 +94,9 @@ const NavMenu = () => {
                                 <Link className="nav-link mx-lg-2 mx-xl-4" to="/charts">Charts</Link>
                             </NavItem>
                             <NavItem>
-                                <span className="nav-link mx-lg-2 mx-xl-4" onClick={() => setShow(true)}>Stake</span>
-                                <ComingSoonModal show={show} hide={() => setShow()} />
+                                <Link className="nav-link mx-lg-2 mx-xl-4" to="/stake">Stake</Link>
+                                {/* <span className="nav-link mx-lg-2 mx-xl-4" onClick={() => setShow(true)}>Stake</span>
+                                <ComingSoonModal show={show} hide={() => setShow()} /> */}
                             </NavItem>
                             <NavItem>
                                 <Link className="nav-link mx-lg-2 mx-xl-4" to="/dex">DEX</Link>
