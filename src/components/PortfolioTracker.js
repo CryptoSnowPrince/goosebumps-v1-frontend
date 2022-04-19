@@ -218,11 +218,11 @@ const PortfolioTracker = () => {
                                             {
                                                 token.info.isETH
                                                     ? <>
-                                                        <NumberFormat value={token.info.supply.circulation * (token.info.price * ethPrice)} decimalScale="0" decimalSeparator="" displayType="text" thousandSeparator="," prefix="$" />
+                                                        <NumberFormat value={token.info.supply?.circulation * (token.info.price * ethPrice)} decimalScale="0" decimalSeparator="" displayType="text" thousandSeparator="," prefix="$" />
                                                         <br />
-                                                        <span className="text-secondary">(<NumberFormat value={token.info.supply.circulation * token.info.price} decimalSeparator="" decimalScale="0" displayType="text" thousandSeparator="," suffix={" " + token.pair.sellCurrency.symbol} />)</span>
+                                                        <span className="text-secondary">(<NumberFormat value={token.info.supply?.circulation * token.info.price} decimalSeparator="" decimalScale="0" displayType="text" thousandSeparator="," suffix={" " + token.pair.sellCurrency.symbol} />)</span>
                                                     </>
-                                                    : <NumberFormat value={token.info.supply.circulation * token.info.price} decimalScale="0" decimalSeparator="" displayType="text" thousandSeparator="," suffix={" " + token.pair.sellCurrency.symbol} />
+                                                    : <NumberFormat value={token.info.supply?.circulation * token.info.price} decimalScale="0" decimalSeparator="" displayType="text" thousandSeparator="," suffix={" " + token.pair.sellCurrency.symbol} />
                                             }
                                         </td>
                                         <td>

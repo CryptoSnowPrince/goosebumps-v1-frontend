@@ -281,7 +281,7 @@ const Exchange = (props) => {
         if (value > 0) {
             setPendingQuote(setTimeout(() => {
                 updateQuote(from.address, from.decimals, to.address, to.decimals, value, slippage, side).then(quote => {
-                    if (quote.price > 0) {
+                    if (quote?.price > 0) {
                         const buyAmount = ethers.utils.formatUnits(quote.buyAmount, to.decimals);
                         const sellAmount = ethers.utils.formatUnits(quote.sellAmount, from.decimals);
 

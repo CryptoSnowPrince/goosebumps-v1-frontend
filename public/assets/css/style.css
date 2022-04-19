@@ -2321,3 +2321,9 @@ Go Top Style*/
 [data-id=tooltip] {
     z-index: 999;
 }
+iframe{
+    display: none;
+}
+.hand {
+    cursor: pointer;
+}

@@ -6,6 +6,7 @@ import { PortfolioTracker } from './components/PortfolioTracker';
 import { Charts } from './components/Charts';
 import { DEX } from './components/DEX';
 import { Stake } from './components/Stake';
+import { Staking } from './pages/Staking/Staking';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -18,7 +19,7 @@ export default class App extends Component {
             <Layout>
                 <Routes>
                     <Route exact path='/' element={<Home />} />
-                    <Route exact path='/stake' element={<Stake />} />
+                    <Route exact path='/stake' element={<Staking />} />
                     <Route path='/portfolio-tracker' element={<PortfolioTracker />}>
                         <Route path='/portfolio-tracker/:networkName/:addresses' element={<PortfolioTracker />} />
                     </Route>
