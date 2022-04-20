@@ -11,7 +11,7 @@ import networks from "../../networks";
 import * as selector from '../../store/selectors';
 import * as action from '../../store/actions';
 
-const network = linq.from(networks).where(x => x.Name === "bsctestnet").single();
+const network = linq.from(networks).where(x => x.Name === "ropsten").single();
 let web3Modal;
 if (typeof window !== "undefined") {
     web3Modal = new Web3Modal({
