@@ -18,27 +18,27 @@
     "Symbol": "GBFT",
     "Address": "0xA6454bbA55F46Ef488c599c44867DF5eE3D6F543",
     "Decimals": 18,
-    "Logo": "https://bscscan.com/token/images/binance_32.png"
+    "Logo": "https://bscscan.com/images/main/empty-token.png"
   },
   {
     "Name": "GooseBumps Second Token",
     "Symbol": "GBST",
     "Address": "0xA490CfCE72c5d7344A177c6fCAdfBf0991816e93",
     "Decimals": 18,
-    "Logo": "https://bscscan.com/token/images/binance_32.png"
+    "Logo": "https://bscscan.com/images/main/empty-token.png"
   },
   {
     "Name": "GooseBumps Third Token",
     "Symbol": "GBTT",
     "Address": "0x2FC145e7A2e6E1E83C55B7e73422072B70C73A77",
     "Decimals": 18,
-    "Logo": "https://bscscan.com/token/images/binance_32.png"
+    "Logo": "https://bscscan.com/images/main/empty-token.png"
   },
   {
     "Name": "GooseBumps Firth Token",
     "Symbol": "GBFT",
     "Address": "0x238CD26cccc1C714201Fc8bf49d453a39f494209",
     "Decimals": 18,
-    "Logo": "https://bscscan.com/token/images/binance_32.png"
+    "Logo": "https://bscscan.com/images/main/empty-token.png"
   }
 ]
