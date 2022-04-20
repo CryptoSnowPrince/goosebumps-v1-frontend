@@ -9,29 +9,15 @@
   {
     "Name": "Wrapped Ether",
     "Symbol": "WETH",
-    "Address": "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
+    "Address": "0xc778417E063141139Fce010982780140Aa0cD5Ab",
     "Decimals": 18,
     "Logo": "https://raw.githubusercontent.com/Uniswap/assets/master/blockchains/ethereum/assets/0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2/logo.png"
   },
   {
     "Name": "Tether USD",
     "Symbol": "USDT",
-    "Address": "0xdAC17F958D2ee523a2206206994597C13D831ec7",
+    "Address": "0x110a13FC3efE6A245B50102D2d79B3E76125Ae83",
     "Decimals": 6,
     "Logo": "https://etherscan.io/token/images/tether_32.png"
-  },
-  {
-    "Name": "Matic Token",
-    "Symbol": "MATIC",
-    "Address": "0x7D1AfA7B718fb893dB30A3aBc0Cfc608AaCfeBB0",
-    "Decimals": 18,
-    "Logo": "https://assets.coingecko.com/coins/images/4713/thumb/matic-token-icon.png?1624446912"
-  },
-  {
-    "Name": "LooksRare Token",
-    "Symbol": "LOOKS",
-    "Address": "0xf4d2888d29D722226FafA5d9B24F9164c092421E",
-    "Decimals": 18,
-    "Logo": "https://etherscan.io/token/images/looksrare_32.png"
   }
 ]
