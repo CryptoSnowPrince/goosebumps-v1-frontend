@@ -40,5 +40,12 @@
     "Address": "0x238CD26cccc1C714201Fc8bf49d453a39f494209",
     "Decimals": 18,
     "Logo": "https://bscscan.com/images/main/empty-token.png"
+  },
+  {
+    "Name": "Tether USD",
+    "Symbol": "USDT",
+    "Address": "0x7ef95a0FEE0Dd31b22626fA2e10Ee6A223F8a684",
+    "Decimals": 18,
+    "Logo": "https://etherscan.io/token/images/tether_32.png"
   }
 ]
