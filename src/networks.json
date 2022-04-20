@@ -84,7 +84,7 @@
     "Name": "bsctestnet",
     "ChainId": 97,
     "chainHexID": "0x61",
-    "SwapApi": "https://bsc.api.0x.org/",
+    "SwapApi": "",
     "MulticallAddress": "0x8F3273Fb89B075b1645095ABaC6ed17B2d4Bc576",
     "RPC": "https://speedy-nodes-nyc.moralis.io/03eb35954a0b7ed092444a8e/bsc/testnet",
     "Explorer": "https://testnet.bscscan.com/",
