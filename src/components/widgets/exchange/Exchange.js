@@ -213,11 +213,16 @@ const Exchange = (props) => {
     };
 
     const confirm = () => {
+        console.log("confirm:0");
         setReady();
+        console.log("confirm:1");
         setConfirmed(true);
+        console.log("confirm:2");
         validateQuote().then(() => {
+            console.log("confirm:3");
             setReady(true);
         });
+        console.log("confirm:4");
     }
 
     const trade = async () => {
