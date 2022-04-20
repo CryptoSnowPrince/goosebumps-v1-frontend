@@ -1,7 +1,62 @@
 ﻿[
   {
+    "Display": "Ethereum",
+    "Name": "ethereum",
+    "ChainId": 1,
+    "chainHexID": "0x1",
+    "RPC": "https://mainnet.infura.io/v3/687f55defdfe416faa0b388c1332727c",
+    "Explorer": "https://etherscan.io/",
+    "SwapApi": "https://api.0x.org/",
+    "Currency": {
+      "Name": "ETH",
+      "Address": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+      "Decimals": 18
+    },
+    "USD": {
+      "Address": "0xdac17f958d2ee523a2206206994597c13d831ec7",
+      "Pair": "0x0d4a11d5eeaac28ec3f61d100daf4d40471f1852",
+      "Decimals": 6
+    },
+    "USDs": [
+      "0xdac17f958d2ee523a2206206994597c13d831ec7",
+      "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+      "0x4fabb145d64652a948d72533023f6e7a623c7c53",
+      "0xa47c8bf37f92abed4a126bda807a7b7498661acd",
+      "0x6b175474e89094c44da98b954eedeac495271d0f",
+      "0x0000000000085d4780b73119b644ae5ecd22b376",
+      "0x8e870d67f660d95d5be530380d0ec0bd388289e1"
+    ]
+  },
+  {
+    "Display": "Ropsten",
+    "Name": "ropsten",
+    "ChainId": 3,
+    "chainHexID": "0x3",
+    "RPC": "https://ropsten.infura.io/v3/687f55defdfe416faa0b388c1332727c",
+    "Explorer": "https://ropsten.etherscan.io",
+    "SwapApi": "https://ropsten.api.0x.org/",
+    "Currency": {
+      "Name": "WETH",
+      "Address": "0xc778417E063141139Fce010982780140Aa0cD5Ab",
+      "Decimals": 18
+    },
+    "USD": {
+      "Address": "0x110a13FC3efE6A245B50102D2d79B3E76125Ae83",
+      "Pair": "0xE5133CA897f1c5cdd273775EEFB950f3055F125D",
+      "Decimals": 6
+    },
+    "USDs": [
+      "0x110a13FC3efE6A245B50102D2d79B3E76125Ae83",
+      "0x07865c6E87B9F70255377e024ace6630C1Eaa37F"
+    ]
+  },
+  {
     "Display": "BSC",
     "Name": "bsc",
+    "ChainId": 56,
+    "chainHexID": "0x38",
+    "RPC": "https://speedy-nodes-nyc.moralis.io/03eb35954a0b7ed092444a8e/bsc/mainnet",
+    "Explorer": "https://bscscan.com/",
     "SwapApi": "https://bsc.api.0x.org/",
     "Currency": {
       "Name": "BNB",
@@ -22,9 +77,7 @@
       "0x1af3f329e8be154074d8769d1ffa4ee058b1dbc3",
       "0x14016e85a25aeb13065688cafb43044c2ef86784",
       "0xb7f8cd00c5a06c0537e2abff0b58033d02e5e094"
-    ],
-    "RPC": "https://bsc-dataseed1.defibit.io/",
-    "Explorer": "https://bscscan.com/"
+    ]
   },
   {
     "Display": "BSC Testnet",
@@ -51,57 +104,12 @@
     ]
   },
   {
-    "Display": "Ethereum",
-    "Name": "ethereum",
-    "SwapApi": "https://api.0x.org/",
-    "Currency": {
-      "Name": "ETH",
-      "Address": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
-      "Decimals": 18
-    },
-    "USD": {
-      "Address": "0xdac17f958d2ee523a2206206994597c13d831ec7",
-      "Pair": "0x0d4a11d5eeaac28ec3f61d100daf4d40471f1852",
-      "Decimals": 6
-    },
-    "USDs": [
-      "0xdac17f958d2ee523a2206206994597c13d831ec7",
-      "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
-      "0x4fabb145d64652a948d72533023f6e7a623c7c53",
-      "0xa47c8bf37f92abed4a126bda807a7b7498661acd",
-      "0x6b175474e89094c44da98b954eedeac495271d0f",
-      "0x0000000000085d4780b73119b644ae5ecd22b376",
-      "0x8e870d67f660d95d5be530380d0ec0bd388289e1"
-    ],
-    "RPC": "https://mainnet.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161",
-    "Explorer": "https://etherscan.io/"
-  },
-  {
-    "Display": "Ropsten",
-    "Name": "ropsten",
-    "ChainId": 3,
-    "chainHexID": "0x3",
-    "SwapApi": "https://ropsten.api.0x.org/",
-    "Currency": {
-      "Name": "WETH",
-      "Address": "0xc778417E063141139Fce010982780140Aa0cD5Ab",
-      "Decimals": 18
-    },
-    "USD": {
-      "Address": "0x110a13FC3efE6A245B50102D2d79B3E76125Ae83",
-      "Pair": "0xE5133CA897f1c5cdd273775EEFB950f3055F125D",
-      "Decimals": 6
-    },
-    "USDs": [
-      "0x110a13FC3efE6A245B50102D2d79B3E76125Ae83",
-      "0x07865c6E87B9F70255377e024ace6630C1Eaa37F"
-    ],
-    "RPC": "https://ropsten.infura.io/v3/687f55defdfe416faa0b388c1332727c",
-    "Explorer": "https://ropsten.etherscan.io"
-  },
-  {
     "Display": "Matic",
     "Name": "matic",
+    "ChainId": 137,
+    "chainHexID": "0x89",
+    "RPC": "https://speedy-nodes-nyc.moralis.io/03eb35954a0b7ed092444a8e/polygon/mainnet",
+    "Explorer": "https://polygonscan.com/",
     "SwapApi": "https://polygon.api.0x.org/",
     "Currency": {
       "Name": "MATIC",
@@ -117,8 +125,6 @@
       "0x2791bca1f2de4661ed88a30c99a7a9449aa84174",
       "0xc2132d05d31c914a87c6611c10748aeb04b58e8f",
       "0x8f3cf7ad23cd3cadbd9735aff958023239c6a063"
-    ],
-    "RPC": "https://rpc-mainnet.matic.network/",
-    "Explorer": "https://polygonscan.com/"
+    ]
   }
 ]

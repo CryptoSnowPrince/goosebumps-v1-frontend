@@ -23,8 +23,13 @@ if (typeof window !== "undefined") {
                 options: {
                     infuraId: config.INFURA_ID, // required
                     rpc: {
-                        // 56: config.RpcURL[config.chainID],
-                        97: network.RPC,
+                        1: "https://mainnet.infura.io/v3/687f55defdfe416faa0b388c1332727c", // Ethereum mainnet
+                        3: "https://ropsten.infura.io/v3/687f55defdfe416faa0b388c1332727c", // Ropsten testnet
+                        4: "https://rinkeby.infura.io/v3/687f55defdfe416faa0b388c1332727c", // Rinkeby testnet
+                        56: "https://speedy-nodes-nyc.moralis.io/03eb35954a0b7ed092444a8e/bsc/mainnet", // BSC mainnet
+                        97: "https://speedy-nodes-nyc.moralis.io/03eb35954a0b7ed092444a8e/bsc/testnet", // BSC testnet
+                        137: "https://speedy-nodes-nyc.moralis.io/03eb35954a0b7ed092444a8e/polygon/mainnet", // Polygon mainnet
+                        80001: "https://speedy-nodes-nyc.moralis.io/03eb35954a0b7ed092444a8e/polygon/mumbai", // Mumbai Polygon testnet
                     },
                 },
             },
