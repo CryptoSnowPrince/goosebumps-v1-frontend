@@ -101,6 +101,9 @@ const NavMenu = () => {
                             <NavItem>
                                 <Link className="nav-link mx-lg-2 mx-xl-4" to="/dex">DEX</Link>
                             </NavItem>
+                            <NavItem>
+                                <Link className="nav-link mx-lg-2 mx-xl-4" to="/bridge">Bridge</Link>
+                            </NavItem>
                         </Nav>
                         <Navbar.Text className='ms-lg-2 ms-xl-4'>
                             {
