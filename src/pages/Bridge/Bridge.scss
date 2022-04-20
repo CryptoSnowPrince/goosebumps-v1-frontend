@@ -1,0 +1,81 @@
+#bridge {
+  background: #121e30;
+  border-radius: 20px;
+  max-width: 680px;
+  margin: 5% auto;
+  // padding: 4rem;
+  .chainList {
+    background-color: #18283a;
+    border-radius: 19px;
+    width: 260px;
+    height: 240px;
+    .title {
+      font-size: 19px;
+      color: #939393;
+    }
+    .selectChain {
+      select {
+        font-size: 24px;
+        background-color: transparent;
+        color: #fff;
+        border: none;
+        &:focus-visible {
+          border: none;
+          outline: none;
+        }
+        option {
+          background-color: #121e30;
+          border: none;
+        }
+      }
+    }
+  }
+  .bridge-amount {
+    background-color: #18283a;
+    border: none;
+    border-radius: 12px;
+    padding: 12px;
+    font-size: 19px;
+    color: #fff;
+    &::placeholder {
+      color: #939393;
+      opacity: 1;
+    }
+  }
+  .bridge-connect-wallet {
+    background: #121e30;
+    border: 2px solid #04c0d7;
+    box-sizing: border-box;
+    border-radius: 7px;
+    padding: 10px;
+  }
+  .tokenList {
+    margin: 3rem auto;
+  }
+  .textOnInput {
+    position: relative;
+    margin: 0 auto;
+    label {
+      position: absolute;
+      background-image: linear-gradient(
+        to top,
+        #18283a 0 calc(50% - 0.5px),
+        #121e30 calc(50% - 0.5px)
+      );
+      padding: 2px;
+      transform: translate(1.4rem, -50%);
+      z-index: 1;
+    }
+    .input-with-label {
+      background: #18283a;
+      border-radius: 12px;
+      border: 2px solid #04c0d7;
+      box-sizing: border-box;
+      border-radius: 12px;
+      padding: 12px;
+      font-size: 19px;
+      color: #fff;
+      width: 100%;
+    }
+  }
+}
