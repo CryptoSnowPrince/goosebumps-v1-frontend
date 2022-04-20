@@ -68,5 +68,5 @@ node_modules/
 .vscode/settings.json
 package-lock.json
 yarn.lock
-firebase.json
 .firebaserc
+firebase.json
