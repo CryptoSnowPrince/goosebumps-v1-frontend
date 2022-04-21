@@ -163,11 +163,11 @@ const Exchange = (props) => {
     };
 
     const updateBalance = async (forContract, forTarget, setForTarget) => {
-        console.log("forContract:", forContract)
-        console.log("forTarget:", forTarget)
-        console.log("setForTarget:", setForTarget)
         const provider = new ethers.providers.JsonRpcProvider(props.network.RPC);
-        setMulticallAddress(props.network.ChainId, props.network.MulticallAddress);
+        if (props.network.ChainId === 97) // When bsc testnet
+        {
+            setMulticallAddress(props.network.ChainId, props.network.MulticallAddress);
+        }
         const ethcallProvider = new Provider(provider);
         await ethcallProvider.init();
 
