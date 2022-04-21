@@ -170,18 +170,15 @@ const Exchange = (props) => {
         setMulticallAddress(props.network.ChainId, props.network.MulticallAddress);
         const ethcallProvider = new Provider(provider);
         await ethcallProvider.init();
-        try {
-            console.log("pass");
 
+        try {
             if (forContract !== "-") {
-                console.log("if");
                 const contract = new Contract(forContract, tokenAbi);
                 var [balance, decimals] = await ethcallProvider.all([
                     contract.balanceOf(account),
                     contract.decimals()
                 ]);
             } else {
-                console.log("else");
                 balance = await provider.getBalance(account);
                 decimals = props.network.Currency.Decimals;
             }
@@ -352,23 +349,13 @@ const Exchange = (props) => {
         setQuote();
         setReady();
 
-        // updateBalance(from.address, from, setFrom).then(() => {
-        //     updateBalance(to.address, to, setTo).then(() => {
-        //         setLoading();
-        //         resetQuote();
-        //     });
-        // });
-    }
-
-    useEffect(() => {
-        console.log("useEffect")
         updateBalance(from.address, from, setFrom).then(() => {
             updateBalance(to.address, to, setTo).then(() => {
                 setLoading();
                 resetQuote();
             });
         });
-    }, [account, setConnected, setQuote, setReady])
+    }
 
     if (!account && connected) {
         setConnected();
