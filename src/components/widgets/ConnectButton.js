@@ -45,12 +45,6 @@ const ConnectButton = (props) => {
     const account = useSelector(selector.accountState);
     const provider = useSelector(selector.providerState);
 
-    useEffect(() => {
-        if (account !== '') {
-            console.log("account: ", account);
-        }
-    }, [account]);
-
     const connect = useCallback(async function () {
         try {
             const provider = await web3Modal.connect();

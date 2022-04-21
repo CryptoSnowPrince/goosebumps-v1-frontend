@@ -9,7 +9,8 @@ const DEX = (props) => {
 
     return (
         <div className="dex">
-            <Exchange network={network} fromSymbol="ETH" fromAddress="-" toSymbol="USDT" toAddress="0xdAC17F958D2ee523a2206206994597C13D831ec7" />
+            <Exchange network={network} fromSymbol="USDT" fromAddress="0xdac17f958d2ee523a2206206994597c13d831ec7" toSymbol="WETH" toAddress="0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2" />
+            {/* <Exchange network={network} fromSymbol="ETH" fromAddress="-" /> */}
         </div>
     );
 }
