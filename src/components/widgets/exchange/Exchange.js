@@ -94,7 +94,7 @@ const Exchange = (props) => {
             if (response) {
                 if (response.price) {
                     response.side = side;
-                    setQuote(response);
+                    // setQuote(response);
 
                     if (response.allowanceTarget !== "0x0000000000000000000000000000000000000000") {
                         const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
