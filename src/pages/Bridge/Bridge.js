@@ -19,8 +19,8 @@ const Bridge = () => {
   const [bridgeWalletConnectStatus, setBridgeWalletConnectStatus] = useState(false);
 
   return (
-    <div id='bridge' style={{ padding: !bridgeWalletConnectStatus ? "5rem" : "3rem 5rem" }}>
-      <div className='d-flex gap-5 justify-content-between'>
+    <div id='bridge' className={`${!bridgeWalletConnectStatus ? `p-5` : `p-4`}`}>
+      <div className='align-items-center d-flex flex-column flex-sm-row gap-5 justify-content-between'>
         <ChainList title={"Wallet Connected from"} chainListData={chainListData} defaultID={0} />
         <ChainList title={"Transferring to"} chainListData={chainListData} defaultID={1} />
       </div>
