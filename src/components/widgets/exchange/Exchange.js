@@ -94,7 +94,8 @@ const Exchange = (props) => {
             if (response) {
                 if (response.price) {
                     response.side = side;
-                    // setQuote(response);
+                    console.log("response: ", response);
+                    setQuote(response);
 
                     if (response.allowanceTarget !== "0x0000000000000000000000000000000000000000") {
                         const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
@@ -129,6 +130,7 @@ const Exchange = (props) => {
     };
 
     const resetQuote = (overrideFrom, overrideTo, overrideSlippage) => {
+        console.log("resetQuote");
         setReady();
         setQuote();
         setError();
@@ -199,6 +201,7 @@ const Exchange = (props) => {
     };
 
     const approve = async () => {
+        console.log("approve");
         setReady();
 
         const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
@@ -220,19 +223,15 @@ const Exchange = (props) => {
     };
 
     const confirm = () => {
-        console.log("confirm:0");
         setReady();
-        console.log("confirm:1");
         setConfirmed(true);
-        console.log("confirm:2");
         validateQuote().then(() => {
-            console.log("confirm:3");
             setReady(true);
         });
-        console.log("confirm:4");
     }
 
     const trade = async () => {
+        console.log("trade");
         const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
 
         const txRequest = {
@@ -285,9 +284,10 @@ const Exchange = (props) => {
         if (pendingQuote) {
             clearTimeout(pendingQuote);
         }
-
+        console.log("L292")
         if (value > 0) {
             setPendingQuote(setTimeout(() => {
+                console.log("L295")
                 updateQuote(from.address, from.decimals, to.address, to.decimals, value, slippage, side).then(quote => {
                     if (quote?.price > 0) {
                         const buyAmount = ethers.utils.formatUnits(quote.buyAmount, to.decimals);
@@ -468,13 +468,13 @@ const Exchange = (props) => {
                                                                     <label className="w-100">Guaranteed Price</label>
                                                                 </div>
                                                                 <div className="col-6 text-end pe-4 py-2">
-                                                                    <NumberFormat value={1 / quote.guaranteedPrice} decimalScale={numberHelper.calculatePricescale(1 / quote.guaranteedPrice)} displayType="text" thousandSeparator="," suffix={" " + from.symbol} />
+                                                                    {/* <NumberFormat value={1 / quote.guaranteedPrice} decimalScale={numberHelper.calculatePricescale(1 / quote.guaranteedPrice)} displayType="text" thousandSeparator="," suffix={" " + from.symbol} /> */}
                                                                 </div>
                                                                 <div className="col-6">
                                                                     <label className="w-100">Guaranteed Price</label>
                                                                 </div>
                                                                 <div className="col-6 text-end pe-4 py-2">
-                                                                    <NumberFormat value={quote.guaranteedPrice} decimalScale={numberHelper.calculatePricescale(parseFloat(quote.guaranteedPrice))} displayType="text" thousandSeparator="," suffix={" " + to.symbol} />
+                                                                    {/* <NumberFormat value={quote.guaranteedPrice} decimalScale={numberHelper.calculatePricescale(parseFloat(quote.guaranteedPrice))} displayType="text" thousandSeparator="," suffix={" " + to.symbol} /> */}
                                                                 </div>
                                                             </>
                                                             : <>
@@ -482,14 +482,14 @@ const Exchange = (props) => {
                                                                     <label className="w-100">Guaranteed Price</label>
                                                                 </div>
                                                                 <div className="col-6 text-end pe-4 py-2">
-                                                                    <NumberFormat value={quote.guaranteedPrice} decimalScale={numberHelper.calculatePricescale(parseFloat(quote.guaranteedPrice))} displayType="text" thousandSeparator="," suffix={" " + from.symbol} />
+                                                                    {/* <NumberFormat value={quote.guaranteedPrice} decimalScale={numberHelper.calculatePricescale(parseFloat(quote.guaranteedPrice))} displayType="text" thousandSeparator="," suffix={" " + from.symbol} /> */}
                                                                 </div>
                                                                 <div className="col-6">
                                                                     <label className="w-100">Guaranteed Price</label>
                                                                 </div>
 
                                                                 <div className="col-6 text-end pe-4 py-2">
-                                                                    <NumberFormat value={1 / quote.guaranteedPrice} decimalScale={numberHelper.calculatePricescale(1 / quote.guaranteedPrice)} displayType="text" thousandSeparator="," suffix={" " + to.symbol} />
+                                                                    {/* <NumberFormat value={1 / quote.guaranteedPrice} decimalScale={numberHelper.calculatePricescale(1 / quote.guaranteedPrice)} displayType="text" thousandSeparator="," suffix={" " + to.symbol} /> */}
                                                                 </div>
                                                             </>
                                                     }
@@ -497,13 +497,13 @@ const Exchange = (props) => {
                                                         <label className="w-100">Minimum Recieve</label>
                                                     </div>
                                                     <div className="col-6 text-end pe-4 py-2">
-                                                        <NumberFormat value={to.amount - (to.amount * slippage / 100)} decimalScale={numberHelper.calculateTokenscale(1 / quote.guaranteedPrice)} displayType="text" thousandSeparator="," suffix={" " + to.symbol} />
+                                                        {/* <NumberFormat value={to.amount - (to.amount * slippage / 100)} decimalScale={numberHelper.calculateTokenscale(1 / quote.guaranteedPrice)} displayType="text" thousandSeparator="," suffix={" " + to.symbol} /> */}
                                                     </div>
                                                     <div className="col-6">
                                                         <label className="w-100">Estimated Fees</label>
                                                     </div>
                                                     <div className="col-6 text-end pe-4 py-2">
-                                                        {ethers.utils.formatUnits(quote.estimatedGas * quote.gasPrice, props.network.Currency.Decimals)} {props.network.Currency.Name}
+                                                        {/* {ethers.utils.formatUnits(quote.estimatedGas * quote.gasPrice, props.network.Currency.Decimals)} {props.network.Currency.Name} */}
                                                     </div>
                                                 </div>
                                             </div>
