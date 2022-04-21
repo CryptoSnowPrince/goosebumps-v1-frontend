@@ -38,7 +38,7 @@
     "MulticallAddress": "0x53c43764255c17bd724f74c4ef150724ac50a3ed",
     "SwapApi": "https://ropsten.api.0x.org/",
     "Currency": {
-      "Name": "WETH",
+      "Name": "ETH",
       "Address": "0xc778417E063141139Fce010982780140Aa0cD5Ab",
       "Decimals": 18
     },
