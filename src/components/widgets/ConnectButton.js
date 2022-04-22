@@ -52,7 +52,7 @@ const ConnectButton = (props) => {
                 // check if the chain to connect to is installed
                 await window.ethereum.request({
                     method: "wallet_switchEthereumChain",
-                    params: [{ chainId: network.chainHexID }], // chainId must be in hexadecimal numbers
+                    params: [{ chainId: network.chainHexId }], // chainId must be in hexadecimal numbers
                 });
             } else {
                 console.log(
@@ -76,7 +76,7 @@ const ConnectButton = (props) => {
                         method: "wallet_addEthereumChain",
                         params: [
                             {
-                                chainId: network.chainHexID,
+                                chainId: network.chainHexId,
                                 rpcUrl: network.RPC,
                             },
                         ],

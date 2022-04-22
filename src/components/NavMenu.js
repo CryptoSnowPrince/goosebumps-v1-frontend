@@ -1,4 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { Navbar, Container, Nav, NavItem } from "react-bootstrap";
 import { ConnectButton } from './widgets/ConnectButton';
@@ -7,8 +8,13 @@ import { Requester } from "./../requester";
 import { ComingSoonModal } from './widgets/ComingSoonModal';
 import { GoogleLogin } from 'react-google-login';
 import GoogleProfile from './widgets/GoogleProfile';
+import * as selector from '../store/selectors';
+import * as action from '../store/actions';
+import * as state from '../store/reducers/selChain';
 
 const NavMenu = () => {
+    const dispatch = useDispatch();
+    // const network = useSelector(selector.chainState);
 
     const [authenticated, setAuthenticated] = useState(false);
     const [user, setUser] = useState({
@@ -32,14 +38,45 @@ const NavMenu = () => {
     }
 
     const [show, setShow] = useState();
-    const [networkName, setNetworkName] = useState(localStorage.getItem("network") || networks[1].Name);
+    const [networkIndex, setNetworkIndex] = useState(localStorage.getItem("networkIndex") || 2);
+    const [networkName, setNetworkName] = useState(networks[networkIndex].Name);
+    const [networkInfo, setNetworkInfo] = useState(state.defaultState);
     const navigate = useNavigate();
     const searchInput = useRef();
 
     useEffect(() => {
-        localStorage.setItem("network", networkName);
-        console.log(localStorage.getItem("network"));
-    }, [networkName]);
+        //     console.log("network effect: ", network)
+        // localStorage.setItem("networkIndex", networkIndex);
+        // console.log("networkIndex: ", networkIndex);
+        // console.log("networkName: ", networkName);
+        // console.log("networks: ", networks[2]);
+        // console.log("store network: ", network);
+        // console.log("networkInfo: ", networkInfo);
+        // dispatch(action.setChain(networkInfo));
+
+    }, [networkInfo]);
+
+    useEffect(() => {
+        localStorage.setItem("networkIndex", networkIndex);
+        setNetworkName(networks[networkIndex].Name);
+        setNetworkInfo({
+            chain: {
+                index: networkIndex,
+                network: networks[networkIndex].Name,
+                chainId: networks[networkIndex].chainId,
+                chainHexId: networks[networkIndex].chainHexId
+            }
+        })
+
+        // console.log("networks[networkIndex].Name: ", networks[networkIndex].Name);
+        // console.log("networkIndex: ", networkIndex);
+        // console.log("networkName: ", networkName);
+        // console.log("networks: ", networks[2]);
+        // console.log("store network: ", network);
+        // console.log("networkInfo: ", networkInfo);
+        // dispatch(action.setChain(networkInfo));
+
+    }, [networkIndex]);
 
 
     const inPortfolio = window.location.pathname.match("^/portfolio-tracker/" + networkName + "/.");
@@ -75,9 +112,15 @@ const NavMenu = () => {
                     <div className="src-form mt-3 mt-lg-0">
                         <div className="network">
                             <i className="fa fa-chevron-down"></i>
-                            <select className="form-select" onChange={(e) => setNetworkName(e.target.value)} defaultValue={networkName}>
-                                {networks.map((network, index) =>
-                                    <option key={index} value={network.Name}>{network.Display}</option>
+                            <select
+                                className="form-select"
+                                onChange={(e) => {
+                                    setNetworkIndex(e.target.value)
+                                }}
+                                defaultValue={networkIndex}>
+                                {networks.map(
+                                    (network, index) =>
+                                        <option key={index} value={index}>{network.Display}</option>
                                 )}
                             </select>
                         </div>

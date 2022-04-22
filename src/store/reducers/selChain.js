@@ -4,7 +4,8 @@ import * as actions from '../actions';
 const chainInfo ={
   index: 2,
   network: "bsc",
-  chainId: 56
+  chainId: 56,
+  chainHexId: "0x38"
 }
 
 export const defaultState = {
