@@ -1,5 +1,5 @@
 //import { useEthers } from '@usedapp/core'
-import React, { useCallback, useEffect, useReducer } from 'react';
+import React, { useCallback, useEffect, useReducer, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Mainnet, DAppProvider, useEtherBalance, useEthers, Config } from '@usedapp/core'
 import Web3Modal from "web3modal";
@@ -11,7 +11,6 @@ import networks from "../../networks";
 import * as selector from '../../store/selectors';
 import * as action from '../../store/actions';
 
-const network = linq.from(networks).where(x => x.Name === "ropsten").single();
 let web3Modal;
 if (typeof window !== "undefined") {
     web3Modal = new Web3Modal({
@@ -39,6 +38,17 @@ if (typeof window !== "undefined") {
 }
 
 const ConnectButton = (props) => {
+    // console.log("rerender connectButton");
+    const selectedNetwork = useSelector(selector.chainState);
+    // const network = linq.from(networks).where(x => x.Name === "ropsten").single();
+    const [network, setNetwork] = useState(networks[localStorage.getItem("networkIndex") || 2]);
+
+    useEffect(() => {
+        // console.log("network: ", networks);
+        console.log("selectedNetwork.chain.index: ", (selectedNetwork ? selectedNetwork.chain.index : 2));
+        // console.log("networks[selectedNetwork.chain.index]: ", networks[selectedNetwork.chain.index]);
+        setNetwork(networks[selectedNetwork ? selectedNetwork.chain.index : 2]);
+    }, [selectedNetwork])
 
     const dispatch = useDispatch();
 
@@ -90,15 +100,19 @@ const ConnectButton = (props) => {
             console.log(`${error}`);
         }
     }, []);
+
     const disconnect = useCallback(async function () {
         await web3Modal.clearCachedProvider();
         dispatch(action.setInit());
     }, []);
+
     useEffect(() => {
+        console.log("reconnect");
         if (web3Modal.cachedProvider) {
             connect();
         }
-    }, [connect]);
+    }, [connect, network]);
+
     useEffect(() => {
         if (provider) {
             const handleAccountsChanged = (accounts) => {

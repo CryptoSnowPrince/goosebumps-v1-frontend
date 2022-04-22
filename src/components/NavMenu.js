@@ -14,7 +14,11 @@ import * as state from '../store/reducers/selChain';
 
 const NavMenu = () => {
     const dispatch = useDispatch();
-    // const network = useSelector(selector.chainState);
+    // const networkSelector = useSelector(selector.chainState);
+
+    // useEffect(() => {
+    //     console.log("networkSelector: ", networkSelector);
+    // }, [networkSelector])
 
     const [authenticated, setAuthenticated] = useState(false);
     const [user, setUser] = useState({
@@ -45,15 +49,17 @@ const NavMenu = () => {
     const searchInput = useRef();
 
     useEffect(() => {
-        //     console.log("network effect: ", network)
+        // console.log("networkInfo effect: ", networkInfo)
+        dispatch(action.setChain(networkInfo));
+
+        // console.log("network effect: ", network)
         // localStorage.setItem("networkIndex", networkIndex);
         // console.log("networkIndex: ", networkIndex);
         // console.log("networkName: ", networkName);
         // console.log("networks: ", networks[2]);
         // console.log("store network: ", network);
         // console.log("networkInfo: ", networkInfo);
-        // dispatch(action.setChain(networkInfo));
-
+        // console.log("networks[networkIndex].Name: ", networks[networkIndex].Name);
     }, [networkInfo]);
 
     useEffect(() => {
@@ -67,15 +73,6 @@ const NavMenu = () => {
                 chainHexId: networks[networkIndex].chainHexId
             }
         })
-
-        // console.log("networks[networkIndex].Name: ", networks[networkIndex].Name);
-        // console.log("networkIndex: ", networkIndex);
-        // console.log("networkName: ", networkName);
-        // console.log("networks: ", networks[2]);
-        // console.log("store network: ", network);
-        // console.log("networkInfo: ", networkInfo);
-        // dispatch(action.setChain(networkInfo));
-
     }, [networkIndex]);
 
 
