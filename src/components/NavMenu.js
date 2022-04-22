@@ -1,8 +1,8 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Navbar, Container, Nav, NavItem } from "react-bootstrap";
 import { ConnectButton } from './widgets/ConnectButton';
-import networks from "./../networks";
+import networks from '../networks.json';
 import { Requester } from "./../requester";
 import { ComingSoonModal } from './widgets/ComingSoonModal';
 import { GoogleLogin } from 'react-google-login';
@@ -35,6 +35,11 @@ const NavMenu = () => {
     const [networkName, setNetworkName] = useState(localStorage.getItem("network") || networks[1].Name);
     const navigate = useNavigate();
     const searchInput = useRef();
+
+    useEffect(() => {
+        localStorage.setItem("network", networkName);
+        console.log(localStorage.getItem("network"));
+    }, [networkName]);
 
 
     const inPortfolio = window.location.pathname.match("^/portfolio-tracker/" + networkName + "/.");
@@ -82,7 +87,6 @@ const NavMenu = () => {
                         </button>
                     </div>
                     <Navbar.Collapse id="basic-navbar-nav" className="justify-content-end text-nowrap">
-
                         <Nav className="mt-3 mt-lg-0">
                             <NavItem>
                                 <Link className="nav-link mx-lg-2 mx-xl-3" to="/">Home</Link>
