@@ -37,17 +37,19 @@ if (typeof window !== "undefined") {
     });
 }
 
-const ConnectButton = (props) => {
+const ConnectButton = () => {
     // console.log("rerender connectButton");
     const selectedNetwork = useSelector(selector.chainState);
     // const network = linq.from(networks).where(x => x.Name === "ropsten").single();
     const [network, setNetwork] = useState(networks[localStorage.getItem("networkIndex") || 2]);
 
     useEffect(() => {
-        // console.log("network: ", networks);
-        console.log("selectedNetwork.chain.index: ", (selectedNetwork ? selectedNetwork.chain.index : 2));
-        // console.log("networks[selectedNetwork.chain.index]: ", networks[selectedNetwork.chain.index]);
-        setNetwork(networks[selectedNetwork ? selectedNetwork.chain.index : 2]);
+        try {
+            console.log("selectedNetwork: ", selectedNetwork.chain.index);
+            setNetwork(networks[selectedNetwork.chain.index]);
+        } catch (error) {
+            console.log("error: ", error);
+        }
     }, [selectedNetwork])
 
     const dispatch = useDispatch();
