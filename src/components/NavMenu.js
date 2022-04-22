@@ -85,24 +85,24 @@ const NavMenu = () => {
 
                         <Nav className="mt-3 mt-lg-0">
                             <NavItem>
-                                <Link className="nav-link mx-lg-2 mx-xl-4" to="/">Home</Link>
+                                <Link className="nav-link mx-lg-2 mx-xl-3" to="/">Home</Link>
                             </NavItem>
                             <NavItem>
-                                <Link className="nav-link mx-lg-2 mx-xl-4" to="/portfolio-tracker">Portfolio Tracker</Link>
+                                <Link className="nav-link mx-lg-2 mx-xl-3" to="/portfolio-tracker">Portfolio Tracker</Link>
                             </NavItem>
                             <NavItem>
-                                <Link className="nav-link mx-lg-2 mx-xl-4" to="/charts">Charts</Link>
+                                <Link className="nav-link mx-lg-2 mx-xl-3" to="/charts">Charts</Link>
                             </NavItem>
                             <NavItem>
-                                <Link className="nav-link mx-lg-2 mx-xl-4" to="/stake">Stake</Link>
+                                <Link className="nav-link mx-lg-2 mx-xl-3" to="/stake">Stake</Link>
                                 {/* <span className="nav-link mx-lg-2 mx-xl-4" onClick={() => setShow(true)}>Stake</span>
                                 <ComingSoonModal show={show} hide={() => setShow()} /> */}
                             </NavItem>
                             <NavItem>
-                                <Link className="nav-link mx-lg-2 mx-xl-4" to="/dex">DEX</Link>
+                                <Link className="nav-link mx-lg-2 mx-xl-3" to="/dex">DEX</Link>
                             </NavItem>
                             <NavItem>
-                                <Link className="nav-link mx-lg-2 mx-xl-4" to="/bridge">Bridge</Link>
+                                <Link className="nav-link mx-lg-2 mx-xl-3" to="/bridge">Bridge</Link>
                             </NavItem>
                         </Nav>
                         <Navbar.Text className='ms-lg-2 ms-xl-4'>
