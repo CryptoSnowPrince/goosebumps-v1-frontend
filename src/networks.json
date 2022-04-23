@@ -10,6 +10,7 @@
     "SwapApi": "https://api.0x.org/",
     "Currency": {
       "Name": "ETH",
+      "WrappedName": "WETH",
       "Address": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
       "Decimals": 18
     },
@@ -39,6 +40,7 @@
     "SwapApi": "https://ropsten.api.0x.org/",
     "Currency": {
       "Name": "ETH",
+      "WrappedName": "WETH",
       "Address": "0xc778417E063141139Fce010982780140Aa0cD5Ab",
       "Decimals": 18
     },
@@ -63,6 +65,7 @@
     "SwapApi": "https://bsc.api.0x.org/",
     "Currency": {
       "Name": "BNB",
+      "WrappedName": "WBNB",
       "Address": "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c",
       "Decimals": 18
     },
@@ -92,7 +95,8 @@
     "MulticallAddress": "0x8F3273Fb89B075b1645095ABaC6ed17B2d4Bc576",
     "SwapApi": "",
     "Currency": {
-      "Name": "WBNB",
+      "Name": "BNB",
+      "WrappedName": "WBNB",
       "Address": "0xae13d989daC2f0dEbFf460aC112a837C89BAa7cd",
       "Decimals": 18
     },
@@ -117,6 +121,7 @@
     "SwapApi": "https://polygon.api.0x.org/",
     "Currency": {
       "Name": "MATIC",
+      "WrappedName": "WMATIC",
       "Address": "0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270",
       "Decimals": 18
     },
