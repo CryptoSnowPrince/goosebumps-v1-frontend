@@ -1,5 +1,8 @@
 import { Modal } from "react-bootstrap";
 import React, { useEffect, useState } from "react";
+import { singer, ethers, BigNumber } from 'ethers';
+import { Contract, Provider, setMulticallAddress } from 'ethers-multicall';
+import tokenAbi from '../../../abis/token';
 
 const TokenSelectModal = (props) => {
     const [init, setInit] = useState(true);
@@ -12,6 +15,39 @@ const TokenSelectModal = (props) => {
     function onSelect(token) {
         props.onSelect(token, props.showFor);
         props.hide();
+    }
+
+    async function getTokenInfo(tokenAddress) {
+        const provider = new ethers.providers.JsonRpcProvider(props.network.RPC);
+        if (props.network.chainId === 97) // When bsc testnet
+        {
+            setMulticallAddress(props.network.chainId, props.network.MulticallAddress);
+        }
+        const ethcallProvider = new Provider(provider);
+        await ethcallProvider.init();
+
+        try {
+            const contract = new Contract(tokenAddress, tokenAbi);
+            var [name, symbol, decimals] = await ethcallProvider.all([
+                contract.name(),
+                contract.symbol(),
+                contract.decimals()
+            ]);
+            console.log("name: ", name);
+            console.log("symbol: ", symbol);
+            console.log("decimals: ", decimals);
+            // } else {
+            // 	balance = await provider.getBalance(account);
+            // 	decimals = props.network.Currency.Decimals;
+            // }
+
+            // const newTarget = Object.assign({}, forTarget);
+            // newTarget.balance = ethers.utils.formatUnits(balance, decimals);
+            // newTarget.decimals = decimals;
+            // setForTarget(newTarget);
+        } catch (error) {
+            console.log("getTokenInfo err: ", error)
+        }
     }
 
     useEffect(() => {
@@ -27,7 +63,12 @@ const TokenSelectModal = (props) => {
         console.log("typeof tokens: ", typeof tokens)
         console.log("tokens: ", tokens)
         console.log("searchTokens: ", searchTokens)
-        
+        console.log("ethers.utils.isAddress(searchTokens): ", ethers.utils.isAddress(searchTokens))
+        if (ethers.utils.isAddress(searchTokens)) {
+            console.log("okay");
+            getTokenInfo(searchTokens);
+        }
+
     }, [tokens, searchTokens])
 
     if (!props.showFor || init) {
@@ -44,7 +85,7 @@ const TokenSelectModal = (props) => {
                 <Modal.Body className="text-center">
                     <input type="text" className='form-control'
                         placeholder="Search name or paste address"
-                        onChange={(e) => {setSearchTokens(e.target.value)}} />
+                        onChange={(e) => { setSearchTokens(e.target.value) }} />
 
                     <div className='text-start overflow-auto border mt-3 p-3' style={{ maxHeight: 250 }}>
                         {
