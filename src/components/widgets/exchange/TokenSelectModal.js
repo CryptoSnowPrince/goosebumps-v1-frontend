@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { singer, ethers, BigNumber } from 'ethers';
 import { Contract, Provider, setMulticallAddress } from 'ethers-multicall';
 import tokenAbi from '../../../abis/token';
+import linq from "linq";
 
 const TokenSelectModal = (props) => {
     const [init, setInit] = useState(true);
@@ -33,9 +34,31 @@ const TokenSelectModal = (props) => {
                 contract.symbol(),
                 contract.decimals()
             ]);
-            console.log("name: ", name);
-            console.log("symbol: ", symbol);
-            console.log("decimals: ", decimals);
+            
+            const token = [
+                {
+                    Name: name,
+                    Symbol: symbol,
+                    Address: tokenAddress,
+                    Decimals: decimals,
+                }
+            ]
+
+            var addedTokenList = JSON.parse(localStorage.getItem(props.networkName))
+            
+            if (addedTokenList) {
+                try {
+                    const alreadyAdded = linq.from(addedTokenList).where(x => x.Address === tokenAddress).single();
+                    console.log("alreadyAdded: ", alreadyAdded);
+                } catch (error) {
+                    addedTokenList = addedTokenList.concat(token);
+                    localStorage.setItem(props.networkName, JSON.stringify(addedTokenList));
+                    console.log(token);
+                }
+            } else {
+                localStorage.setItem(props.networkName, JSON.stringify(token));
+                console.log(token);
+            }
             // } else {
             // 	balance = await provider.getBalance(account);
             // 	decimals = props.network.Currency.Decimals;
@@ -80,7 +103,8 @@ const TokenSelectModal = (props) => {
             <div className="bg-dark border border-info">
                 <Modal.Header className="border-info">
                     <Modal.Title>Select a token</Modal.Title>
-                    <button type="button" className="default-btn btn-sq" onClick={props.hide}><i className="fa fa-times"></i></button>
+                    <button type="button" className="default-btn btn-sq"
+                        onClick={props.hide}><i className="fa fa-times"></i></button>
                 </Modal.Header>
                 <Modal.Body className="text-center">
                     <input type="text" className='form-control'
@@ -91,7 +115,9 @@ const TokenSelectModal = (props) => {
                         {
                             tokens.map((token, index) => (
                                 <div key={index} className='row mb-3 align-items-center'>
-                                    <img className='col-auto' style={{ height: 32 }} src={token.Logo ? token.Logo : "/assets/tokens/empty.png"} alt={token.Symbol} />
+                                    <img className='col-auto' style={{ height: 32 }}
+                                        src={token.Logo ? token.Logo : "/assets/tokens/empty.png"}
+                                        alt={token.Symbol} />
                                     <div className='col'>
                                         <div>{token.Name}</div>
                                         <div>{token.Symbol}</div>
