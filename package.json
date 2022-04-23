@@ -5,6 +5,7 @@
   "dependencies": {
     "@ampproject/remapping": "^2.1.2",
     "@babel/helper-environment-visitor": "^7.16.7",
+    "@maticnetwork/maticjs": "^3.2.5",
     "@pancakeswap-libs/sdk": "^1.0.1",
     "@pancakeswap/uikit": "^0.64.0",
     "@usedapp/core": "^0.3.10",
