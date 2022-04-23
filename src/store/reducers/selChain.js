@@ -2,10 +2,10 @@ import { getType } from 'typesafe-actions';
 import * as actions from '../actions';
 
 const chainInfo ={
-  index: 2,
-  network: "bsc",
-  chainId: 56,
-  chainHexId: "0x38"
+  index: 0,
+  network: "ethereum",
+  chainId: 1,
+  chainHexId: "0x1"
 }
 
 export const defaultState = {

@@ -22,7 +22,8 @@ const DEX = (props) => {
 
     return (
         <div className="dex">
-            <Exchange network={network} fromSymbol="WETH" fromAddress="0xc778417E063141139Fce010982780140Aa0cD5Ab" toSymbol="USDT" toAddress="0x110a13FC3efE6A245B50102D2d79B3E76125Ae83" />
+            <Exchange network={network}  />
+            {/* <Exchange network={network} fromSymbol="WETH" fromAddress="0xc778417E063141139Fce010982780140Aa0cD5Ab" toSymbol="USDT" toAddress="0x110a13FC3efE6A245B50102D2d79B3E76125Ae83" /> */}
         </div>
     );
 }

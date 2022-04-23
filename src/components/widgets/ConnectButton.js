@@ -38,15 +38,16 @@ if (typeof window !== "undefined") {
 }
 
 const ConnectButton = () => {
-    // console.log("rerender connectButton");
+    console.log("rerender connectButton");
     const selectedNetwork = useSelector(selector.chainState);
     // const network = linq.from(networks).where(x => x.Name === "ropsten").single();
     const [network, setNetwork] = useState(networks[localStorage.getItem("networkIndex") || 2]);
 
     useEffect(() => {
         try {
-            console.log("selectedNetwork: ", selectedNetwork.chain.index);
+            // console.log("selectedNetwork: ", selectedNetwork.chain.index);
             setNetwork(networks[selectedNetwork.chain.index]);
+            // console.log("network: ", network);
         } catch (error) {
             console.log("error: ", error);
         }
@@ -57,15 +58,19 @@ const ConnectButton = () => {
     const account = useSelector(selector.accountState);
     const provider = useSelector(selector.providerState);
 
-    const connect = useCallback(async function () {
+    const connect = useCallback(async function (network) {
         try {
             const provider = await web3Modal.connect();
+
             if (window.ethereum) {
                 // check if the chain to connect to is installed
-                await window.ethereum.request({
-                    method: "wallet_switchEthereumChain",
-                    params: [{ chainId: network.chainHexId }], // chainId must be in hexadecimal numbers
-                });
+                if ((await new providers.Web3Provider(provider).getNetwork()).chainId !== network.chainId)
+                    console.log("switch network: ", network.chainHexId)
+                    await window.ethereum.request({
+                        method: "wallet_switchEthereumChain",
+                        params: [{ chainId: network.chainHexId }], // chainId must be in hexadecimal numbers
+                    });
+
             } else {
                 console.log(
                     "MetaMask is not installed. Please consider installing it: https://metamask.io/download.html"
@@ -75,12 +80,13 @@ const ConnectButton = () => {
             const web3Provider = new providers.Web3Provider(provider);
             const signer = web3Provider.getSigner();
             const account = await signer.getAddress();
+            const chainId = (await web3Provider.getNetwork()).chainId;
 
             dispatch(action.setProvider(provider));
             dispatch(action.setWeb3Provider(web3Provider));
             dispatch(action.setSigner(signer));
             dispatch(action.setAccount(account));
-            dispatch(action.setChainId(network.chainId));
+            dispatch(action.setChainId(chainId));
         } catch (error) {
             if (error.code === 4902) {
                 try {
@@ -109,16 +115,17 @@ const ConnectButton = () => {
     }, []);
 
     useEffect(() => {
-        console.log("reconnect");
         if (web3Modal.cachedProvider) {
-            connect();
+            console.log("reconnect if");
+            connect(network);
         }
-    }, [connect, network]);
+    }, [network]);
 
     useEffect(() => {
         if (provider) {
             const handleAccountsChanged = (accounts) => {
-                connect();
+                console.log("reconnect if 2");
+                connect(network);
                 dispatch(action.setAccount(accounts[0]));
             };
 
@@ -144,7 +151,7 @@ const ConnectButton = () => {
         return (<button className="default-btn" onClick={disconnect}>{account.substring(0, 8)}... (Disconnect)</button>);
     }
 
-    return (<button className="default-btn" onClick={(connect)}>Connect Wallet</button>);
+    return (<button className="default-btn" onClick={() => {connect(network)}}>Connect Wallet</button>);
 }
 
 export { ConnectButton }
