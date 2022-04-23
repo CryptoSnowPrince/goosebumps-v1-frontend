@@ -91,7 +91,7 @@ const TokenSelectModal = (props) => {
                         {
                             tokens.map((token, index) => (
                                 <div key={index} className='row mb-3 align-items-center'>
-                                    <img className='col-auto' style={{ height: 32 }} src={token.Logo} alt={token.Symbol} />
+                                    <img className='col-auto' style={{ height: 32 }} src={token.Logo ? token.Logo : "/assets/tokens/empty.png"} alt={token.Symbol} />
                                     <div className='col'>
                                         <div>{token.Name}</div>
                                         <div>{token.Symbol}</div>
