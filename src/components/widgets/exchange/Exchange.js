@@ -519,7 +519,12 @@ const Exchange = (props) => {
 					</div>
 				</div>
 			</div>
-			<TokenSelectModal showFor={showTokenSelectModal} hide={() => setShowTokenSelectModal()} onSelect={onSelectToken} networkName={props.network.Name} />
+			<TokenSelectModal
+				showFor={showTokenSelectModal}
+				hide={() => setShowTokenSelectModal()}
+				onSelect={onSelectToken}
+				networkName={props.network.Name}
+				network={props.network} />
 		</>
 	);
 }

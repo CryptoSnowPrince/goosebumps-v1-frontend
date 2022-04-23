@@ -5,6 +5,10 @@ const TokenSelectModal = (props) => {
     const [init, setInit] = useState(true);
     const [tokens, setTokens] = useState();
 
+    const [searchTokens, setSearchTokens] = useState("");
+
+    const [testtokenlist, setTesttokenlist] = useState();
+
     function onSelect(token) {
         props.onSelect(token, props.showFor);
         props.hide();
@@ -14,8 +18,17 @@ const TokenSelectModal = (props) => {
         if (init) {
             setInit(false);
             setTokens(require("../../../tokens/" + props.networkName))
+            //
+            setTesttokenlist(require("../../../tokens/" + props.networkName))
         };
     }, [init, props.networkName]);
+
+    useEffect(() => {
+        console.log("typeof tokens: ", typeof tokens)
+        console.log("tokens: ", tokens)
+        console.log("searchTokens: ", searchTokens)
+        
+    }, [tokens, searchTokens])
 
     if (!props.showFor || init) {
         return null;
@@ -29,7 +42,9 @@ const TokenSelectModal = (props) => {
                     <button type="button" className="default-btn btn-sq" onClick={props.hide}><i className="fa fa-times"></i></button>
                 </Modal.Header>
                 <Modal.Body className="text-center">
-                    <input type="text" className='form-control' placeholder="Search name or paste address" />
+                    <input type="text" className='form-control'
+                        placeholder="Search name or paste address"
+                        onChange={(e) => {setSearchTokens(e.target.value)}} />
 
                     <div className='text-start overflow-auto border mt-3 p-3' style={{ maxHeight: 250 }}>
                         {
