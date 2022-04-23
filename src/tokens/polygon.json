@@ -4,27 +4,27 @@
     "Symbol": "MATIC",
     "Address": "-",
     "Decimals": 18,
-    "Logo": "https://assets.coingecko.com/coins/images/4713/thumb/matic-token-icon.png?1624446912"
+    "Logo": "/assets/tokens/MATIC.png"
   },
   {
     "Name": "Wrapped Matic",
     "Symbol": "WMATIC",
     "Address": "0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270",
     "Decimals": 18,
-    "Logo": "https://assets.coingecko.com/coins/images/4713/thumb/matic-token-icon.png?1624446912"
+    "Logo": "/assets/tokens/WMATIC.png"
   },
   {
     "Name": "Tether USD",
     "Symbol": "USDT",
     "Address": "0xc2132D05D31c914a87C6611C10748AEb04B58e8F",
     "Decimals": 6,
-    "Logo": "https://etherscan.io/token/images/tether_32.png"
+    "Logo": "/assets/tokens/USDT.png"
   },
   {
     "Name": "Coin",
     "Symbol": "CCC",
     "Address": "0x0DAEFbe39309BE637f01d6465164561DE3E0492F",
     "Decimals": 9,
-    "Logo": "https://polygonscan.com/images/main/empty-token.png"
+    "Logo": "/assets/tokens/empty.png"
   }
 ]

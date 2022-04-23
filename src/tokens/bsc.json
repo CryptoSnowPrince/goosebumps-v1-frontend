@@ -4,48 +4,48 @@
     "Symbol": "BNB",
     "Address": "-",
     "Decimals": 18,
-    "Logo": "https://bscscan.com/token/images/binance_32.png"
+    "Logo": "/assets/tokens/BNB.png"
   },
   {
     "Name": "Wrapped BNB",
     "Symbol": "WBNB",
     "Address": "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c",
     "Decimals": 18,
-    "Logo": "https://bscscan.com/token/images/binance_32.png"
+    "Logo": "/assets/tokens/WBNB.png"
   },
   {
     "Name": "Empire Token",
     "Symbol": "EMPIRE",
     "Address": "0x293c3ee9abacb08bb8ced107987f00efd1539288",
     "Decimals": 9,
-    "Logo": "https://bscscan.com/token/images/empiretoken_32.png"
+    "Logo": "/assets/tokens/EMPIRE.png"
   },
   {
     "Name": "Binance-Peg BUSD Token",
     "Symbol": "BUSD",
     "Address": "0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56",
     "Decimals": 18,
-    "Logo": "https://bscscan.com/token/images/busd_32.png"
+    "Logo": "/assets/tokens/BUSD.png"
   },
   {
     "Name": "Tether USD",
     "Symbol": "USDT",
     "Address": "0x55d398326f99059fF775485246999027B3197955",
     "Decimals": 18,
-    "Logo": "https://etherscan.io/token/images/tether_32.png"
+    "Logo": "/assets/tokens/USDT.png"
   },
   {
     "Name": "PancakeSwap Token",
     "Symbol": "Cake",
     "Address": "0x0E09FaBB73Bd3Ade0a17ECC321fD13a19e81cE82",
     "Decimals": 18,
-    "Logo": "https://bscscan.com/token/images/pancake_32.png"
+    "Logo": "/assets/tokens/Cake.png"
   },
   {
     "Name": "Coin",
     "Symbol": "CCC",
     "Address": "0x0DAEFbe39309BE637f01d6465164561DE3E0492F",
     "Decimals": 9,
-    "Logo": "https://bscscan.com/images/main/empty-token.png"
+    "Logo": "/assets/tokens/empty.png"
   }
 ]
