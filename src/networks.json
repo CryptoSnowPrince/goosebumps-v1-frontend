@@ -107,8 +107,8 @@
     ]
   },
   {
-    "Display": "Matic",
-    "Name": "matic",
+    "Display": "Polygon",
+    "Name": "polygon",
     "chainId": 137,
     "chainHexId": "0x89",
     "RPC": "https://speedy-nodes-nyc.moralis.io/03eb35954a0b7ed092444a8e/polygon/mainnet",
