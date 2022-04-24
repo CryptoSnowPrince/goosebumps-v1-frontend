@@ -74,12 +74,14 @@ const TokenSelectModal = (props) => {
             setTokens(
                 require("../../../tokens/" + props.networkName)
             )
-            setTokensAddedByUser(
-                JSON.parse(
-                    localStorage.getItem(props.networkName)
+            if (localStorage.getItem(props.networkName)) {
+                setTokensAddedByUser(
+                    JSON.parse(
+                        localStorage.getItem(props.networkName)
+                    )
                 )
-            )
-        };
+            }
+        }
     }, [init, props.networkName]);
 
     useEffect(() => {
@@ -160,21 +162,22 @@ const TokenSelectModal = (props) => {
                                         </div>
                                     )) : "No results found."
                                 ) :
-                                (tokens.concat(tokensAddedByUser)).map((token, index) => (
-                                    <div key={index} className='row mb-3 align-items-center'>
-                                        <img className='col-auto' style={{ height: 32 }}
-                                            src={token.Logo ? token.Logo : "/assets/tokens/empty.png"}
-                                            alt={token.Symbol} />
-                                        <div className='col'>
-                                            <div>{token.Name}</div>
-                                            <div>{token.Symbol}</div>
+                                (tokensAddedByUser ? tokens.concat(tokensAddedByUser) : tokens)
+                                    .map((token, index) => (
+                                        <div key={index} className='row mb-3 align-items-center'>
+                                            <img className='col-auto' style={{ height: 32 }}
+                                                src={token.Logo ? token.Logo : "/assets/tokens/empty.png"}
+                                                alt={token.Symbol} />
+                                            <div className='col'>
+                                                <div>{token.Name}</div>
+                                                <div>{token.Symbol}</div>
+                                            </div>
+                                            <div className='col-auto'>
+                                                <button type="button" className="default-btn btn-sq"
+                                                    onClick={() => { onSelect(token) }}>Select</button>
+                                            </div>
                                         </div>
-                                        <div className='col-auto'>
-                                            <button type="button" className="default-btn btn-sq"
-                                                onClick={() => { onSelect(token) }}>Select</button>
-                                        </div>
-                                    </div>
-                                ))
+                                    ))
                         }
                     </div>
                 </Modal.Body>
