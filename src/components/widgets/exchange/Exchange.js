@@ -32,6 +32,11 @@ const Exchange = (props) => {
 	const [to, setTo] = useState({ symbol: props.toSymbol, address: props.toAddress, decimals: 0, amount: 0, balance: 0 });
 	const [slippage, setSlippage] = useState(0.5);
 
+	useEffect(() => {
+		setFrom({ symbol: props.fromSymbol, address: props.fromAddress, decimals: 0, amount: 0, balance: 0 })
+		setTo({ symbol: props.toSymbol, address: props.toAddress, decimals: 0, amount: 0, balance: 0 });
+	}, [props.network])
+	
 	const validateQuote = async () => {
 		setError();
 
@@ -523,7 +528,6 @@ const Exchange = (props) => {
 				showFor={showTokenSelectModal}
 				hide={() => setShowTokenSelectModal()}
 				onSelect={onSelectToken}
-				networkName={props.network.Name}
 				network={props.network} />
 		</>
 	);
