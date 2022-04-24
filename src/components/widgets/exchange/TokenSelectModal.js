@@ -8,10 +8,9 @@ import linq from "linq";
 const TokenSelectModal = (props) => {
     const [init, setInit] = useState(true);
     const [tokens, setTokens] = useState();
+    const [tokensAddedByUser, setTokensAddedByUser] = useState();
 
     const [searchTokens, setSearchTokens] = useState("");
-
-    const [testtokenlist, setTesttokenlist] = useState();
 
     function onSelect(token) {
         props.onSelect(token, props.showFor);
@@ -34,7 +33,7 @@ const TokenSelectModal = (props) => {
                 contract.symbol(),
                 contract.decimals()
             ]);
-            
+
             const token = [
                 {
                     Name: name,
@@ -45,7 +44,7 @@ const TokenSelectModal = (props) => {
             ]
 
             var addedTokenList = JSON.parse(localStorage.getItem(props.networkName))
-            
+
             if (addedTokenList) {
                 try {
                     const alreadyAdded = linq.from(addedTokenList).where(x => x.Address === tokenAddress).single();
@@ -59,15 +58,6 @@ const TokenSelectModal = (props) => {
                 localStorage.setItem(props.networkName, JSON.stringify(token));
                 console.log(token);
             }
-            // } else {
-            // 	balance = await provider.getBalance(account);
-            // 	decimals = props.network.Currency.Decimals;
-            // }
-
-            // const newTarget = Object.assign({}, forTarget);
-            // newTarget.balance = ethers.utils.formatUnits(balance, decimals);
-            // newTarget.decimals = decimals;
-            // setForTarget(newTarget);
         } catch (error) {
             console.log("getTokenInfo err: ", error)
         }
@@ -76,11 +66,20 @@ const TokenSelectModal = (props) => {
     useEffect(() => {
         if (init) {
             setInit(false);
-            setTokens(require("../../../tokens/" + props.networkName))
-            //
-            setTesttokenlist(require("../../../tokens/" + props.networkName))
+            setTokens(
+                require("../../../tokens/" + props.networkName)
+            )
+            setTokensAddedByUser(
+                JSON.parse(
+                    localStorage.getItem(props.networkName)
+                )
+            )
         };
     }, [init, props.networkName]);
+
+    useEffect(() => {
+
+    }, [])
 
     useEffect(() => {
         console.log("typeof tokens: ", typeof tokens)
@@ -123,7 +122,25 @@ const TokenSelectModal = (props) => {
                                         <div>{token.Symbol}</div>
                                     </div>
                                     <div className='col-auto'>
-                                        <button type="button" className="default-btn btn-sq" onClick={() => { onSelect(token) }}>Select</button>
+                                        <button type="button" className="default-btn btn-sq"
+                                            onClick={() => { onSelect(token) }}>Select</button>
+                                    </div>
+                                </div>
+                            ))
+                        }
+                        {
+                            tokensAddedByUser.map((token, index) => (
+                                <div key={index} className='row mb-3 align-items-center'>
+                                    <img className='col-auto' style={{ height: 32 }}
+                                        src={"/assets/tokens/empty.png"}
+                                        alt={token.Symbol} />
+                                    <div className='col'>
+                                        <div>{token.Name}</div>
+                                        <div>{token.Symbol}</div>
+                                    </div>
+                                    <div className='col-auto'>
+                                        <button type="button" className="default-btn btn-sq"
+                                            onClick={() => { onSelect(token) }}>Select</button>
                                     </div>
                                 </div>
                             ))
