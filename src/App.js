@@ -12,7 +12,6 @@ import { Bridge } from './pages/Bridge/Bridge';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-
 export default class App extends Component {
     static displayName = App.name;
 

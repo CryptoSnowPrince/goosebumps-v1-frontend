@@ -1,6 +1,7 @@
 //import { useEthers } from '@usedapp/core'
 import React, { useCallback, useEffect, useReducer, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { NotificationManager } from 'react-notifications'; 
 import { Mainnet, DAppProvider, useEtherBalance, useEthers, Config } from '@usedapp/core'
 import Web3Modal from "web3modal";
 import { providers/*, ethers*/ } from "ethers";
@@ -40,8 +41,10 @@ if (typeof window !== "undefined") {
 const ConnectButton = () => {
     console.log("rerender connectButton");
     const selectedNetwork = useSelector(selector.chainState);
+    
     // const network = linq.from(networks).where(x => x.Name === "ropsten").single();
     const [network, setNetwork] = useState(networks[localStorage.getItem("networkIndex") || 2]);
+    const [pendingConnectWallet, setPendingConnectWallet] = useState(false);
 
     useEffect(() => {
         try {
@@ -58,19 +61,25 @@ const ConnectButton = () => {
     const account = useSelector(selector.accountState);
     const provider = useSelector(selector.providerState);
 
-    const connect = useCallback(async function (network) {
+    const connect = useCallback(async function (network, connectState) {
+        if(connectState == true) return;
+        setPendingConnectWallet(true);
         try {
             const provider = await web3Modal.connect();
 
             if (window.ethereum) {
                 // check if the chain to connect to is installed
-                if ((await new providers.Web3Provider(provider).getNetwork()).chainId !== network.chainId)
+                if ((await new providers.Web3Provider(provider).getNetwork()).chainId !== network.chainId) {
                     console.log("switch network: ", network.chainHexId)
-                    await window.ethereum.request({
-                        method: "wallet_switchEthereumChain",
-                        params: [{ chainId: network.chainHexId }], // chainId must be in hexadecimal numbers
-                    });
-
+                    try {
+                        await window.ethereum.request({
+                            method: "wallet_switchEthereumChain",
+                            params: [{ chainId: network.chainHexId }], // chainId must be in hexadecimal numbers
+                        });
+                    } catch (error) {
+                        console.log("network switching error: ", error);                        
+                    } 
+                }
             } else {
                 console.log(
                     "MetaMask is not installed. Please consider installing it: https://metamask.io/download.html"
@@ -78,15 +87,24 @@ const ConnectButton = () => {
             }
 
             const web3Provider = new providers.Web3Provider(provider);
-            const signer = web3Provider.getSigner();
-            const account = await signer.getAddress();
             const chainId = (await web3Provider.getNetwork()).chainId;
+            console.log("pass");
+            if (chainId === network.chainId) {
+                console.log("pass if")
+                const signer = web3Provider.getSigner();
+                const account = await signer.getAddress();
 
-            dispatch(action.setProvider(provider));
-            dispatch(action.setWeb3Provider(web3Provider));
-            dispatch(action.setSigner(signer));
-            dispatch(action.setAccount(account));
-            dispatch(action.setChainId(chainId));
+                dispatch(action.setProvider(provider));
+                dispatch(action.setWeb3Provider(web3Provider));
+                dispatch(action.setSigner(signer));
+                dispatch(action.setAccount(account));
+                dispatch(action.setChainId(chainId));
+            } else {
+                console.log("pass else")
+                alert(`Change network to ${network.Display}!`);
+                // NotificationManager.info(`Change network to ${network.Display}!`, "Info", 2000);
+                dispatch(action.setInit());
+            }
         } catch (error) {
             if (error.code === 4902) {
                 try {
@@ -103,10 +121,11 @@ const ConnectButton = () => {
                     console.log(addError);
                 }
             } else if (error.code === 4001) {
-                console.log(error);
+                console.log("connect error 4001: ", error);
             }
-            console.log(`${error}`);
+            console.log("connect", error);
         }
+        setPendingConnectWallet(false);
     }, []);
 
     const disconnect = useCallback(async function () {
@@ -117,7 +136,7 @@ const ConnectButton = () => {
     useEffect(() => {
         if (web3Modal.cachedProvider) {
             console.log("reconnect if");
-            connect(network);
+            connect(network, pendingConnectWallet);
         }
     }, [network]);
 
@@ -125,7 +144,7 @@ const ConnectButton = () => {
         if (provider) {
             const handleAccountsChanged = (accounts) => {
                 console.log("reconnect if 2");
-                connect(network);
+                connect(network, pendingConnectWallet);
                 dispatch(action.setAccount(accounts[0]));
             };
 
@@ -151,7 +170,7 @@ const ConnectButton = () => {
         return (<button className="default-btn" onClick={disconnect}>{account.substring(0, 8)}... (Disconnect)</button>);
     }
 
-    return (<button className="default-btn" onClick={() => {connect(network)}}>Connect Wallet</button>);
+    return (<button className="default-btn" onClick={() => { connect(network, pendingConnectWallet) }}>Connect Wallet</button>);
 }
 
 export { ConnectButton }
