@@ -49,7 +49,7 @@ const UserTokenPair = () => {
           <div style={{ color: "#40FF97" }}>8.53%</div>
         </div>
         <div className='d-flex justify-content-center mt-3 mb-4'><Link to="/liquidityRemove"><button className='default-btn fs-6'>Remove</button></Link></div>
-        <div className='text-center fs-6'>+ Add liquidity instead</div>
+        <Link to="/liquidityAdd"><div className='text-center fs-6'>+ Add liquidity instead</div></Link>
       </div>}
     </div>
   );
