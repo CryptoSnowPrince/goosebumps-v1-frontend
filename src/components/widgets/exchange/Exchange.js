@@ -349,6 +349,15 @@ const Exchange = (props) => {
 		}
 	}
 
+	useEffect(() => {
+		updateBalance(from.address, from, setFrom).then(() => {
+			updateBalance(to.address, to, setTo).then(() => {
+				setLoading();
+				resetQuote();
+			});
+		});
+	}, [account])
+
 	if (account && !connected) {
 		setConnected(true);
 		setQuote();
