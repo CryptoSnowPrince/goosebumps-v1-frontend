@@ -21,7 +21,7 @@ const LiquidityRemove = () => {
     <>
       <Submenu />
       <div id='liquidity' >
-        <LiquidityHeader title="Remove DSP-TRM liquidity" content="To receive DSP and TRM"></LiquidityHeader>
+        <LiquidityHeader title="Remove DSP-BNB liquidity" content="To receive DSP and BNB"></LiquidityHeader>
         <div className='p-3 mt-4'>
           <div>
             <div className='d-flex justify-content-between'>
@@ -58,7 +58,7 @@ const LiquidityRemove = () => {
                 <div className='mt-2 d-flex justify-content-between'>
                   <div className='d-flex fs-5 align-items-center'>
                     <div><BiHelpCircle /> </div>
-                    <div>TRM </div>
+                    <div>BNB </div>
                   </div>
                   <div style={{ color: "#40FF97" }}>9887.17</div>
                 </div>
