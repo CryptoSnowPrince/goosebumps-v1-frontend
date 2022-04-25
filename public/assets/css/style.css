@@ -1296,12 +1296,12 @@ Coming Soon Area Style
 .wallet-tabs .tab_content {
     background-color: #121e30;
     padding: 30px;
-    border-radius: 0 10px 10px 10px;
+    border-radius: 0 20px 20px 20px;
 }
 
     .wallet-tabs .tab_content .default-btn {
         padding: 10px 14px;
-        border-radius: 10px;
+        border-radius: 20px;
         border-color: gray;
         width: 100%;
     }
@@ -1332,7 +1332,7 @@ Coming Soon Area Style
     .wallet-tabs .tab_content .form-group {
         position: relative;
         background-color: #18283a !important;
-        border-radius: 10px;
+        border-radius: 20px;
     }
 
         .wallet-tabs .tab_content .form-group.btns {
@@ -1351,7 +1351,7 @@ Coming Soon Area Style
         .wallet-tabs .tab_content .form-group .form-control {
             background-color: #18283a !important;
             border: none !important;
-            border-radius: 10px;
+            border-radius: 20px;
             padding: 5px 20px;
             height: 45px;
         }
@@ -1974,12 +1974,12 @@ Go Top Style*/
 
 .wallet-tabs-h {
     background-color: #121e30;
-    border-radius: 10px;
+    border-radius: 20px;
 }
 
     .wallet-tabs-h .bg-need {
         background-color: rgba(255, 255, 255, 0.1);
-        border-radius: 10px 10px 0 0;
+        border-radius: 20px 20px 0 0;
     }
 
     .wallet-tabs-h .tabs li {
