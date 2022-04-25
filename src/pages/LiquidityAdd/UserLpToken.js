@@ -12,7 +12,7 @@ const UserLpToken = () => {
           <div><BiHelpCircle /> </div>
           <div><BiHelpCircle /> </div>
           <div>DSP/ </div>
-          <div>BNB </div>
+          <div>TRM </div>
         </div>
         <div className='fs-6'>300</div>
       </div>
@@ -30,7 +30,7 @@ const UserLpToken = () => {
       </div>
       <div className='mt-2 d-flex justify-content-between  mt-2'>
         <div style={{ color: "#04C0D7" }}>
-          Pooled BNB:
+          Pooled TRM:
         </div>
         <div style={{ color: "#40FF97" }}>8.53%</div>
       </div>

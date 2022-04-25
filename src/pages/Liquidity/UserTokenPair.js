@@ -13,7 +13,7 @@ const UserTokenPair = () => {
             <div><BiHelpCircle /> </div>
             <div><BiHelpCircle /> </div>
             <div>DSP/ </div>
-            <div>BNB </div>
+            <div>TRM </div>
           </div>
           <div className='fs-6'>300</div>
         </div>
@@ -38,7 +38,7 @@ const UserTokenPair = () => {
         <div className='d-flex justify-content-between  mt-2'>
           <div className='d-flex align-items-center'>
             <BiHelpCircle />
-            <div style={{ color: "#04C0D7" }}>Pooled BNB</div>
+            <div style={{ color: "#04C0D7" }}>Pooled TRM</div>
           </div>
           <div style={{ color: "#40FF97" }}>0.10496</div>
         </div>

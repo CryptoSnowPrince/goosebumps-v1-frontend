@@ -10,6 +10,7 @@ import { Staking } from './pages/Staking/Staking';
 import { Liquidity } from './pages/Liquidity/Liquidity';
 import { LiquidityAdd } from './pages/LiquidityAdd/LiquidityAdd';
 import { LiquidityRemove } from './pages/LiquidityRemove/LiquidityRemove';
+import { LiquidityFindToken } from './pages/LiquidityFindToken/LiquidityFindToken';
 import { Farming } from './pages/Farming/Farming';
 import { Bridge } from './pages/Bridge/Bridge';
 
@@ -28,6 +29,7 @@ export default class App extends Component {
                     <Route exact path='/liquidity' element={<Liquidity />} />
                     <Route exact path='/liquidityAdd' element={<LiquidityAdd />} />
                     <Route exact path='/liquidityRemove' element={<LiquidityRemove />} />
+                    <Route exact path='/liquidityFindToken' element={<LiquidityFindToken />} />
                     <Route exact path='/farms' element={<Farming />} />
                     <Route exact path='/bridge' element={<Bridge />} />
                     <Route path='/portfolio-tracker' element={<PortfolioTracker />}>

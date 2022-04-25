@@ -21,7 +21,7 @@ const LiquidityBody = ({ walletConnectStatus, userLiquidityFound }) => {
             ))
           )}
           <div className='text-center mt-4'>Don't see a pool you joined?</div>
-          <div className='d-flex justify-content-center mt-3 mb-4'><button className='default-btn fs-6'>Find other LP tokens</button></div>
+          <div className='d-flex justify-content-center mt-3 mb-4'><Link to="/liquidityFindToken"><button className='default-btn fs-6'>Find other LP tokens</button></Link></div>
         </>)}
       <hr />
       <div className='d-flex justify-content-center mt-4'>

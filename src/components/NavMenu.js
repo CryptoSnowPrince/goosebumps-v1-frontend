@@ -146,9 +146,6 @@ const NavMenu = () => {
                                 <Link className="nav-link mx-lg-2 mx-xl-3" to="/dex">DEX</Link>
                             </NavItem>
                             <NavItem>
-                                <Link className="nav-link mx-lg-2 mx-xl-3" to="/liquidity">Liquidity</Link>
-                            </NavItem>
-                            <NavItem>
                                 <Link className="nav-link mx-lg-2 mx-xl-3" to="/bridge">Bridge</Link>
                             </NavItem>
                         </Nav>
