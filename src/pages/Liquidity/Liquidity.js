@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { LiquidityHeader } from "../../components/LiquidityHeader.js/LiquidityHeader";
+import { LiquidityHeader } from "../../components/LiquidityHeader/LiquidityHeader";
 import { LiquidityBody } from "./LiquidityBody";
 import './Liquidity.scss'
 

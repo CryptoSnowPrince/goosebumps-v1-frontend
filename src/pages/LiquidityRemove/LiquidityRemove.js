@@ -3,7 +3,7 @@ import { BiHelpCircle } from 'react-icons/bi';
 import InputRange from "react-input-range";
 import "react-input-range/lib/css/index.css";
 
-import { LiquidityHeader } from "../../components/LiquidityHeader.js/LiquidityHeader";
+import { LiquidityHeader } from "../../components/LiquidityHeader/LiquidityHeader";
 import { UserLpToken } from "../LiquidityAdd/UserLpToken"
 import { TokenSelectModal } from "../LiquidityAdd/TokenModal"
 import '../Liquidity/Liquidity.scss'
