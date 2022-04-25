@@ -19,7 +19,7 @@ const LiquidityRemove = () => {
   return (
     <>
       <div id='liquidity' >
-        <LiquidityHeader title="Remove DSP-TRM liquidity" content="To receive DSP and TRM"></LiquidityHeader>
+        <LiquidityHeader title="Remove DSP-BNB liquidity" content="To receive DSP and BNB"></LiquidityHeader>
         <div className='p-3 mt-4'>
           <div>
             <div className='d-flex justify-content-between'>
@@ -56,7 +56,7 @@ const LiquidityRemove = () => {
                 <div className='mt-2 d-flex justify-content-between'>
                   <div className='d-flex fs-5 align-items-center'>
                     <div><BiHelpCircle /> </div>
-                    <div>TRM </div>
+                    <div>BNB </div>
                   </div>
                   <div style={{ color: "#40FF97" }}>9887.17</div>
                 </div>
@@ -73,7 +73,7 @@ const LiquidityRemove = () => {
           {!detailed && <>
             <div className='mt-3'>
               <div className='d-flex justify-content-between'>
-                <div>DSP:WTRM</div>
+                <div>DSP:WBNB</div>
                 <div>Balance: 300</div>
               </div>
               <div className='mt-2 position-relative'><div className='position-absolute' style={{ right: "15px", top: "15px" }}>Max</div><input className='w-100 token-value-input' /></div>

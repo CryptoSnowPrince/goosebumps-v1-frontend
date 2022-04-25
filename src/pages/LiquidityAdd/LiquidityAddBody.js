@@ -36,11 +36,11 @@ const LiquidityAddBody = () => {
       <div className='d-flex justify-content-around'>
         <div className='text-center'>
           <div>1085.91</div>
-          <div>DSP per TRM</div>
+          <div>DSP per BNB</div>
         </div>
         <div className='text-center'>
           <div>0.000920886</div>
-          <div>TRM per DSP</div>
+          <div>BNB per DSP</div>
         </div>
         <div className='text-center'>
           <div>9%</div>
