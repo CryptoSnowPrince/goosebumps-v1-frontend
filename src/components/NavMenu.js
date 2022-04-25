@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { Navbar, Container, Nav, NavItem } from "react-bootstrap";
 import { ConnectButton } from './widgets/ConnectButton';
 import networks from '../networks.json';
@@ -13,6 +13,7 @@ import * as action from '../store/actions';
 import * as state from '../store/reducers/selChain';
 
 const NavMenu = () => {
+    const { pathname } = useLocation();
     const dispatch = useDispatch();
     // const networkSelector = useSelector(selector.chainState);
 
@@ -129,24 +130,42 @@ const NavMenu = () => {
                     <Navbar.Collapse id="basic-navbar-nav" className="justify-content-end text-nowrap">
                         <Nav className="mt-3 mt-lg-0">
                             <NavItem>
-                                <Link className="nav-link mx-lg-2 mx-xl-3" to="/">Home</Link>
+                                <Link
+                                    className={`nav-link mx-lg-2 mx-xl-3 
+                                    ${pathname === '/' ? "active" : ""}`} to="/">Home</Link>
                             </NavItem>
                             <NavItem>
-                                <Link className="nav-link mx-lg-2 mx-xl-3" to="/portfolio-tracker">Portfolio Tracker</Link>
+                                <Link
+                                    className={`nav-link mx-lg-2 mx-xl-3 
+                                    ${pathname === '/portfolio-tracker' ? "active" : ""}`} to="/portfolio-tracker">Portfolio Tracker</Link>
                             </NavItem>
                             <NavItem>
-                                <Link className="nav-link mx-lg-2 mx-xl-3" to="/charts">Charts</Link>
+                                <Link
+                                    className={`nav-link mx-lg-2 mx-xl-3 
+                                    ${pathname === '/charts' ? "active" : ""}`} to="/charts">Charts</Link>
                             </NavItem>
                             <NavItem>
-                                <Link className="nav-link mx-lg-2 mx-xl-3" to="/stake">Stake</Link>
+                                <Link
+                                    className={`nav-link mx-lg-2 mx-xl-3 
+                                    ${(pathname === '/stake' || pathname === '/farms') ? "active" : ""}`} to="/stake">Stake</Link>
                                 {/* <span className="nav-link mx-lg-2 mx-xl-4" onClick={() => setShow(true)}>Stake</span>
                                 <ComingSoonModal show={show} hide={() => setShow()} /> */}
                             </NavItem>
                             <NavItem>
-                                <Link className="nav-link mx-lg-2 mx-xl-3" to="/dex">DEX</Link>
+                                <Link
+                                    className={`nav-link mx-lg-2 mx-xl-3 
+                                    ${(
+                                            pathname === '/dex' ||
+                                            pathname === '/liquidity' ||
+                                            pathname === '/liquidityAdd' ||
+                                            pathname === '/liquidityRemove' ||
+                                            pathname === '/liquidityFindToken'
+                                        ) ? "active" : ""}`} to="/dex">DEX</Link>
                             </NavItem>
                             <NavItem>
-                                <Link className="nav-link mx-lg-2 mx-xl-3" to="/bridge">Bridge</Link>
+                                <Link
+                                    className={`nav-link mx-lg-2 mx-xl-3 
+                                    ${pathname === '/bridge' ? "active" : ""}`} to="/bridge">Bridge</Link>
                             </NavItem>
                         </Nav>
                         <Navbar.Text className='ms-lg-2 ms-xl-4'>
