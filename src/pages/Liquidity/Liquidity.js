@@ -10,10 +10,12 @@ const Liquidity = () => {
   const userLiquidityFound = true;
   return (
     <>
-      <DEXSubmenu />
-      <div id='liquidity' >
-        <LiquidityHeader title="Your Liquidity" content="Remove liquidity to receive tokens back" back={false}></LiquidityHeader>
-        <LiquidityBody walletConnectStatus={walletConnectStatus} userLiquidityFound={userLiquidityFound}></LiquidityBody>
+      <div className="dex">
+        <DEXSubmenu />
+        <div id='liquidity' >
+          <LiquidityHeader title="Your Liquidity" content="Remove liquidity to receive tokens back" back={false}></LiquidityHeader>
+          <LiquidityBody walletConnectStatus={walletConnectStatus} userLiquidityFound={userLiquidityFound}></LiquidityBody>
+        </div>
       </div>
     </>
   );

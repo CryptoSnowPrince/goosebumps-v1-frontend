@@ -9,13 +9,14 @@ import '../Liquidity/Liquidity.scss'
 const LiquidityAdd = () => {
   return (
     <>
-      <DEXSubmenu />
-      <div id='liquidity' >
-        <LiquidityHeader title="Add Liquidity" content="Add liquidity to receive LP tokens" />
-        <LiquidityAddBody />
-
+      <div className="dex">
+        <DEXSubmenu />
+        <div id='liquidity' >
+          <LiquidityHeader title="Add Liquidity" content="Add liquidity to receive LP tokens" />
+          <LiquidityAddBody />
+        </div>
+        <UserLpToken />
       </div>
-      <UserLpToken />
     </>
   );
 }
