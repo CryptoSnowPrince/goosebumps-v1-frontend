@@ -5,7 +5,7 @@ import { Home } from './components/Home';
 import { PortfolioTracker } from './components/PortfolioTracker';
 import { Charts } from './components/Charts';
 import { DEX } from './pages/DEX/DEX';
-import { Stake } from './components/Stake';
+// import { Stake } from './components/Stake';
 import { Staking } from './pages/Staking/Staking';
 import { Liquidity } from './pages/Liquidity/Liquidity';
 import { LiquidityAdd } from './pages/LiquidityAdd/LiquidityAdd';

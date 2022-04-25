@@ -3,7 +3,7 @@ import { BiHelpCircle } from 'react-icons/bi';
 import InputRange from "react-input-range";
 import "react-input-range/lib/css/index.css";
 
-import Submenu from '../../components/Submenu/Submenu'
+import DEXSubmenu from '../../components/Submenu/DEXSubmenu'
 import { LiquidityHeader } from "../../components/LiquidityHeader/LiquidityHeader";
 import { UserLpToken } from "../LiquidityAdd/UserLpToken"
 import { TokenSelectModal } from "../LiquidityAdd/TokenModal"
@@ -19,7 +19,7 @@ const LiquidityRemove = () => {
 
   return (
     <>
-      <Submenu />
+      <DEXSubmenu />
       <div id='liquidity' >
         <LiquidityHeader title="Remove DSP-BNB liquidity" content="To receive DSP and BNB"></LiquidityHeader>
         <div className='p-3 mt-4'>

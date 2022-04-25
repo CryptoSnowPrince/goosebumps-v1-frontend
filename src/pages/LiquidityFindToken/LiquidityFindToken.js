@@ -3,7 +3,7 @@ import { BiHelpCircle } from 'react-icons/bi';
 import InputRange from "react-input-range";
 import "react-input-range/lib/css/index.css";
 
-import Submenu from '../../components/Submenu/Submenu'
+import DEXSubmenu from '../../components/Submenu/DEXSubmenu'
 import { LiquidityHeader } from "../../components/LiquidityHeader/LiquidityHeader";
 import { UserLpToken } from "../LiquidityAdd/UserLpToken"
 import { TokenSelectModal } from "../LiquidityAdd/TokenModal"
@@ -18,7 +18,7 @@ const LiquidityFindToken = () => {
 
   return (
     <>
-      <Submenu />
+      <DEXSubmenu />
       <div id='liquidity' >
         <LiquidityHeader title="Import Poll" content="Import an existing pool"></LiquidityHeader>
         <div className='liquidityfindtoken-body p-4'>

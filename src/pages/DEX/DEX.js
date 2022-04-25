@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { Exchange } from "../../components/widgets/exchange/Exchange";
 import networks from '../../networks.json'
-import Submenu from '../../components/Submenu/Submenu';
+import DEXSubmenu from '../../components/Submenu/DEXSubmenu';
 import * as selector from '../../store/selectors';
 import linq from "linq";
 
@@ -21,6 +21,7 @@ const DEX = (props) => {
 
     return (
         <div className="dex">
+            <DEXSubmenu />
             <Exchange network={network} fromSymbol={network.Currency.Name} fromAddress="-" toSymbol={network.Currency.WrappedName} toAddress={network.Currency.Address} />
         </div>
     );

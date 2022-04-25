@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import Submenu from '../../components/Submenu/Submenu'
+import DEXSubmenu from '../../components/Submenu/DEXSubmenu'
 import { LiquidityHeader } from "../../components/LiquidityHeader/LiquidityHeader";
 import { LiquidityBody } from "./LiquidityBody";
 import './Liquidity.scss'
@@ -10,7 +10,7 @@ const Liquidity = () => {
   const userLiquidityFound = true;
   return (
     <>
-      <Submenu />
+      <DEXSubmenu />
       <div id='liquidity' >
         <LiquidityHeader title="Your Liquidity" content="Remove liquidity to receive tokens back" back={false}></LiquidityHeader>
         <LiquidityBody walletConnectStatus={walletConnectStatus} userLiquidityFound={userLiquidityFound}></LiquidityBody>

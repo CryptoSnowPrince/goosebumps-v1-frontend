@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import Submenu from '../../components/Submenu/Submenu'
+import DEXSubmenu from '../../components/Submenu/DEXSubmenu'
 import { LiquidityHeader } from "../../components/LiquidityHeader/LiquidityHeader";
 import { LiquidityAddBody } from "./LiquidityAddBody"
 import { UserLpToken } from "./UserLpToken"
@@ -9,7 +9,7 @@ import '../Liquidity/Liquidity.scss'
 const LiquidityAdd = () => {
   return (
     <>
-      <Submenu />
+      <DEXSubmenu />
       <div id='liquidity' >
         <LiquidityHeader title="Add Liquidity" content="Add liquidity to receive LP tokens" />
         <LiquidityAddBody />
