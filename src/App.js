@@ -4,7 +4,7 @@ import { Layout } from './components/Layout';
 import { Home } from './components/Home';
 import { PortfolioTracker } from './components/PortfolioTracker';
 import { Charts } from './components/Charts';
-import { DEX } from './components/DEX';
+import { DEX } from './pages/DEX/DEX';
 import { Stake } from './components/Stake';
 import { Staking } from './pages/Staking/Staking';
 import { Liquidity } from './pages/Liquidity/Liquidity';

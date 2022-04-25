@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { Exchange } from "./widgets/exchange/Exchange";
-import networks from "./../networks";
+import { Exchange } from "../../components/widgets/exchange/Exchange";
+import networks from '../../networks.json'
+import Submenu from '../../components/Submenu/Submenu';
+import * as selector from '../../store/selectors';
 import linq from "linq";
-import * as selector from '../store/selectors';
 
 const DEX = (props) => {
     // const network = linq.from(networks).where(x => x.Name === "ropsten").single();
