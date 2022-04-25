@@ -7,10 +7,14 @@ import { Charts } from './components/Charts';
 import { DEX } from './components/DEX';
 import { Stake } from './components/Stake';
 import { Staking } from './pages/Staking/Staking';
+import { Liquidity } from './pages/Liquidity/Liquidity';
+import { LiquidityAdd } from './pages/LiquidityAdd/LiquidityAdd';
+import { LiquidityRemove } from './pages/LiquidityRemove/LiquidityRemove';
 import { Farming } from './pages/Farming/Farming';
 import { Bridge } from './pages/Bridge/Bridge';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
+
 
 export default class App extends Component {
     static displayName = App.name;
@@ -21,6 +25,9 @@ export default class App extends Component {
                 <Routes>
                     <Route exact path='/' element={<Home />} />
                     <Route exact path='/stake' element={<Staking />} />
+                    <Route exact path='/liquidity' element={<Liquidity />} />
+                    <Route exact path='/liquidityAdd' element={<LiquidityAdd />} />
+                    <Route exact path='/liquidityRemove' element={<LiquidityRemove />} />
                     <Route exact path='/farms' element={<Farming />} />
                     <Route exact path='/bridge' element={<Bridge />} />
                     <Route path='/portfolio-tracker' element={<PortfolioTracker />}>
