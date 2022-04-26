@@ -210,20 +210,26 @@ const Exchange = (props) => {
 		console.log("approve");
 		setReady();
 
-		const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
-		const contract = new ethers.Contract(
-			from.address,
+		const web3 = new Web3(provider);
+
+		const contract = new web3.eth.Contract(
 			tokenAbi,
-			provider.getSigner()
+			from.address,
 		);
 
 		try {
-			const tx = await contract.approve(needApprove.target, quote.sellAmount);
-			const receipt = await tx.wait(tx);
-			if (receipt.status === 1) {
+			const tx = await contract.methods.approve(needApprove.target, quote.sellAmount).send({ from: account });
+			if (tx.status === true) {
 				setNeedApprove();
 			}
-		} catch { }
+		} catch(err) {
+			console.log("approve err: ", err);
+		 }
+
+		updateBalance(from.address, from, setFrom).then(() => {
+			updateBalance(to.address, to, setTo).then(() => {
+			});
+		});
 
 		setReady(true);
 	};
@@ -237,32 +243,25 @@ const Exchange = (props) => {
 	}
 
 	const trade = async () => {
-		console.log("from: ", from.address)
-		console.log("from: ", from.symbol)
-		console.log("to: ", to.address)
-		console.log("to: ", to.symbol)
-		console.log("account: ", account)
-		console.log("sellAmount: ", quote.sellAmount)
-		// Selling 100 ETH for DAI.
 		const params = {
-			// sellToken: 'MATIC',
 			sellToken: (from.address === "-" ? from.symbol : from.address),
 			buyToken: (to.address === "-" ? to.symbol : to.address),
-			// buyToken: 'DAI',
 			sellAmount: quote.sellAmount, // 1 ETH = 10^18 wei
 			takerAddress: account,
 		}
 
-		console.log(`${props.network.SwapApi}swap/v1/quote?${qs.stringify(params)}`);
-		// Fetch the swap quote.
-		const response = await fetch(
-			// `https://polygon.api.0x.org/swap/v1/quote?${qs.stringify(params)}`
-			`${props.network.SwapApi}swap/v1/quote?${qs.stringify(params)}`
-		);
-
-		const web3 = new Web3(provider);
-		const ret = await response.json();
-		await web3.eth.sendTransaction(ret);
+		try {
+			// Fetch the swap quote.
+			const response = await fetch(
+				`${props.network.SwapApi}swap/v1/quote?${qs.stringify(params)}`
+			);
+	
+			const web3 = new Web3(provider);
+			const ret = await response.json();
+			await web3.eth.sendTransaction(ret);
+		} catch (error) {
+			console.log("trade error: ", error)			
+		}
 
 		updateBalance(from.address, from, setFrom).then(() => {
 			updateBalance(to.address, to, setTo).then(() => {
@@ -270,7 +269,7 @@ const Exchange = (props) => {
 				resetQuote();
 			});
 		});
-		
+
 		resetQuote();
 		resetBalances();
 	}
