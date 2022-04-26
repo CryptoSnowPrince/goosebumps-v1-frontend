@@ -1,14 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
-// import { Exchange } from "../../components/widgets/exchange/Exchange";
-import { Exchange } from "../../components/widgets/exchange/ExchangeTest";
+import { Exchange } from "../../components/widgets/exchange/Exchange";
 import networks from '../../networks.json'
 import DEXSubmenu from '../../components/Submenu/DEXSubmenu';
 import * as selector from '../../store/selectors';
 import linq from "linq";
 
 const DEX = (props) => {
-    // const network = linq.from(networks).where(x => x.Name === "ropsten").single();
     const selectedNetwork = useSelector(selector.chainState);
     const [network, setNetwork] = useState(networks[localStorage.getItem("networkIndex") || 2]);
 

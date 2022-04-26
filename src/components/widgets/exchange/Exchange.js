@@ -14,6 +14,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import * as selector from '../../../store/selectors';
 import * as action from '../../../store/actions';
 import { getFullDisplayBalance, formatNumberWithoutComma } from '../../../utils/number';
+import qs from 'qs';
 
 const Exchange = (props) => {
 	const account = useSelector(selector.accountState);
@@ -36,7 +37,7 @@ const Exchange = (props) => {
 		setFrom({ symbol: props.fromSymbol, address: props.fromAddress, decimals: 0, amount: 0, balance: 0 })
 		setTo({ symbol: props.toSymbol, address: props.toAddress, decimals: 0, amount: 0, balance: 0 });
 	}, [props.network])
-	
+
 	const validateQuote = async () => {
 		setError();
 
@@ -99,7 +100,7 @@ const Exchange = (props) => {
 			if (response) {
 				if (response.price) {
 					response.side = side;
-					console.log("response: ", response);
+					// console.log("response: ", response);
 					setQuote(response);
 
 					if (response.allowanceTarget !== "0x0000000000000000000000000000000000000000") {
@@ -135,7 +136,7 @@ const Exchange = (props) => {
 	};
 
 	const resetQuote = (overrideFrom, overrideTo, overrideSlippage) => {
-		console.log("resetQuote");
+		// console.log("resetQuote");
 		setReady();
 		setQuote();
 		setError();
@@ -200,13 +201,13 @@ const Exchange = (props) => {
 	};
 
 	const resetBalances = () => {
-		console.log("resetBalances");
+		// console.log("resetBalances");
 		setFrom(Object.assign({}, from));
 		setTo(Object.assign({}, to));
 	};
 
 	const approve = async () => {
-		console.log("approve");
+		// console.log("approve");
 		setReady();
 
 		const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
@@ -222,7 +223,14 @@ const Exchange = (props) => {
 			if (receipt.status === 1) {
 				setNeedApprove();
 			}
-		} catch { }
+		} catch (err) {
+			console.log("approve err: ", err);
+		}
+
+		updateBalance(from.address, from, setFrom).then(() => {
+			updateBalance(to.address, to, setTo).then(() => {
+			});
+		});
 
 		setReady(true);
 	};
@@ -236,32 +244,32 @@ const Exchange = (props) => {
 	}
 
 	const trade = async () => {
-		console.log("trade");
-		// const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
+		const params = {
+			sellToken: (from.address === "-" ? from.symbol : from.address),
+			buyToken: (to.address === "-" ? to.symbol : to.address),
+			sellAmount: quote.sellAmount, // 1 ETH = 10^18 wei
+			takerAddress: account,
+		}
 
-		const txRequest = {
-			from: account,
-			to: quote.to,
-			value: BigNumber.from(quote.value),
-			gasLimit: BigNumber.from(quote.gas),
-			gasPrice: BigNumber.from(quote.gasPrice),
-			data: quote.data
-		};
-		console.log("txRequest: ", txRequest);
-		console.log("txRequest from: ", account);
-		console.log("txRequest quote.to: ", quote.to);
-		console.log("txRequest quote.value: ", quote.value);
-		console.log("txRequest quote.gas: ", quote.gas);
-		console.log("txRequest quote.gasPrice: ", quote.gasPrice);
-		console.log("txRequest BigNumber quote.value: ", BigNumber.from(quote.value));
-		console.log("txRequest BigNumber quote.gas: ", BigNumber.from(quote.gas));
-		console.log("txRequest BigNumber quote.gasPrice: ", BigNumber.from(quote.gasPrice));
-		console.log("txRequest quote.data: ", quote.data);
+		try {
+			// Fetch the swap quote.
+			const response = await fetch(
+				`${props.network.SwapApi}swap/v1/quote?${qs.stringify(params)}`
+			);
 
-		const web3 = new Web3(provider);
+			const web3 = new Web3(provider);
+			const ret = await response.json();
+			await web3.eth.sendTransaction(ret);
+		} catch (error) {
+			console.log("trade error: ", error)
+		}
 
-		await web3.eth.sendTransaction(txRequest);
-		// await provider.getSigner().sendTransaction(txRequest);
+		updateBalance(from.address, from, setFrom).then(() => {
+			updateBalance(to.address, to, setTo).then(() => {
+				setLoading();
+				resetQuote();
+			});
+		});
 
 		resetQuote();
 		resetBalances();
@@ -302,10 +310,10 @@ const Exchange = (props) => {
 		if (pendingQuote) {
 			clearTimeout(pendingQuote);
 		}
-		console.log("L292")
+		// console.log("L292")
 		if (value > 0) {
 			setPendingQuote(setTimeout(() => {
-				console.log("L295")
+				// console.log("L295")
 				updateQuote(from.address, from.decimals, to.address, to.decimals, value, slippage, side).then(quote => {
 					if (quote?.price > 0) {
 						const buyAmount = ethers.utils.formatUnits(quote.buyAmount, to.decimals);
