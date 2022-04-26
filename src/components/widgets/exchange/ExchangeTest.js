@@ -264,6 +264,13 @@ const Exchange = (props) => {
 		const ret = await response.json();
 		await web3.eth.sendTransaction(ret);
 
+		updateBalance(from.address, from, setFrom).then(() => {
+			updateBalance(to.address, to, setTo).then(() => {
+				setLoading();
+				resetQuote();
+			});
+		});
+		
 		resetQuote();
 		resetBalances();
 	}
