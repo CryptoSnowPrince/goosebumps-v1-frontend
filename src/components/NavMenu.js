@@ -1,16 +1,16 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { Navbar, Container, Nav, NavItem } from "react-bootstrap";
 import { ConnectButton } from './widgets/ConnectButton';
 import networks from '../networks.json';
 import { Requester } from "./../requester";
-import { ComingSoonModal } from './widgets/ComingSoonModal';
-import { GoogleLogin } from 'react-google-login';
-import GoogleProfile from './widgets/GoogleProfile';
-import * as selector from '../store/selectors';
+// import { ComingSoonModal } from './widgets/ComingSoonModal';
+// import { GoogleLogin } from 'react-google-login';
+// import GoogleProfile from './widgets/GoogleProfile';
+// import * as selector from '../store/selectors';
 import * as action from '../store/actions';
-import * as state from '../store/reducers/selChain';
+// import * as state from '../store/reducers/selChain';
 
 const NavMenu = () => {
     const { pathname } = useLocation();
@@ -21,28 +21,28 @@ const NavMenu = () => {
     //     console.log("networkSelector: ", networkSelector);
     // }, [networkSelector])
 
-    const [authenticated, setAuthenticated] = useState(false);
-    const [user, setUser] = useState({
-        email: '',
-        name: '',
-        imageUrl: ''
-    });
+    // const [authenticated, setAuthenticated] = useState(false);
+    // const [user, setUser] = useState({
+    //     email: '',
+    //     name: '',
+    //     imageUrl: ''
+    // });
 
-    const loginSuccess = (response) => {
-        console.log(response);
-        setUser({
-            email: response?.profileObj.email,
-            name: response?.profileObj.name,
-            imageUrl: response?.profileObj.imageUrl
-        });
-        setAuthenticated(true);
-    }
+    // const loginSuccess = (response) => {
+    //     console.log(response);
+    //     setUser({
+    //         email: response?.profileObj.email,
+    //         name: response?.profileObj.name,
+    //         imageUrl: response?.profileObj.imageUrl
+    //     });
+    //     setAuthenticated(true);
+    // }
 
-    const loginFail = (response) => {
-        console.log(response);
-    }
+    // const loginFail = (response) => {
+    //     console.log(response);
+    // }
 
-    const [show, setShow] = useState();
+    // const [show, setShow] = useState();
     const [networkIndex, setNetworkIndex] = useState(localStorage.getItem("networkIndex") || 2);
     const [networkName, setNetworkName] = useState(networks[networkIndex].Name);
     const [networkInfo, setNetworkInfo] = useState();

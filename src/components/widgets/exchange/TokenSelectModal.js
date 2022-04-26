@@ -1,6 +1,6 @@
 import { Modal } from "react-bootstrap";
 import React, { useEffect, useState } from "react";
-import { singer, ethers, BigNumber } from 'ethers';
+import { ethers, /*singer, BigNumber*/ } from 'ethers';
 import { Contract, Provider, setMulticallAddress } from 'ethers-multicall';
 import tokenAbi from '../../../abis/token';
 import linq from "linq";

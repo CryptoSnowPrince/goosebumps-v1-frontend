@@ -1,7 +1,7 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState/*, useCallback*/ } from 'react';
 import Web3 from 'web3';
-import { multicall, useEthers } from '@usedapp/core';
-import { singer, ethers, BigNumber } from 'ethers';
+// import { multicall, useEthers } from '@usedapp/core';
+import { /*singer, */ethers, BigNumber } from 'ethers';
 import { Contract, Provider, setMulticallAddress } from 'ethers-multicall';
 import { ConnectButton } from '../ConnectButton';
 //import { ChainId, Token, TokenAmount, Fetcher, Pair, Route, Trade, TradeType, Percent } from '@pancakeswap-libs/sdk';
@@ -10,10 +10,9 @@ import { Requester } from "../../../requester";
 import numberHelper from "../../../numberHelper";
 import NumberFormat from "react-number-format";
 import { TokenSelectModal } from './TokenSelectModal';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import * as selector from '../../../store/selectors';
-import * as action from '../../../store/actions';
-import { getFullDisplayBalance, formatNumberWithoutComma } from '../../../utils/number';
+import { /*getFullDisplayBalance, */formatNumberWithoutComma } from '../../../utils/number';
 import qs from 'qs';
 
 const Exchange = (props) => {

@@ -4,7 +4,7 @@ import { Exchange } from "../../components/widgets/exchange/Exchange";
 import networks from '../../networks.json'
 import DEXSubmenu from '../../components/Submenu/DEXSubmenu';
 import * as selector from '../../store/selectors';
-import linq from "linq";
+// import linq from "linq";
 
 const DEX = (props) => {
     const selectedNetwork = useSelector(selector.chainState);
