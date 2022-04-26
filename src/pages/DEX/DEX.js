@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { Exchange } from "../../components/widgets/exchange/Exchange";
+// import { Exchange } from "../../components/widgets/exchange/Exchange";
+import { Exchange } from "../../components/widgets/exchange/ExchangeTest";
 import networks from '../../networks.json'
 import DEXSubmenu from '../../components/Submenu/DEXSubmenu';
 import * as selector from '../../store/selectors';

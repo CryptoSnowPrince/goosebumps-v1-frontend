@@ -21,6 +21,13 @@
     "Logo": "/assets/tokens/USDT.png"
   },
   {
+    "Name": "Dai Stablecoin",
+    "Symbol": "DAI",
+    "Address": "0x6B175474E89094C44Da98b954EedeAC495271d0F",
+    "Decimals": 18,
+    "Logo": "/assets/tokens/DAI.png"
+  },
+  {
     "Name": "Matic Token",
     "Symbol": "MATIC",
     "Address": "0x7D1AfA7B718fb893dB30A3aBc0Cfc608AaCfeBB0",

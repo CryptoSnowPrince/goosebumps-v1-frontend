@@ -14,6 +14,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import * as selector from '../../../store/selectors';
 import * as action from '../../../store/actions';
 import { getFullDisplayBalance, formatNumberWithoutComma } from '../../../utils/number';
+// console.log("Web3:", Web3);
 
 const Exchange = (props) => {
 	const account = useSelector(selector.accountState);
@@ -36,7 +37,7 @@ const Exchange = (props) => {
 		setFrom({ symbol: props.fromSymbol, address: props.fromAddress, decimals: 0, amount: 0, balance: 0 })
 		setTo({ symbol: props.toSymbol, address: props.toAddress, decimals: 0, amount: 0, balance: 0 });
 	}, [props.network])
-	
+
 	const validateQuote = async () => {
 		setError();
 
@@ -236,35 +237,61 @@ const Exchange = (props) => {
 	}
 
 	const trade = async () => {
-		console.log("trade");
+		const qs = require('qs');
+
+		console.log("from: ", from.address)
+		console.log("from: ", from.symbol)
+		console.log("to: ", to.address)
+		console.log("to: ", to.symbol)
+		console.log("account: ", account)
+		console.log("sellAmount: ", quote.sellAmount)
+		// Selling 100 ETH for DAI.
+		const params = {
+			// sellToken: 'MATIC',
+			sellToken: (from.address === "-" ? from.symbol: from.address),
+			buyToken: (to.address === "-" ? to.symbol: to.address),
+			// buyToken: 'DAI',
+			sellAmount: quote.sellAmount, // 1 ETH = 10^18 wei
+			takerAddress: account,
+		}
+
+		console.log(`${props.network.SwapApi}swap/v1/quote?${qs.stringify(params)}`);
+		// Fetch the swap quote.
+		const response = await fetch(
+			// `https://polygon.api.0x.org/swap/v1/quote?${qs.stringify(params)}`
+			`${props.network.SwapApi}swap/v1/quote?${qs.stringify(params)}`
+		);
+
+		// Perform the swap.
 		// const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
+		// const ret = await response.json();
+		// console.log("await response.json(): ", ret)
+		// await provider.getSigner().sendTransaction(ret);
 
-		const txRequest = {
-			from: account,
-			to: quote.to,
-			value: BigNumber.from(quote.value),
-			gasLimit: BigNumber.from(quote.gas),
-			gasPrice: BigNumber.from(quote.gasPrice),
-			data: quote.data
-		};
-		console.log("txRequest: ", txRequest);
-		console.log("txRequest from: ", account);
-		console.log("txRequest quote.to: ", quote.to);
-		console.log("txRequest quote.value: ", quote.value);
-		console.log("txRequest quote.gas: ", quote.gas);
-		console.log("txRequest quote.gasPrice: ", quote.gasPrice);
-		console.log("txRequest BigNumber quote.value: ", BigNumber.from(quote.value));
-		console.log("txRequest BigNumber quote.gas: ", BigNumber.from(quote.gas));
-		console.log("txRequest BigNumber quote.gasPrice: ", BigNumber.from(quote.gasPrice));
-		console.log("txRequest quote.data: ", quote.data);
-
+		// console.log(props.network.RPC)
 		const web3 = new Web3(provider);
 
-		await web3.eth.sendTransaction(txRequest);
+		await web3.eth.sendTransaction(await response.json());
+
+
+
+
+		// console.log("trade");
+		// const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
+
+		// const txRequest = {
+		// 	from: account,
+		// 	to: quote.to,
+		// 	value: BigNumber.from(quote.value),
+		// 	gasLimit: BigNumber.from(quote.gas),
+		// 	gasPrice: BigNumber.from(quote.gasPrice),
+		// 	data: quote.data
+		// };
+
 		// await provider.getSigner().sendTransaction(txRequest);
 
-		resetQuote();
-		resetBalances();
+		// resetQuote();
+		// resetBalances();
 	}
 
 	const invert = () => {

@@ -21,6 +21,7 @@
     "linq": "^4.0.0",
     "moralis": "^0.0.135",
     "node-sass": "^6.0.1",
+    "qs": "^6.10.3",
     "react": "^17.0.2",
     "react-bootstrap": "^2.0.2",
     "react-bootstrap-icons": "^1.7.2",
