@@ -1,13 +1,13 @@
 //import { useEthers } from '@usedapp/core'
-import React, { useCallback, useEffect, useReducer, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { NotificationManager } from 'react-notifications'; 
-import { Mainnet, DAppProvider, useEtherBalance, useEthers, Config } from '@usedapp/core'
+// import { NotificationManager } from 'react-notifications'; 
+// import { Mainnet, DAppProvider, useEtherBalance, useEthers, Config } from '@usedapp/core'
 import Web3Modal from "web3modal";
 import { providers/*, ethers*/ } from "ethers";
 import WalletConnectProvider from "@walletconnect/web3-provider";
 import config from '../../constants/config'
-import linq from "linq";
+// import linq from "linq";
 import networks from "../../networks";
 import * as selector from '../../store/selectors';
 import * as action from '../../store/actions';
@@ -41,7 +41,7 @@ if (typeof window !== "undefined") {
 const ConnectButton = () => {
     // console.log("rerender connectButton");
     const selectedNetwork = useSelector(selector.chainState);
-    
+
     // const network = linq.from(networks).where(x => x.Name === "ropsten").single();
     const [network, setNetwork] = useState(networks[localStorage.getItem("networkIndex") || 2]);
     const [pendingConnectWallet, setPendingConnectWallet] = useState(false);
@@ -50,7 +50,8 @@ const ConnectButton = () => {
         try {
             setNetwork(networks[selectedNetwork.chain.index]);
         } catch (error) {
-            console.log("error: ", error);
+            setNetwork(networks[localStorage.getItem("networkIndex") || 2]);
+            console.log("selectedNetwork error: ", error);
         }
     }, [selectedNetwork])
 
@@ -60,7 +61,7 @@ const ConnectButton = () => {
     const provider = useSelector(selector.providerState);
 
     const connect = useCallback(async function (network, connectState) {
-        if(connectState == true) return;
+        if (connectState === true) return;
         setPendingConnectWallet(true);
         try {
             const provider = await web3Modal.connect();
@@ -74,8 +75,8 @@ const ConnectButton = () => {
                             params: [{ chainId: network.chainHexId }], // chainId must be in hexadecimal numbers
                         });
                     } catch (error) {
-                        console.log("network switching error: ", error);                        
-                    } 
+                        console.log("network switching error: ", error);
+                    }
                 }
             } else {
                 console.log(
