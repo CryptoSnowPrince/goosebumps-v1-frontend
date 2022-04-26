@@ -14,7 +14,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import * as selector from '../../../store/selectors';
 import * as action from '../../../store/actions';
 import { getFullDisplayBalance, formatNumberWithoutComma } from '../../../utils/number';
-// console.log("Web3:", Web3);
+import qs from 'qs';
 
 const Exchange = (props) => {
 	const account = useSelector(selector.accountState);
@@ -237,8 +237,6 @@ const Exchange = (props) => {
 	}
 
 	const trade = async () => {
-		const qs = require('qs');
-
 		console.log("from: ", from.address)
 		console.log("from: ", from.symbol)
 		console.log("to: ", to.address)
@@ -248,8 +246,8 @@ const Exchange = (props) => {
 		// Selling 100 ETH for DAI.
 		const params = {
 			// sellToken: 'MATIC',
-			sellToken: (from.address === "-" ? from.symbol: from.address),
-			buyToken: (to.address === "-" ? to.symbol: to.address),
+			sellToken: (from.address === "-" ? from.symbol : from.address),
+			buyToken: (to.address === "-" ? to.symbol : to.address),
 			// buyToken: 'DAI',
 			sellAmount: quote.sellAmount, // 1 ETH = 10^18 wei
 			takerAddress: account,
@@ -262,36 +260,12 @@ const Exchange = (props) => {
 			`${props.network.SwapApi}swap/v1/quote?${qs.stringify(params)}`
 		);
 
-		// Perform the swap.
-		// const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
-		// const ret = await response.json();
-		// console.log("await response.json(): ", ret)
-		// await provider.getSigner().sendTransaction(ret);
-
-		// console.log(props.network.RPC)
 		const web3 = new Web3(provider);
+		const ret = await response.json();
+		await web3.eth.sendTransaction(ret);
 
-		await web3.eth.sendTransaction(await response.json());
-
-
-
-
-		// console.log("trade");
-		// const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
-
-		// const txRequest = {
-		// 	from: account,
-		// 	to: quote.to,
-		// 	value: BigNumber.from(quote.value),
-		// 	gasLimit: BigNumber.from(quote.gas),
-		// 	gasPrice: BigNumber.from(quote.gasPrice),
-		// 	data: quote.data
-		// };
-
-		// await provider.getSigner().sendTransaction(txRequest);
-
-		// resetQuote();
-		// resetBalances();
+		resetQuote();
+		resetBalances();
 	}
 
 	const invert = () => {
