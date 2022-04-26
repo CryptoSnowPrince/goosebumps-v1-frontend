@@ -50,17 +50,7 @@ const NavMenu = () => {
     const searchInput = useRef();
 
     useEffect(() => {
-        // console.log("networkInfo effect: ", networkInfo)
         dispatch(action.setChain(networkInfo));
-
-        // console.log("network effect: ", network)
-        // localStorage.setItem("networkIndex", networkIndex);
-        // console.log("networkIndex: ", networkIndex);
-        // console.log("networkName: ", networkName);
-        // console.log("networks: ", networks[2]);
-        // console.log("store network: ", network);
-        // console.log("networkInfo: ", networkInfo);
-        // console.log("networks[networkIndex].Name: ", networks[networkIndex].Name);
     }, [networkInfo]);
 
     useEffect(() => {
