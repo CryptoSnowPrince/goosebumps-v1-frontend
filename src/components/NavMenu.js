@@ -80,8 +80,7 @@ const NavMenu = () => {
                 // https://docs.ethers.io/v5/concepts/best-practices/#best-practices--network-changes
                 const handleChainChanged = (_hexChainId) => {
                     console.log("handleChainChanged ")
-                    window.location.reload();
-                    // console.log("handleChainChanged");
+                    // window.location.reload();
                     // if (parseInt(_hexChainId, 16) !== networks[networkIndex].chainId) {
                         // alert(`Reconnect Change network to ${networks[networkIndex].Display}!`);
 
