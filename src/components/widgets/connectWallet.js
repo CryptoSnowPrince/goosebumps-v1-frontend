@@ -1,15 +1,8 @@
-//import { useEthers } from '@usedapp/core'
-import React, { useCallback, useEffect, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-// import { NotificationManager } from 'react-notifications'; 
-// import { Mainnet, DAppProvider, useEtherBalance, useEthers, Config } from '@usedapp/core'
 import Web3Modal from "web3modal";
 import { providers/*, ethers*/ } from "ethers";
 import WalletConnectProvider from "@walletconnect/web3-provider";
 import config from '../../constants/config'
-// import linq from "linq";
 import networks from "../../networks";
-import * as selector from '../../store/selectors';
 import * as action from '../../store/actions';
 import store from '../../store';
 

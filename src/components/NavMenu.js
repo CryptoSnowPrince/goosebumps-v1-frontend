@@ -2,15 +2,16 @@ import React, { useRef, useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { Navbar, Container, Nav, NavItem } from "react-bootstrap";
+import { providers/*, ethers*/ } from "ethers";
 import { ConnectButtonModal } from './widgets/ConnectButtonModal';
 import { Reconnect, Connect, Disconnect } from '../components/widgets/connectWallet'
 import networks from '../networks.json';
 import { Requester } from "./../requester";
+import * as action from '../store/actions';
+import * as selector from '../store/selectors'
 // import { ComingSoonModal } from './widgets/ComingSoonModal';
 // import { GoogleLogin } from 'react-google-login';
 // import GoogleProfile from './widgets/GoogleProfile';
-import * as action from '../store/actions';
-import * as selector from '../store/selectors'
 
 const NavMenu = () => {
     const { pathname } = useLocation();
@@ -44,26 +45,53 @@ const NavMenu = () => {
     const navigate = useNavigate();
     const searchInput = useRef();
 
+    // const getChainId = async () => {
+    //     const chainId = (await new providers.Web3Provider(provider).getNetwork()).chainId;
+    //     return chainId;
+    // }
+
+    const switchChainRequest = async () => {
+        try {
+            await window.ethereum.request({
+                method: "wallet_switchEthereumChain",
+                params: [{ chainId: networks[networkIndex].chainHexId }], // chainId must be in hexadecimal numbers
+            });
+        } catch (error) {
+            console.log("network switching error: ", error);
+        }
+    }
+
     useEffect(() => {
         localStorage.setItem("networkIndex", networkIndex);
         dispatch(action.setChainIndex(networkIndex));
         setNetworkName(networks[networkIndex].Name);
     }, [networkIndex]);
 
-    useEffect(() => {
+    useEffect(async () => {
         console.log("provider useEffect")
         try {
             if (provider) {
                 const handleAccountsChanged = (accounts) => {
-                    // console.log("reconnect if 2");
+                    // console.log("handleAccountsChanged");
                     Connect();
                     dispatch(action.setAccount(accounts[0]));
                 };
 
                 // https://docs.ethers.io/v5/concepts/best-practices/#best-practices--network-changes
                 const handleChainChanged = (_hexChainId) => {
-                    // window.location.reload();
-                    Disconnect();
+                    // console.log("handleChainChanged");
+                    if (parseInt(_hexChainId, 16) !== networks[networkIndex].chainId) {
+                        alert(`Change network to ${networks[networkIndex].Display}!`);
+
+                        if (window.ethereum) {
+                            // check if the chain to connect to is installed
+                            switchChainRequest();
+                        } else {
+                            console.log(
+                                "MetaMask is not installed. Please consider installing it: https://metamask.io/download.html"
+                            );
+                        }
+                    }
                 };
 
                 provider.on("accountsChanged", handleAccountsChanged);
