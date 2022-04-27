@@ -502,7 +502,7 @@ const Exchange = (props) => {
 									</div>
 								</div>
 								{
-									quote ?
+									quote && (from.amount !== 0 || to.amount !==0) ?
 
 										<>
 											<div className="form-group text-center">
