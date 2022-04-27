@@ -1,8 +1,32 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { TokenSelectModal } from "./TokenModal"
+import Web3 from 'web3';
+import { /*singer, */ethers, BigNumber } from 'ethers';
+import { useSelector } from 'react-redux';
+import * as selector from '../../store/selectors';
+import networks from '../../networks.json'
 
 
 const LiquidityAddBody = () => {
+
+  const account = useSelector(selector.accountState);
+  const provider = useSelector(selector.providerState);
+  const web3Provider = useSelector(selector.web3ProviderState);
+
+  const selectedNetwork = useSelector(selector.chainState);
+  const [network, setNetwork] = useState(networks[localStorage.getItem("networkIndex") || 2]);
+
+  useEffect(() => {
+    try {
+      setNetwork(networks[selectedNetwork.chain.index]);
+    } catch (error) {
+      console.log("error: ", error);
+    }
+  }, [selectedNetwork])
+
+  const [tokenA, setTokenA] = useState({ symbol: "", address: "", decimals: 0, amount: 0, balance: 0 });
+  const [tokenB, setTokenB] = useState({ symbol: "", address: "", decimals: 0, amount: 0, balance: 0 });
+
   const [showTokenSelectModal, setShowTokenSelectModal] = useState();
   const onSelectToken = (token, forTarget) => {
     console.log(token, forTarget)
@@ -24,7 +48,7 @@ const LiquidityAddBody = () => {
             <div className="input-group">
               <input id="from" type="text" className="form-control me-2" placeholder="0" autoComplete="off" min="0" value={0} />
               <div className="input-group-addon">
-                <button type="button" className="default-btn" onClick={() => setShowTokenSelectModal("from")}>BNB</button>
+                <button type="button" className="default-btn" onClick={() => setShowTokenSelectModal("from")}>{tokenA.symbol}</button>
               </div>
             </div>
           </div>
@@ -45,7 +69,7 @@ const LiquidityAddBody = () => {
             <div className="input-group">
               <input id="from" type="text" className="form-control me-2" placeholder="0" autoComplete="off" min="0" value={0} />
               <div className="input-group-addon">
-                <button type="button" className="default-btn" onClick={() => setShowTokenSelectModal("from")}>BNB</button>
+                <button type="button" className="default-btn" onClick={() => setShowTokenSelectModal("from")}>{tokenB.symbol}</button>
               </div>
             </div>
           </div>
@@ -69,7 +93,11 @@ const LiquidityAddBody = () => {
       </div>
       <div className='d-flex justify-content-center mt-4'><button className='default-btn'>Enter an amount</button></div>
 
-      <TokenSelectModal showFor={showTokenSelectModal} hide={() => setShowTokenSelectModal()} onSelect={onSelectToken} networkName={"bsctestnet"} />
+      <TokenSelectModal
+        showFor={showTokenSelectModal}
+        hide={() => setShowTokenSelectModal()}
+        onSelect={onSelectToken}
+        networkName={network.Name} />
     </div>
   );
 }

@@ -43,8 +43,8 @@ const ConnectButton = () => {
     const selectedNetwork = useSelector(selector.chainState);
 
     // const network = linq.from(networks).where(x => x.Name === "ropsten").single();
-    const [network, setNetwork] = useState(networks[localStorage.getItem("networkIndex") || 2]);
-    const [pendingConnectWallet, setPendingConnectWallet] = useState(false);
+    const [network, setNetwork] = useState(networks[selectedNetwork.chain.index]);
+    // const [pendingConnectWallet, setPendingConnectWallet] = useState(false);
 
     useEffect(() => {
         try {
@@ -60,9 +60,9 @@ const ConnectButton = () => {
     const account = useSelector(selector.accountState);
     const provider = useSelector(selector.providerState);
 
-    const connect = useCallback(async function (network, connectState) {
-        if (connectState === true) return;
-        setPendingConnectWallet(true);
+    const connect = useCallback(async function () {
+        // if (connectState === true) return;
+        // setPendingConnectWallet(true);
         try {
             const provider = await web3Modal.connect();
 
@@ -122,8 +122,8 @@ const ConnectButton = () => {
             }
             console.log("connect", error);
         }
-        setPendingConnectWallet(false);
-    }, []);
+        // setPendingConnectWallet(false);
+    }, [network]);
 
     const disconnect = useCallback(async function () {
         await web3Modal.clearCachedProvider();
@@ -133,8 +133,8 @@ const ConnectButton = () => {
     useEffect(() => {
         try {
             if (web3Modal.cachedProvider) {
-                // console.log("reconnect if");
-                connect(network, pendingConnectWallet);
+                console.log("reconnect if");
+                connect();
             }
         } catch (error) {
             console.log("auto connect with network switching err: ", error)
@@ -146,7 +146,7 @@ const ConnectButton = () => {
             if (provider) {
                 const handleAccountsChanged = (accounts) => {
                     // console.log("reconnect if 2");
-                    connect(network, pendingConnectWallet);
+                    connect();
                     dispatch(action.setAccount(accounts[0]));
                 };
 
@@ -175,7 +175,7 @@ const ConnectButton = () => {
         return (<button className="default-btn" onClick={disconnect}>{account.substring(0, 8)}... (Disconnect)</button>);
     }
 
-    return (<button className="default-btn" onClick={() => { connect(network, pendingConnectWallet) }}>Connect Wallet</button>);
+    return (<button className="default-btn" onClick={() => { connect() }}>Connect Wallet</button>);
 }
 
 export { ConnectButton }
