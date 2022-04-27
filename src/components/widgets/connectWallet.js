@@ -69,7 +69,7 @@ export const Connect = async (newChainIndex) => {
         } else {
             alert(`Change network to ${networks[newChainIndex ? newChainIndex : chainIndex].Display}!`);
             // NotificationManager.info(`Change network to ${network.Display}!`, "Info", 2000);
-            store.dispatch(action.setInit());
+            Disconnect();
         }
     } catch (error) {
         if (error.code === 4902) {
