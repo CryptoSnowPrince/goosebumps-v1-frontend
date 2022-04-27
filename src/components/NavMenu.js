@@ -79,20 +79,15 @@ const NavMenu = () => {
 
                 // https://docs.ethers.io/v5/concepts/best-practices/#best-practices--network-changes
                 const handleChainChanged = (_hexChainId) => {
-                    console.log("handleChainChanged ")
+                    // console.log("handleChainChanged ")
+                    // console.log("_hexChainId: ", _hexChainId);
+                    // console.log("networkIndex: ", networks[networkIndex].chainHexId);
                     // window.location.reload();
-                    // if (parseInt(_hexChainId, 16) !== networks[networkIndex].chainId) {
-                        // alert(`Reconnect Change network to ${networks[networkIndex].Display}!`);
-
-                    //     if (window.ethereum) {
-                    //         // check if the chain to connect to is installed
-                    //         switchChainRequest();
-                    //     } else {
-                    //         console.log(
-                    //             "MetaMask is not installed. Please consider installing it: https://metamask.io/download.html"
-                    //         );
-                    //     }
-                    // }
+                    if (parseInt(_hexChainId, 16) !== networks[networkIndex].chainId) {
+                        // console.log("handleChainChanged if ")
+                        alert(`Switch network to ${networks[networkIndex].Display}!`);
+                        Disconnect();
+                    }
                 };
 
                 provider.on("accountsChanged", handleAccountsChanged);
@@ -109,7 +104,7 @@ const NavMenu = () => {
         } catch (error) {
             console.log("auto connect with provider change err: ", error)
         }
-    }, [provider]);
+    }, [provider, networkIndex, dispatch]);
 
     const inPortfolio = window.location.pathname.match("^/portfolio-tracker/" + networkName + "/.");
 
