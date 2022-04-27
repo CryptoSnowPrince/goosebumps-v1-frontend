@@ -85,8 +85,8 @@ const NavMenu = () => {
                     // window.location.reload();
                     if (parseInt(_hexChainId, 16) !== networks[networkIndex].chainId) {
                         // console.log("handleChainChanged if ")
-                        alert(`Switch network to ${networks[networkIndex].Display} on your wallet!`);
-                        Disconnect();
+                        // alert(`Switch network to ${networks[networkIndex].Display} on your wallet!`);
+                        // Disconnect();
                     }
                 };
 

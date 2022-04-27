@@ -67,7 +67,7 @@ export const Connect = async (newChainIndex) => {
             store.dispatch(action.setAccount(account));
             store.dispatch(action.setChainId(chainId));
         } else {
-            alert(`Change network to ${networks[newChainIndex ? newChainIndex : chainIndex].Display} on your wallet!`);
+            alert(`Switch network to ${networks[newChainIndex ? newChainIndex : chainIndex].Display} on your wallet!`);
             // NotificationManager.info(`Change network to ${network.Display}!`, "Info", 2000);
             Disconnect();
         }
