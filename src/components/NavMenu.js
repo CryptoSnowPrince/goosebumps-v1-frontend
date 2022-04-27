@@ -83,11 +83,11 @@ const NavMenu = () => {
                     // console.log("_hexChainId: ", _hexChainId);
                     // console.log("networkIndex: ", networks[networkIndex].chainHexId);
                     // window.location.reload();
-                    if (parseInt(_hexChainId, 16) !== networks[networkIndex].chainId) {
+                    // if (parseInt(_hexChainId, 16) !== networks[networkIndex].chainId) {
                         // console.log("handleChainChanged if ")
                         // alert(`Switch network to ${networks[networkIndex].Display} on your wallet!`);
                         // Disconnect();
-                    }
+                    // }
                 };
 
                 provider.on("accountsChanged", handleAccountsChanged);
