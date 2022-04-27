@@ -107,6 +107,7 @@ export const Reconnect = async (newChainIndex) => {
 export const Disconnect = async () => {
     // console.log("Disconnect")
     await web3Modal.clearCachedProvider();
+    await web3Modal.disconnect()
     store.dispatch(action.setInit());
 }
 
