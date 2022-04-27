@@ -45,7 +45,7 @@ const Exchange = (props) => {
 	}, [props.network])
 
 	const validateQuote = async () => {
-		console.log("validateQuote");
+		// console.log("validateQuote");
 		setError();
 
 		var response = null;
@@ -88,7 +88,7 @@ const Exchange = (props) => {
 	};
 
 	const updateQuote = async (sellTokenAddress, sellTokenDecimals, buyTokenAddress, buyTokenDecimals, amount, slippage, side) => {
-		console.log("updateQuote")
+		// console.log("updateQuote")
 		setError();
 		setConfirmed();
 
@@ -136,7 +136,7 @@ const Exchange = (props) => {
 
 						try {
 							var allowance = await contract.allowance(account, response.allowanceTarget);
-							console.log("allowance: ", allowance)
+							// console.log("allowance: ", allowance)
 						} catch { }
 
 						if (BigNumber.from(response.sellAmount).gt(allowance)) {
@@ -161,7 +161,7 @@ const Exchange = (props) => {
 	};
 
 	const resetQuote = (overrideFrom, overrideTo, overrideSlippage) => {
-		console.log("resetQuote");
+		// console.log("resetQuote");
 		setReady();
 		setQuote();
 		setError();
@@ -196,7 +196,7 @@ const Exchange = (props) => {
 	};
 
 	const updateBalance = async (forContract, forTarget, setForTarget, setAmount = false) => {
-		console.log("updateBalance")
+		// console.log("updateBalance")
 		const provider = new ethers.providers.JsonRpcProvider(props.network.RPC);
 		if (props.network.chainId === 97) // When bsc testnet
 		{
@@ -230,13 +230,13 @@ const Exchange = (props) => {
 	};
 
 	const resetBalances = () => {
-		console.log("resetBalances");
+		// console.log("resetBalances");
 		setFrom(Object.assign({}, from));
 		setTo(Object.assign({}, to));
 	};
 
 	const approve = async () => {
-		console.log("approve");
+		// console.log("approve");
 		setReady();
 
 		// const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
@@ -266,7 +266,7 @@ const Exchange = (props) => {
 	};
 
 	const confirm = () => {
-		console.log("confirm");
+		// console.log("confirm");
 		setReady();
 		setConfirmed(true);
 		validateQuote().then(() => {
@@ -304,7 +304,7 @@ const Exchange = (props) => {
 	}
 
 	const invert = () => {
-		console.log("invert")
+		// console.log("invert")
 		const newFrom = Object.assign({}, to);
 		const newTo = Object.assign({}, from);
 		setFrom(newFrom);
@@ -313,7 +313,7 @@ const Exchange = (props) => {
 	}
 
 	const fill = (side, value) => {
-		console.log("fill")
+		// console.log("fill")
 		setReady();
 		if (side === "from") {
 			var target = from;
@@ -363,24 +363,24 @@ const Exchange = (props) => {
 	}
 
 	const onAmountChange = (e, side) => {
-		console.log("onAmountChange")
+		// console.log("onAmountChange")
 		fill(side, e.target.value.replace(/[^0-9.]/g, ""));
 	};
 
 	const fillMaxAmount = (e, side) => {
-		console.log("fillMaxAmount")
+		// console.log("fillMaxAmount")
 		fill(side, e.target.dataset.balance);
 	};
 
 	const onSlippageChange = (e) => {
-		console.log("onSlippageChange")
+		// console.log("onSlippageChange")
 		const value = e.target.value.replace(/[^0-9.]/g, "");
 		setSlippage(value);
 		resetQuote(null, null, value);
 	};
 
 	const onSelectToken = (token, forTarget) => {
-		console.log("onSelectToken")
+		// console.log("onSelectToken")
 		if ((token.Address === to.address && forTarget === "from") || (token.Address === from.address && forTarget === "to")) {
 			invert();
 		}
@@ -413,7 +413,7 @@ const Exchange = (props) => {
 	}
 
 	useEffect(() => {
-		console.log("account useEffect")
+		// console.log("account useEffect")
 		updateBalance(from.address, from, setFrom).then(() => {
 			updateBalance(to.address, to, setTo).then(() => {
 				setLoading();
@@ -423,7 +423,7 @@ const Exchange = (props) => {
 	}, [account])
 
 	if (account && !connected) {
-		console.log("account && !connected")
+		// console.log("account && !connected")
 		setConnected(true);
 		setQuote();
 		setReady();
@@ -437,7 +437,7 @@ const Exchange = (props) => {
 	}
 
 	if (!account && connected) {
-		console.log("!account && connected")
+		// console.log("!account && connected")
 		setConnected();
 
 		resetBalances();
@@ -445,7 +445,7 @@ const Exchange = (props) => {
 	}
 
 	if (loading) {
-		console.log("loading")
+		// console.log("loading")
 		return (
 			<div className="text-center p-5 w-100">
 				<span className="spinner-border" role="status"></span>
@@ -454,7 +454,7 @@ const Exchange = (props) => {
 	}
 
 	const SubmitButton = () => {
-		console.log("SubmitButton")
+		// console.log("SubmitButton")
 		if (account) {
 			if (!ready) {
 				return <button className="default-btn w-100" disabled="disabled">Please wait...</button>;

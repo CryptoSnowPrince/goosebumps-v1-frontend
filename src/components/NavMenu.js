@@ -68,7 +68,7 @@ const NavMenu = () => {
     }, [networkIndex]);
 
     useEffect(async () => {
-        console.log("provider useEffect")
+        // console.log("provider useEffect")
         try {
             if (provider) {
                 const handleAccountsChanged = (accounts) => {

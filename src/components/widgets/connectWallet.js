@@ -32,7 +32,7 @@ if (typeof window !== "undefined") {
     });
 }
 export const Connect = async (newChainIndex) => {
-    console.log("connect")
+    // console.log("connect")
     const chainIndex = store.getState().selChain.index;
     try {
         const provider = await web3Modal.connect();
@@ -96,7 +96,7 @@ export const Connect = async (newChainIndex) => {
 }
 
 export const Reconnect = async (newChainIndex) => {
-    console.log("Reconnect")
+    // console.log("Reconnect")
     try {
         if (web3Modal.cachedProvider) {
             Connect(newChainIndex);
@@ -107,7 +107,7 @@ export const Reconnect = async (newChainIndex) => {
 }
 
 export const Disconnect = async () => {
-    console.log("Disconnect")
+    // console.log("Disconnect")
     await web3Modal.clearCachedProvider();
     store.dispatch(action.setInit());
 }
