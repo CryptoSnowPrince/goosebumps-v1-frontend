@@ -1,25 +1,21 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { Navbar, Container, Nav, NavItem } from "react-bootstrap";
-import { ConnectButton } from './widgets/ConnectButton';
+import { ConnectButtonModal } from './widgets/ConnectButtonModal';
+import { Reconnect, Connect, Disconnect } from '../components/widgets/connectWallet'
 import networks from '../networks.json';
 import { Requester } from "./../requester";
 // import { ComingSoonModal } from './widgets/ComingSoonModal';
 // import { GoogleLogin } from 'react-google-login';
 // import GoogleProfile from './widgets/GoogleProfile';
-// import * as selector from '../store/selectors';
 import * as action from '../store/actions';
-// import * as state from '../store/reducers/selChain';
+import * as selector from '../store/selectors'
 
 const NavMenu = () => {
     const { pathname } = useLocation();
     const dispatch = useDispatch();
-    // const networkSelector = useSelector(selector.chainState);
-
-    // useEffect(() => {
-    //     console.log("networkSelector: ", networkSelector);
-    // }, [networkSelector])
+    const provider = useSelector(selector.providerState);
 
     // const [authenticated, setAuthenticated] = useState(false);
     // const [user, setUser] = useState({
@@ -54,6 +50,37 @@ const NavMenu = () => {
         setNetworkName(networks[networkIndex].Name);
     }, [networkIndex]);
 
+    useEffect(() => {
+        console.log("provider useEffect")
+        try {
+            if (provider) {
+                const handleAccountsChanged = (accounts) => {
+                    // console.log("reconnect if 2");
+                    Connect();
+                    dispatch(action.setAccount(accounts[0]));
+                };
+
+                // https://docs.ethers.io/v5/concepts/best-practices/#best-practices--network-changes
+                const handleChainChanged = (_hexChainId) => {
+                    // window.location.reload();
+                    Disconnect();
+                };
+
+                provider.on("accountsChanged", handleAccountsChanged);
+                provider.on("chainChanged", handleChainChanged);
+
+                // Subscription Cleanup
+                return () => {
+                    if (provider.removeListener) {
+                        provider.removeListener("accountsChanged", handleAccountsChanged);
+                        provider.removeListener("chainChanged", handleChainChanged);
+                    }
+                };
+            }
+        } catch (error) {
+            console.log("auto connect with provider change err: ", error)
+        }
+    }, [provider]);
 
     const inPortfolio = window.location.pathname.match("^/portfolio-tracker/" + networkName + "/.");
 
@@ -73,6 +100,11 @@ const NavMenu = () => {
         searchInput.current.value = "";
     }
 
+    const handleSelectChain = async (event) => {
+        setNetworkIndex(event.target.value)
+        Reconnect(event.target.value);
+    }
+
     return (
         <>
             <Navbar variant="dark" expand="lg">
@@ -90,9 +122,7 @@ const NavMenu = () => {
                             <i className="fa fa-chevron-down"></i>
                             <select
                                 className="form-select"
-                                onChange={(e) => {
-                                    setNetworkIndex(e.target.value)
-                                }}
+                                onChange={handleSelectChain}
                                 defaultValue={networkIndex}>
                                 {networks.map(
                                     (network, index) =>
@@ -160,7 +190,7 @@ const NavMenu = () => {
                                 //        isSignedIn={true}
                                 //    />
                             }
-                            <ConnectButton />
+                            <ConnectButtonModal />
                         </Navbar.Text>
                     </Navbar.Collapse>
                 </Container>

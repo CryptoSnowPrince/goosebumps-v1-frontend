@@ -10,7 +10,7 @@ import {
 import { useEthers } from "@usedapp/core";
 import { ethers } from "ethers";
 import { Contract, Provider } from "ethers-multicall";
-import { ConnectButton } from "./ConnectButton";
+import { ConnectButtonModal } from "./ConnectButtonModal";
 //import { ChainId, Token, TokenAmount, Fetcher, Pair, Route, Trade, TradeType, Percent } from '@pancakeswap-libs/sdk';
 //import Web3 from 'web3';
 import tokenAbi from "../../abis/token";
@@ -536,7 +536,7 @@ const StakeEmpire = (props) => {
                           ),
                         ]
                       ) : (
-                        <ConnectButton />
+                        <ConnectButtonModal />
                       )}
                       </div>
                     </div>

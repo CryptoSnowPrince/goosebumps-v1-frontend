@@ -3,7 +3,7 @@ import Web3 from 'web3';
 // import { multicall, useEthers } from '@usedapp/core';
 import { /*singer, */ethers, BigNumber } from 'ethers';
 import { Contract, Provider, setMulticallAddress } from 'ethers-multicall';
-import { ConnectButton } from '../ConnectButton';
+import { ConnectButtonModal } from '../ConnectButtonModal';
 //import { ChainId, Token, TokenAmount, Fetcher, Pair, Route, Trade, TradeType, Percent } from '@pancakeswap-libs/sdk';
 import tokenAbi from '../../../abis/token';
 import { Requester } from "../../../requester";
@@ -36,6 +36,12 @@ const Exchange = (props) => {
 	useEffect(() => {
 		setFrom({ symbol: props.fromSymbol, address: props.fromAddress, decimals: 0, amount: 0, balance: 0 })
 		setTo({ symbol: props.toSymbol, address: props.toAddress, decimals: 0, amount: 0, balance: 0 });
+		updateBalance(from.address, from, setFrom, true).then(() => {
+			updateBalance(to.address, to, setTo, true).then(() => {
+				setLoading();
+				resetQuote();
+			});
+		});
 	}, [props.network])
 
 	const validateQuote = async () => {
@@ -470,7 +476,7 @@ const Exchange = (props) => {
 			}
 		}
 		else {
-			return <ConnectButton />;
+			return <ConnectButtonModal />;
 		}
 	};
 
