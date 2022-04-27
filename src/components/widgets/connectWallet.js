@@ -98,9 +98,7 @@ export const Connect = async (newChainIndex) => {
 export const Reconnect = async (newChainIndex) => {
     // console.log("Reconnect")
     try {
-        if (web3Modal.cachedProvider) {
-            Connect(newChainIndex);
-        }
+        Connect(newChainIndex);
     } catch (error) {
         console.log("auto connect with network switching err: ", error)
     }
