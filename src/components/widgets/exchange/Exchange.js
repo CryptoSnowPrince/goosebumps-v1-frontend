@@ -105,10 +105,14 @@ const Exchange = (props) => {
 					// console.log("response: ", response);
 					setQuote(response);
 
+					// console.log("pass: ", response.allowanceTarget);
 					if (response.allowanceTarget !== "0x0000000000000000000000000000000000000000") {
+						// console.log("pass if");
 						// const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
+						// console.log("from.address: ", from.address);
+						// console.log("sellTokenAddress: ", sellTokenAddress);
 						const contract = new ethers.Contract(
-							from.address,
+							sellTokenAddress,
 							tokenAbi,
 							// provider
 							web3Provider
@@ -116,6 +120,7 @@ const Exchange = (props) => {
 
 						try {
 							var allowance = await contract.allowance(account, response.allowanceTarget);
+							console.log("allowance: ", allowance)
 						} catch { }
 
 						if (BigNumber.from(response.sellAmount).gt(allowance)) {
@@ -126,6 +131,7 @@ const Exchange = (props) => {
 						}
 					}
 					else {
+						// console.log("pass else");
 						setNeedApprove();
 					}
 				}
@@ -513,7 +519,7 @@ const Exchange = (props) => {
 									</div>
 								</div>
 								{
-									quote && (from.amount !== 0 || to.amount !==0) ?
+									quote && (from.amount !== 0 || to.amount !== 0) ?
 
 										<>
 											<div className="form-group text-center">
