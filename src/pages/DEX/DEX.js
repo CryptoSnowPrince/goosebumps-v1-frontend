@@ -7,21 +7,12 @@ import * as selector from '../../store/selectors';
 // import linq from "linq";
 
 const DEX = (props) => {
-    const selectedNetwork = useSelector(selector.chainState);
-    const [network, setNetwork] = useState(networks[localStorage.getItem("networkIndex") || 2]);
-
-    useEffect(() => {
-        try {
-            setNetwork(networks[selectedNetwork.chain.index]);
-        } catch (error) {
-            console.log("error: ", error);
-        }
-    }, [selectedNetwork])
+    const chainIndex = useSelector(selector.chainIndex);
 
     return (
         <div className="dex">
             <DEXSubmenu />
-            <Exchange network={network} fromSymbol={network.Currency.Name} fromAddress="-" toSymbol={network.Currency.WrappedName} toAddress={network.Currency.Address} />
+            <Exchange network={networks[chainIndex]} fromSymbol={networks[chainIndex].Currency.Name} fromAddress="-" toSymbol={networks[chainIndex].Currency.WrappedName} toAddress={networks[chainIndex].Currency.Address} />
         </div>
     );
 }

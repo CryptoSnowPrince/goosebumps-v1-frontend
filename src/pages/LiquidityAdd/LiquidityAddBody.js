@@ -13,16 +13,7 @@ const LiquidityAddBody = () => {
   const provider = useSelector(selector.providerState);
   const web3Provider = useSelector(selector.web3ProviderState);
 
-  const selectedNetwork = useSelector(selector.chainState);
-  const [network, setNetwork] = useState(networks[localStorage.getItem("networkIndex") || 2]);
-
-  useEffect(() => {
-    try {
-      setNetwork(networks[selectedNetwork.chain.index]);
-    } catch (error) {
-      console.log("error: ", error);
-    }
-  }, [selectedNetwork])
+  const chainIndex = useSelector(selector.chainIndex);
 
   const [tokenA, setTokenA] = useState({ symbol: "", address: "", decimals: 0, amount: 0, balance: 0 });
   const [tokenB, setTokenB] = useState({ symbol: "", address: "", decimals: 0, amount: 0, balance: 0 });
@@ -97,7 +88,7 @@ const LiquidityAddBody = () => {
         showFor={showTokenSelectModal}
         hide={() => setShowTokenSelectModal()}
         onSelect={onSelectToken}
-        networkName={network.Name} />
+        networkName={networks[chainIndex].Name} />
     </div>
   );
 }

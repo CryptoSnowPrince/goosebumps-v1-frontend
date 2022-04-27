@@ -45,25 +45,13 @@ const NavMenu = () => {
     // const [show, setShow] = useState();
     const [networkIndex, setNetworkIndex] = useState(localStorage.getItem("networkIndex") || 2);
     const [networkName, setNetworkName] = useState(networks[networkIndex].Name);
-    const [networkInfo, setNetworkInfo] = useState();
     const navigate = useNavigate();
     const searchInput = useRef();
 
     useEffect(() => {
-        dispatch(action.setChain(networkInfo));
-    }, [networkInfo]);
-
-    useEffect(() => {
         localStorage.setItem("networkIndex", networkIndex);
+        dispatch(action.setChainIndex(networkIndex));
         setNetworkName(networks[networkIndex].Name);
-        setNetworkInfo({
-            chain: {
-                index: networkIndex,
-                network: networks[networkIndex].Name,
-                chainId: networks[networkIndex].chainId,
-                chainHexId: networks[networkIndex].chainHexId
-            }
-        })
     }, [networkIndex]);
 
 

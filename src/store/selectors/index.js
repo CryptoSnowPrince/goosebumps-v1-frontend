@@ -8,4 +8,4 @@ export const accountState = (state) => state.auth.account;
 export const chainIdState = (state) => state.auth.chainId;
 
 // Select Chain Selectors
-export const chainState = (state) => state.selChain.chain
+export const chainIndex = (state) => state.selChain.index

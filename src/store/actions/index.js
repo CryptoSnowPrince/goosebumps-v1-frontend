@@ -12,5 +12,5 @@ export const setChainId = action('auth/SET_CHAINID')();
 export const setInit = action('auth/SET_INIT')();
 
 // Select chain
-export const setChain = action('selChain/SET_CHAIN')();
-export const setChainInit = action('selChain/SET_INIT')();
+export const setChainIndex = action('selChain/SET_CHAININDEX')();
+export const setChainIndexInit = action('selChain/SET_INIT')();

@@ -40,20 +40,10 @@ if (typeof window !== "undefined") {
 
 const ConnectButton = () => {
     // console.log("rerender connectButton");
-    const selectedNetwork = useSelector(selector.chainState);
+    const chainIndex = useSelector(selector.chainIndex);
 
     // const network = linq.from(networks).where(x => x.Name === "ropsten").single();
-    const [network, setNetwork] = useState(networks[selectedNetwork.chain.index]);
     // const [pendingConnectWallet, setPendingConnectWallet] = useState(false);
-
-    useEffect(() => {
-        try {
-            setNetwork(networks[selectedNetwork.chain.index]);
-        } catch (error) {
-            // setNetwork(networks[localStorage.getItem("networkIndex") || 2]);
-            console.log("selectedNetwork error: ", error);
-        }
-    }, [selectedNetwork])
 
     const dispatch = useDispatch();
 
@@ -68,11 +58,11 @@ const ConnectButton = () => {
 
             if (window.ethereum) {
                 // check if the chain to connect to is installed
-                if ((await new providers.Web3Provider(provider).getNetwork()).chainId !== network.chainId) {
+                if ((await new providers.Web3Provider(provider).getNetwork()).chainId !== networks[chainIndex].chainId) {
                     try {
                         await window.ethereum.request({
                             method: "wallet_switchEthereumChain",
-                            params: [{ chainId: network.chainHexId }], // chainId must be in hexadecimal numbers
+                            params: [{ chainId: networks[chainIndex].chainHexId }], // chainId must be in hexadecimal numbers
                         });
                     } catch (error) {
                         console.log("network switching error: ", error);
@@ -86,7 +76,7 @@ const ConnectButton = () => {
 
             const web3Provider = new providers.Web3Provider(provider);
             const chainId = (await web3Provider.getNetwork()).chainId;
-            if (chainId === network.chainId) {
+            if (chainId === networks[chainIndex].chainId) {
                 const signer = web3Provider.getSigner();
                 const account = await signer.getAddress();
 
@@ -96,7 +86,7 @@ const ConnectButton = () => {
                 dispatch(action.setAccount(account));
                 dispatch(action.setChainId(chainId));
             } else {
-                alert(`Change network to ${network.Display}!`);
+                alert(`Change network to ${networks[chainIndex].Display}!`);
                 // NotificationManager.info(`Change network to ${network.Display}!`, "Info", 2000);
                 dispatch(action.setInit());
             }
@@ -108,8 +98,8 @@ const ConnectButton = () => {
                             method: "wallet_addEthereumChain",
                             params: [
                                 {
-                                    chainId: network.chainHexId,
-                                    rpcUrl: network.RPC,
+                                    chainId: networks[chainIndex].chainHexId,
+                                    rpcUrl: networks[chainIndex].RPC,
                                 },
                             ],
                         });
@@ -123,7 +113,7 @@ const ConnectButton = () => {
             console.log("connect", error);
         }
         // setPendingConnectWallet(false);
-    }, [network]);
+    }, [chainIndex]);
 
     const disconnect = useCallback(async function () {
         await web3Modal.clearCachedProvider();
@@ -139,7 +129,7 @@ const ConnectButton = () => {
         } catch (error) {
             console.log("auto connect with network switching err: ", error)
         }
-    }, [network]);
+    }, [chainIndex]);
 
     useEffect(() => {
         try {
