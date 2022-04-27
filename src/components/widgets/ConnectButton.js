@@ -50,7 +50,7 @@ const ConnectButton = () => {
         try {
             setNetwork(networks[selectedNetwork.chain.index]);
         } catch (error) {
-            setNetwork(networks[localStorage.getItem("networkIndex") || 2]);
+            // setNetwork(networks[localStorage.getItem("networkIndex") || 2]);
             console.log("selectedNetwork error: ", error);
         }
     }, [selectedNetwork])
@@ -129,35 +129,43 @@ const ConnectButton = () => {
     }, []);
 
     useEffect(() => {
-        if (web3Modal.cachedProvider) {
-            // console.log("reconnect if");
-            connect(network, pendingConnectWallet);
+        try {
+            if (web3Modal.cachedProvider) {
+                // console.log("reconnect if");
+                connect(network, pendingConnectWallet);
+            }
+        } catch (error) {
+            console.log("auto connect with network switching err: ", error)            
         }
     }, [network]);
 
     useEffect(() => {
-        if (provider) {
-            const handleAccountsChanged = (accounts) => {
-                // console.log("reconnect if 2");
-                connect(network, pendingConnectWallet);
-                dispatch(action.setAccount(accounts[0]));
-            };
-
-            // https://docs.ethers.io/v5/concepts/best-practices/#best-practices--network-changes
-            const handleChainChanged = (_hexChainId) => {
-                window.location.reload();
-            };
-
-            provider.on("accountsChanged", handleAccountsChanged);
-            provider.on("chainChanged", handleChainChanged);
-
-            // Subscription Cleanup
-            return () => {
-                if (provider.removeListener) {
-                    provider.removeListener("accountsChanged", handleAccountsChanged);
-                    provider.removeListener("chainChanged", handleChainChanged);
-                }
-            };
+        try {
+            if (provider) {
+                const handleAccountsChanged = (accounts) => {
+                    // console.log("reconnect if 2");
+                    connect(network, pendingConnectWallet);
+                    dispatch(action.setAccount(accounts[0]));
+                };
+    
+                // https://docs.ethers.io/v5/concepts/best-practices/#best-practices--network-changes
+                const handleChainChanged = (_hexChainId) => {
+                    window.location.reload();
+                };
+    
+                provider.on("accountsChanged", handleAccountsChanged);
+                provider.on("chainChanged", handleChainChanged);
+    
+                // Subscription Cleanup
+                return () => {
+                    if (provider.removeListener) {
+                        provider.removeListener("accountsChanged", handleAccountsChanged);
+                        provider.removeListener("chainChanged", handleChainChanged);
+                    }
+                };
+            }
+        } catch (error) {
+            console.log("auto connect with provider change err: ", error)            
         }
     }, [provider]);
 

@@ -38,6 +38,7 @@ const Exchange = (props) => {
 	}, [props.network])
 
 	const validateQuote = async () => {
+		console.log("validateQuote");
 		setError();
 
 		var response = await Requester.getAsync(props.network.SwapApi + "swap/v1/quote", {
@@ -75,6 +76,7 @@ const Exchange = (props) => {
 	};
 
 	const updateQuote = async (sellTokenAddress, sellTokenDecimals, buyTokenAddress, buyTokenDecimals, amount, slippage, side) => {
+		console.log("updateQuote")
 		setError();
 		setConfirmed();
 
@@ -135,7 +137,7 @@ const Exchange = (props) => {
 	};
 
 	const resetQuote = (overrideFrom, overrideTo, overrideSlippage) => {
-		// console.log("resetQuote");
+		console.log("resetQuote");
 		setReady();
 		setQuote();
 		setError();
@@ -169,7 +171,8 @@ const Exchange = (props) => {
 		}
 	};
 
-	const updateBalance = async (forContract, forTarget, setForTarget) => {
+	const updateBalance = async (forContract, forTarget, setForTarget, setAmount = false) => {
+		console.log("updateBalance")
 		const provider = new ethers.providers.JsonRpcProvider(props.network.RPC);
 		if (props.network.chainId === 97) // When bsc testnet
 		{
@@ -192,6 +195,9 @@ const Exchange = (props) => {
 
 			const newTarget = Object.assign({}, forTarget);
 			newTarget.balance = ethers.utils.formatUnits(balance, decimals);
+			if (setAmount) {
+				newTarget.amount = 0;
+			}
 			newTarget.decimals = decimals;
 			setForTarget(newTarget);
 		} catch (error) {
@@ -200,13 +206,13 @@ const Exchange = (props) => {
 	};
 
 	const resetBalances = () => {
-		// console.log("resetBalances");
+		console.log("resetBalances");
 		setFrom(Object.assign({}, from));
 		setTo(Object.assign({}, to));
 	};
 
 	const approve = async () => {
-		// console.log("approve");
+		console.log("approve");
 		setReady();
 
 		const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
@@ -235,6 +241,7 @@ const Exchange = (props) => {
 	};
 
 	const confirm = () => {
+		console.log("confirm");
 		setReady();
 		setConfirmed(true);
 		validateQuote().then(() => {
@@ -263,18 +270,16 @@ const Exchange = (props) => {
 			console.log("trade error: ", error)
 		}
 
-		updateBalance(from.address, from, setFrom).then(() => {
-			updateBalance(to.address, to, setTo).then(() => {
+		updateBalance(from.address, from, setFrom, true).then(() => {
+			updateBalance(to.address, to, setTo, true).then(() => {
 				setLoading();
 				resetQuote();
 			});
 		});
-
-		resetQuote();
-		resetBalances();
 	}
 
 	const invert = () => {
+		console.log("invert")
 		const newFrom = Object.assign({}, to);
 		const newTo = Object.assign({}, from);
 		setFrom(newFrom);
@@ -283,6 +288,7 @@ const Exchange = (props) => {
 	}
 
 	const fill = (side, value) => {
+		console.log("fill")
 		setReady();
 		if (side === "from") {
 			var target = from;
@@ -332,20 +338,24 @@ const Exchange = (props) => {
 	}
 
 	const onAmountChange = (e, side) => {
+		console.log("onAmountChange")
 		fill(side, e.target.value.replace(/[^0-9.]/g, ""));
 	};
 
 	const fillMaxAmount = (e, side) => {
+		console.log("fillMaxAmount")
 		fill(side, e.target.dataset.balance);
 	};
 
 	const onSlippageChange = (e) => {
+		console.log("onSlippageChange")
 		const value = e.target.value.replace(/[^0-9.]/g, "");
 		setSlippage(value);
 		resetQuote(null, null, value);
 	};
 
 	const onSelectToken = (token, forTarget) => {
+		console.log("onSelectToken")
 		if ((token.Address === to.address && forTarget === "from") || (token.Address === from.address && forTarget === "to")) {
 			invert();
 		}
@@ -370,6 +380,7 @@ const Exchange = (props) => {
 	}
 
 	useEffect(() => {
+		console.log("account useEffect")
 		updateBalance(from.address, from, setFrom).then(() => {
 			updateBalance(to.address, to, setTo).then(() => {
 				setLoading();
@@ -379,6 +390,7 @@ const Exchange = (props) => {
 	}, [account])
 
 	if (account && !connected) {
+		console.log("account && !connected")
 		setConnected(true);
 		setQuote();
 		setReady();
@@ -392,6 +404,7 @@ const Exchange = (props) => {
 	}
 
 	if (!account && connected) {
+		console.log("!account && connected")
 		setConnected();
 
 		resetBalances();
@@ -399,6 +412,7 @@ const Exchange = (props) => {
 	}
 
 	if (loading) {
+		console.log("loading")
 		return (
 			<div className="text-center p-5 w-100">
 				<span className="spinner-border" role="status"></span>
@@ -407,6 +421,7 @@ const Exchange = (props) => {
 	}
 
 	const SubmitButton = () => {
+		console.log("SubmitButton")
 		if (account) {
 			if (!ready) {
 				return <button className="default-btn w-100" disabled="disabled">Please wait...</button>;
