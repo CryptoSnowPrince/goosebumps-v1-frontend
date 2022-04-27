@@ -65,9 +65,9 @@ const NavMenu = () => {
         localStorage.setItem("networkIndex", networkIndex);
         dispatch(action.setChainIndex(networkIndex));
         setNetworkName(networks[networkIndex].Name);
-    }, [networkIndex]);
+    }, [dispatch, networkIndex]);
 
-    useEffect(async () => {
+    useEffect(() => {
         // console.log("provider useEffect")
         try {
             if (provider) {
@@ -79,19 +79,20 @@ const NavMenu = () => {
 
                 // https://docs.ethers.io/v5/concepts/best-practices/#best-practices--network-changes
                 const handleChainChanged = (_hexChainId) => {
+                    window.location.reload();
                     // console.log("handleChainChanged");
-                    if (parseInt(_hexChainId, 16) !== networks[networkIndex].chainId) {
-                        alert(`Change network to ${networks[networkIndex].Display}!`);
+                    // if (parseInt(_hexChainId, 16) !== networks[networkIndex].chainId) {
+                        // alert(`Reconnect Change network to ${networks[networkIndex].Display}!`);
 
-                        if (window.ethereum) {
-                            // check if the chain to connect to is installed
-                            switchChainRequest();
-                        } else {
-                            console.log(
-                                "MetaMask is not installed. Please consider installing it: https://metamask.io/download.html"
-                            );
-                        }
-                    }
+                    //     if (window.ethereum) {
+                    //         // check if the chain to connect to is installed
+                    //         switchChainRequest();
+                    //     } else {
+                    //         console.log(
+                    //             "MetaMask is not installed. Please consider installing it: https://metamask.io/download.html"
+                    //         );
+                    //     }
+                    // }
                 };
 
                 provider.on("accountsChanged", handleAccountsChanged);
