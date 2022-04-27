@@ -42,13 +42,18 @@ const Exchange = (props) => {
 		console.log("validateQuote");
 		setError();
 
-		var response = await Requester.getAsync(props.network.SwapApi + "swap/v1/quote", {
-			sellToken: from.address === "-" ? props.network.Currency.Name : from.address,
-			buyToken: to.address === "-" ? props.network.Currency.Name : to.address,
-			sellAmount: ethers.utils.parseUnits(from.amount.toString(), from.decimals),
-			slippagePercentage: slippage / 100,
-			takerAddress: account
-		});
+		var response = null;
+		try {
+			response = await Requester.getAsync(props.network.SwapApi + "swap/v1/quote", {
+				sellToken: from.address === "-" ? props.network.Currency.Name : from.address,
+				buyToken: to.address === "-" ? props.network.Currency.Name : to.address,
+				sellAmount: ethers.utils.parseUnits(from.amount.toString(), from.decimals),
+				slippagePercentage: slippage / 100,
+				takerAddress: account
+			});
+		} catch (error) {
+			
+		}
 
 		if (response) {
 			if (!response.price) {
@@ -82,21 +87,26 @@ const Exchange = (props) => {
 		setConfirmed();
 
 		if (amount > 0) {
-			if (side === "from") {
-				var response = await Requester.getAsync(props.network.SwapApi + "swap/v1/quote", {
-					sellToken: sellTokenAddress === "-" ? props.network.Currency.Name : sellTokenAddress,
-					buyToken: buyTokenAddress === "-" ? props.network.Currency.Name : buyTokenAddress,
-					sellAmount: ethers.utils.parseUnits(amount.toString(), sellTokenDecimals),
-					slippagePercentage: slippage / 100
-				});
-			}
-			else {
-				response = await Requester.getAsync(props.network.SwapApi + "swap/v1/quote", {
-					sellToken: sellTokenAddress === "-" ? props.network.Currency.Name : sellTokenAddress,
-					buyToken: buyTokenAddress === "-" ? props.network.Currency.Name : buyTokenAddress,
-					buyAmount: ethers.utils.parseUnits(amount.toString(), buyTokenDecimals),
-					slippagePercentage: slippage / 100
-				});
+			var response = null;
+			try {
+				if (side === "from") {
+					response = await Requester.getAsync(props.network.SwapApi + "swap/v1/quote", {
+						sellToken: sellTokenAddress === "-" ? props.network.Currency.Name : sellTokenAddress,
+						buyToken: buyTokenAddress === "-" ? props.network.Currency.Name : buyTokenAddress,
+						sellAmount: ethers.utils.parseUnits(amount.toString(), sellTokenDecimals),
+						slippagePercentage: slippage / 100
+					});
+				}
+				else {
+					response = await Requester.getAsync(props.network.SwapApi + "swap/v1/quote", {
+						sellToken: sellTokenAddress === "-" ? props.network.Currency.Name : sellTokenAddress,
+						buyToken: buyTokenAddress === "-" ? props.network.Currency.Name : buyTokenAddress,
+						buyAmount: ethers.utils.parseUnits(amount.toString(), buyTokenDecimals),
+						slippagePercentage: slippage / 100
+					});
+				}
+			} catch (error) {
+				
 			}
 
 			if (response) {
@@ -187,9 +197,9 @@ const Exchange = (props) => {
 			setMulticallAddress(props.network.chainId, props.network.MulticallAddress);
 		}
 		const ethcallProvider = new Provider(provider);
-		await ethcallProvider.init();
 
 		try {
+			await ethcallProvider.init();
 			if (forContract !== "-") {
 				const contract = new Contract(forContract, tokenAbi);
 				var [balance, decimals] = await ethcallProvider.all([
