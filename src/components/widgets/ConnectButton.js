@@ -51,6 +51,7 @@ const ConnectButton = () => {
     const provider = useSelector(selector.providerState);
 
     const connect = useCallback(async function () {
+        console.log("connect")
         // if (connectState === true) return;
         // setPendingConnectWallet(true);
         try {
@@ -121,6 +122,7 @@ const ConnectButton = () => {
     }, []);
 
     useEffect(() => {
+        console.log("chainIndex useEffect")
         try {
             if (web3Modal.cachedProvider) {
                 console.log("reconnect if");
@@ -132,6 +134,7 @@ const ConnectButton = () => {
     }, [chainIndex]);
 
     useEffect(() => {
+        console.log("provider useEffect")
         try {
             if (provider) {
                 const handleAccountsChanged = (accounts) => {
