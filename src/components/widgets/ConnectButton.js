@@ -103,15 +103,17 @@ const ConnectButton = () => {
         } catch (error) {
             if (error.code === 4902) {
                 try {
-                    await window.ethereum.request({
-                        method: "wallet_addEthereumChain",
-                        params: [
-                            {
-                                chainId: network.chainHexId,
-                                rpcUrl: network.RPC,
-                            },
-                        ],
-                    });
+                    if (window.ethereum) {
+                        await window.ethereum.request({
+                            method: "wallet_addEthereumChain",
+                            params: [
+                                {
+                                    chainId: network.chainHexId,
+                                    rpcUrl: network.RPC,
+                                },
+                            ],
+                        });
+                    }
                 } catch (addError) {
                     console.log(addError);
                 }
@@ -135,7 +137,7 @@ const ConnectButton = () => {
                 connect(network, pendingConnectWallet);
             }
         } catch (error) {
-            console.log("auto connect with network switching err: ", error)            
+            console.log("auto connect with network switching err: ", error)
         }
     }, [network]);
 
@@ -147,15 +149,15 @@ const ConnectButton = () => {
                     connect(network, pendingConnectWallet);
                     dispatch(action.setAccount(accounts[0]));
                 };
-    
+
                 // https://docs.ethers.io/v5/concepts/best-practices/#best-practices--network-changes
                 const handleChainChanged = (_hexChainId) => {
                     window.location.reload();
                 };
-    
+
                 provider.on("accountsChanged", handleAccountsChanged);
                 provider.on("chainChanged", handleChainChanged);
-    
+
                 // Subscription Cleanup
                 return () => {
                     if (provider.removeListener) {
@@ -165,7 +167,7 @@ const ConnectButton = () => {
                 };
             }
         } catch (error) {
-            console.log("auto connect with provider change err: ", error)            
+            console.log("auto connect with provider change err: ", error)
         }
     }, [provider]);
 

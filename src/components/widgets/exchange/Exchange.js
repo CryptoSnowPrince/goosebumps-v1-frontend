@@ -18,6 +18,7 @@ import qs from 'qs';
 const Exchange = (props) => {
 	const account = useSelector(selector.accountState);
 	const provider = useSelector(selector.providerState);
+	const web3Provider = useSelector(selector.web3ProviderState);
 	const [connected, setConnected] = useState();
 	const [loading, setLoading] = useState();
 	const [ready, setReady] = useState();
@@ -105,11 +106,12 @@ const Exchange = (props) => {
 					setQuote(response);
 
 					if (response.allowanceTarget !== "0x0000000000000000000000000000000000000000") {
-						const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
+						// const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
 						const contract = new ethers.Contract(
 							from.address,
 							tokenAbi,
-							provider
+							// provider
+							web3Provider
 						);
 
 						try {
@@ -215,11 +217,12 @@ const Exchange = (props) => {
 		console.log("approve");
 		setReady();
 
-		const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
+		// const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
 		const contract = new ethers.Contract(
 			from.address,
 			tokenAbi,
-			provider.getSigner()
+			web3Provider.getSigner()
+			// provider.getSigner()
 		);
 
 		try {
@@ -365,16 +368,24 @@ const Exchange = (props) => {
 				newFrom.address = token.Address;
 				newFrom.symbol = token.Symbol;
 				newFrom.decimals = token.Decimals;
-				updateBalance(token.Address, newFrom, setFrom)
-					.then(() => resetQuote(newFrom));
+				updateBalance(token.Address, newFrom, setFrom, true).then(() => {
+					updateBalance(to.address, to, setTo, true).then(() => {
+						setLoading();
+						resetQuote();
+					});
+				});
 			}
 			else {
 				const newTo = Object.assign({}, to);
 				newTo.address = token.Address;
 				newTo.symbol = token.Symbol;
 				newTo.decimals = token.Decimals;
-				updateBalance(token.Address, newTo, setTo)
-					.then(() => resetQuote(null, newTo));
+				updateBalance(token.Address, newTo, setTo, true).then(() => {
+					updateBalance(from.address, from, setFrom, true).then(() => {
+						setLoading();
+						resetQuote();
+					});
+				});
 			}
 		}
 	}
