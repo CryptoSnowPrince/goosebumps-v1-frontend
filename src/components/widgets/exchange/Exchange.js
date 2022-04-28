@@ -33,17 +33,6 @@ const Exchange = (props) => {
 	const [to, setTo] = useState({ symbol: props.toSymbol, address: props.toAddress, decimals: 0, amount: 0, balance: 0 });
 	const [slippage, setSlippage] = useState(0.5);
 
-	useEffect(() => {
-		setFrom({ symbol: props.fromSymbol, address: props.fromAddress, decimals: 0, amount: 0, balance: 0 })
-		setTo({ symbol: props.toSymbol, address: props.toAddress, decimals: 0, amount: 0, balance: 0 });
-		updateBalance(from.address, from, setFrom, true).then(() => {
-			updateBalance(to.address, to, setTo, true).then(() => {
-				setLoading();
-				resetQuote();
-			});
-		});
-	}, [props.network])
-
 	const validateQuote = async () => {
 		// console.log("validateQuote");
 		setError();
@@ -58,7 +47,7 @@ const Exchange = (props) => {
 				takerAddress: account
 			});
 		} catch (error) {
-			
+
 		}
 
 		if (response) {
@@ -112,7 +101,7 @@ const Exchange = (props) => {
 					});
 				}
 			} catch (error) {
-				
+
 			}
 
 			if (response) {
@@ -421,6 +410,37 @@ const Exchange = (props) => {
 			});
 		});
 	}, [account])
+
+	useEffect(() => {
+		const newFrom = {
+			symbol: props.fromSymbol,
+			address: props.fromAddress,
+			decimals: 0,
+			amount: 0,
+			balance: 0
+		};
+
+		const newTo = {
+			symbol: props.toSymbol,
+			address: props.toAddress,
+			decimals: 0,
+			amount: 0,
+			balance: 0
+		};
+
+		updateBalance(newFrom.address, newFrom, setFrom, true).then(() => {
+			updateBalance(newTo.address, newTo, setTo, true).then(() => {
+				setLoading();
+				resetQuote();
+			});
+		});
+	}, [props.network])
+
+	useEffect(() => {
+		console.log("from token: ", from);
+		console.log("to token: ", to);
+		console.log("rpc token: ", props.network.RPC);
+	}, [from, to, props.network])
 
 	if (account && !connected) {
 		// console.log("account && !connected")
