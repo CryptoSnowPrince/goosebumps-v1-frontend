@@ -6,6 +6,7 @@ import { LiquidityAddBody } from "./LiquidityAddBody"
 import { UserLpToken } from "./UserLpToken"
 import '../Liquidity/Liquidity.scss'
 import * as selector from '../../store/selectors';
+import networks from '../../networks.json'
 
 const LiquidityAdd = () => {
   const chainIndex = useSelector(selector.chainIndex);
@@ -15,7 +16,7 @@ const LiquidityAdd = () => {
         <DEXSubmenu />
         <div id='liquidity' >
           <LiquidityHeader title="Add Liquidity" content="Add liquidity to receive LP tokens" />
-          <LiquidityAddBody chainIndex={chainIndex} />
+          <LiquidityAddBody network={networks[chainIndex]} />
         </div>
         <UserLpToken />
       </div>
