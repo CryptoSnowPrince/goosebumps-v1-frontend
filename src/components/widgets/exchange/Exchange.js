@@ -445,11 +445,11 @@ const Exchange = (props) => {
 		});
 	}, [props.network])
 
-	useEffect(() => {
-		console.log("from token: ", from);
-		console.log("to token: ", to);
-		console.log("rpc token: ", props.network.RPC);
-	}, [from, to, props.network])
+	// useEffect(() => {
+	// 	console.log("from token: ", from);
+	// 	console.log("to token: ", to);
+	// 	console.log("rpc token: ", props.network.RPC);
+	// }, [from, to, props.network])
 
 	if (account && !connected) {
 		// console.log("account && !connected")
