@@ -421,28 +421,31 @@ const Exchange = (props) => {
 	// }, [account])
 
 	useEffect(() => {
-		const newFrom = {
-			symbol: props.fromSymbol,
-			address: props.fromAddress,
-			decimals: 0,
-			amount: 0,
-			balance: 0
-		};
-
-		const newTo = {
-			symbol: props.toSymbol,
-			address: props.toAddress,
-			decimals: 0,
-			amount: 0,
-			balance: 0
-		};
-
-		updateBalance(newFrom.address, newFrom, setFrom, true).then(() => {
-			updateBalance(newTo.address, newTo, setTo, true).then(() => {
-				setLoading();
-				resetQuote();
+		const reloadFromToToken = async () => {
+			const newFrom = {
+				symbol: props.fromSymbol,
+				address: props.fromAddress,
+				decimals: 0,
+				amount: 0,
+				balance: 0
+			};
+	
+			const newTo = {
+				symbol: props.toSymbol,
+				address: props.toAddress,
+				decimals: 0,
+				amount: 0,
+				balance: 0
+			};
+	
+			updateBalance(newFrom.address, newFrom, setFrom, true).then(() => {
+				updateBalance(newTo.address, newTo, setTo, true).then(() => {
+					setLoading();
+					resetQuote();
+				});
 			});
-		});
+		}
+		reloadFromToToken();
 	}, [props.network, account])
 
 	// useEffect(() => {

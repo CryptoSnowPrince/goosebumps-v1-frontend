@@ -19,7 +19,10 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 const App = () => {
   useEffect(() => {
-    Connect();
+		const WrappedConnect = async () => {
+      await Connect();
+    }
+    WrappedConnect();
   }, []);
 
   return (
