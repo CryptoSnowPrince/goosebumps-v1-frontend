@@ -33,13 +33,19 @@ const LiquidityAddBody = () => {
                 <label htmlFor="from" className="w-100">From</label>
               </div>
               <div className="col text-end">
-                <button type="button" className="w-100 text-end badge btn text-white">Balance: 0.0</button>
+                <button type="button" className="w-100 text-end badge btn text-white">
+                  Balance: 0.0
+                </button>
               </div>
             </div>
             <div className="input-group">
-              <input id="from" type="text" className="form-control me-2" placeholder="0" autoComplete="off" min="0" value={0} />
+              <input id="from" type="text" className="form-control me-2"
+                placeholder="0" autoComplete="off" min="0" value={0} />
               <div className="input-group-addon">
-                <button type="button" className="default-btn" onClick={() => setShowTokenSelectModal("from")}>{tokenA.symbol}</button>
+                <button type="button" className="default-btn"
+                  onClick={() => setShowTokenSelectModal("from")}>
+                  {tokenA.symbol ? tokenA.symbol : ""}
+                </button>
               </div>
             </div>
           </div>
@@ -54,19 +60,28 @@ const LiquidityAddBody = () => {
                 <label htmlFor="from" className="w-100">From</label>
               </div>
               <div className="col text-end">
-                <button type="button" className="w-100 text-end badge btn text-white">Balance: 0.0</button>
+                <button type="button" className="w-100 text-end badge btn text-white">
+                  Balance: 0.0
+                </button>
               </div>
             </div>
             <div className="input-group">
-              <input id="from" type="text" className="form-control me-2" placeholder="0" autoComplete="off" min="0" value={0} />
+              <input id="from" type="text" className="form-control me-2"
+                placeholder="0" autoComplete="off" min="0" value={0} />
               <div className="input-group-addon">
-                <button type="button" className="default-btn" onClick={() => setShowTokenSelectModal("from")}>{tokenB.symbol}</button>
+                <button type="button" className="default-btn"
+                  onClick={() => setShowTokenSelectModal("from")}>
+                  {tokenB.symbol ? tokenB.symbol : ""}
+                </button>
               </div>
             </div>
           </div>
         </div>
       </div>
-      <div className='d-flex justify-content-center mt-4'><button className='disable-btn' disabled>Invaild pair</button></div>
+      <div className='d-flex justify-content-center mt-4'>
+        <button className='disable-btn' disabled>
+          Invaild pair
+        </button></div>
       <div className='mt-4 mb-4'>prices and pool share</div>
       <div className='d-flex justify-content-around'>
         <div className='text-center'>
