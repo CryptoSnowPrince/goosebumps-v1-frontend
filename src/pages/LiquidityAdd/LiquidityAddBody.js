@@ -3,17 +3,15 @@ import { TokenSelectModal } from "./TokenModal"
 import Web3 from 'web3';
 import { /*singer, */ethers, BigNumber } from 'ethers';
 import { useSelector } from 'react-redux';
-import * as selector from '../../store/selectors';
 import networks from '../../networks.json'
+import * as selector from '../../store/selectors';
 
 
-const LiquidityAddBody = () => {
+const LiquidityAddBody = (props) => {
 
   const account = useSelector(selector.accountState);
   const provider = useSelector(selector.providerState);
   const web3Provider = useSelector(selector.web3ProviderState);
-
-  const chainIndex = useSelector(selector.chainIndex);
 
   const [tokenA, setTokenA] = useState({ symbol: "", address: "", decimals: 0, amount: 0, balance: 0 });
   const [tokenB, setTokenB] = useState({ symbol: "", address: "", decimals: 0, amount: 0, balance: 0 });
@@ -26,9 +24,9 @@ const LiquidityAddBody = () => {
   useEffect(() => {
 		setTokenA({ symbol: "", address: "", decimals: 0, amount: 0, balance: 0 })
 		setTokenB({ symbol: "", address: "", decimals: 0, amount: 0, balance: 0 })
-    console.log("chainIndex: ", chainIndex);
+    console.log("props.chainIndex: ", props.chainIndex);
     console.log("account: ", account);
-	}, [chainIndex, account])
+	}, [props.chainIndex, account])
 
   return (
     <div className='liquidityAddBody p-4' >
@@ -110,7 +108,7 @@ const LiquidityAddBody = () => {
         showFor={showTokenSelectModal}
         hide={() => setShowTokenSelectModal()}
         onSelect={onSelectToken}
-        networkName={networks[chainIndex].Name} />
+        networkName={networks[props.chainIndex].Name} />
     </div>
   );
 }
