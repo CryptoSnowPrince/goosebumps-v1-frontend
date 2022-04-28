@@ -196,10 +196,10 @@ const Exchange = (props) => {
 		try {
 			await ethcallProvider.init();
 
-			var balance = 0;
-			var decimals = props.network.Currency.Decimals;
-
 			if (ethers.utils.isAddress(account)) {
+				var balance = 0;
+				var decimals = 0;
+
 				if (forContract !== "-") {
 					const contract = new Contract(forContract, tokenAbi);
 					[balance, decimals] = await ethcallProvider.all([
@@ -210,16 +210,19 @@ const Exchange = (props) => {
 					balance = await provider.getBalance(account);
 					decimals = props.network.Currency.Decimals;
 				}
+				
+				const newTarget = Object.assign({}, forTarget);
+				newTarget.balance = ethers.utils.formatUnits(balance, decimals);
+				if (setAmount) {
+					newTarget.amount = 0;
+				}
+				newTarget.decimals = decimals;
+				setForTarget(newTarget);
+			} else {
+				setForTarget(forTarget);
 			}
-
-			const newTarget = Object.assign({}, forTarget);
-			newTarget.balance = ethers.utils.formatUnits(balance, decimals);
-			if (setAmount) {
-				newTarget.amount = 0;
-			}
-			newTarget.decimals = decimals;
-			setForTarget(newTarget);
 		} catch (error) {
+			setForTarget(forTarget);
 			console.log("update balance err: ", error)
 		}
 	};
