@@ -23,6 +23,13 @@ const LiquidityAddBody = () => {
     console.log(token, forTarget)
   }
 
+  useEffect(() => {
+		setTokenA({ symbol: "", address: "", decimals: 0, amount: 0, balance: 0 })
+		setTokenB({ symbol: "", address: "", decimals: 0, amount: 0, balance: 0 })
+    console.log("chainIndex: ", chainIndex);
+    console.log("account: ", account);
+	}, [chainIndex, account])
+
   return (
     <div className='liquidityAddBody p-4' >
       <div className='wallet-tabs'>
@@ -44,7 +51,7 @@ const LiquidityAddBody = () => {
               <div className="input-group-addon">
                 <button type="button" className="default-btn"
                   onClick={() => setShowTokenSelectModal("from")}>
-                  {tokenA.symbol ? tokenA.symbol : ""}
+                  {tokenA.symbol ? tokenA.symbol : "Select"}
                 </button>
               </div>
             </div>
@@ -71,7 +78,7 @@ const LiquidityAddBody = () => {
               <div className="input-group-addon">
                 <button type="button" className="default-btn"
                   onClick={() => setShowTokenSelectModal("from")}>
-                  {tokenB.symbol ? tokenB.symbol : ""}
+                  {tokenB.symbol ? tokenB.symbol : "Select"}
                 </button>
               </div>
             </div>
