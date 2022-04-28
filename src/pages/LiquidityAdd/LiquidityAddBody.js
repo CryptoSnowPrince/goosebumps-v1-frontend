@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { TokenSelectModal } from "./TokenModal"
+// import { TokenSelectModal } from "./TokenModal"
+import { TokenSelectModal } from "../../components/widgets/exchange/TokenSelectModal"
 import Web3 from 'web3';
 import { /*singer, */ethers, BigNumber } from 'ethers';
 import { useSelector } from 'react-redux';
@@ -22,11 +23,11 @@ const LiquidityAddBody = (props) => {
   }
 
   useEffect(() => {
-		setTokenA({ symbol: "", address: "", decimals: 0, amount: 0, balance: 0 })
-		setTokenB({ symbol: "", address: "", decimals: 0, amount: 0, balance: 0 })
+    setTokenA({ symbol: "", address: "", decimals: 0, amount: 0, balance: 0 })
+    setTokenB({ symbol: "", address: "", decimals: 0, amount: 0, balance: 0 })
     console.log("props.chainIndex: ", props.chainIndex);
     console.log("account: ", account);
-	}, [props.chainIndex, account])
+  }, [props.chainIndex, account])
 
   return (
     <div className='liquidityAddBody p-4' >
@@ -44,6 +45,11 @@ const LiquidityAddBody = (props) => {
               </div>
             </div>
             <div className="input-group">
+              {/* <input id="from" type="text" className="form-control me-2" placeholder="0" autoComplete="off" onChange={e => onAmountChange(e, "from")} min="0" max={from.balance} value={from.amount} />
+              <div className="input-group-addon">
+                <button type="button" className="default-btn" onClick={() => setShowTokenSelectModal("from")}>{from.symbol}</button>
+              </div>
+               */}
               <input id="from" type="text" className="form-control me-2"
                 placeholder="0" autoComplete="off" min="0" value={0} />
               <div className="input-group-addon">
@@ -108,7 +114,7 @@ const LiquidityAddBody = (props) => {
         showFor={showTokenSelectModal}
         hide={() => setShowTokenSelectModal()}
         onSelect={onSelectToken}
-        networkName={networks[props.chainIndex].Name} />
+        network={networks[props.chainIndex]} />
     </div>
   );
 }
