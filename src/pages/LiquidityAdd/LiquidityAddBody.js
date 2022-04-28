@@ -5,11 +5,11 @@ import Web3 from 'web3';
 import { useSelector } from 'react-redux';
 // import { TokenSelectModal } from "./TokenModal"
 import { TokenSelectModal } from "../../components/widgets/exchange/TokenSelectModal"
+import { ConnectButtonModal } from '../../components/widgets/ConnectButtonModal';
 import tokenAbi from '../../abis/token';
 import { /*getFullDisplayBalance, */formatNumberWithoutComma } from '../../utils/number';
 // import networks from '../../networks.json'
 import * as selector from '../../store/selectors';
-
 
 const LiquidityAddBody = (props) => {
 
@@ -162,9 +162,38 @@ const LiquidityAddBody = (props) => {
     fill(side, e.target.dataset.balance);
   };
 
+  const addLiquidity = async () => {
+		// const params = {
+		// 	sellToken: (from.address === "-" ? from.symbol : from.address),
+		// 	buyToken: (to.address === "-" ? to.symbol : to.address),
+		// 	sellAmount: quote.sellAmount, // 1 ETH = 10^18 wei
+		// 	takerAddress: account,
+		// }
+
+		// try {
+		// 	// Fetch the swap quote.
+		// 	const response = await fetch(
+		// 		`${props.network.SwapApi}swap/v1/quote?${qs.stringify(params)}`
+		// 	);
+
+		// 	const web3 = new Web3(provider);
+		// 	const ret = await response.json();
+		// 	await web3.eth.sendTransaction(ret);
+		// } catch (error) {
+		// 	console.log("trade error: ", error)
+		// }
+
+		// updateBalance(from.address, from, setFrom, true).then(() => {
+		// 	updateBalance(to.address, to, setTo, true).then(() => {
+		// 		setLoading();
+		// 		resetQuote();
+		// 	});
+		// });
+	}
+
   useEffect(() => {
-    setTokenA({ symbol: "", address: "", decimals: 0, amount: 0, balance: 0 })
-    setTokenB({ symbol: "", address: "", decimals: 0, amount: 0, balance: 0 })
+    setTokenA({ symbol: "", address: "", decimals: 0, amount: "", balance: 0 })
+    setTokenB({ symbol: "", address: "", decimals: 0, amount: "", balance: 0 })
     console.log("props.network: ", props.network);
     console.log("account: ", account);
   }, [props.network, account])
@@ -177,6 +206,33 @@ const LiquidityAddBody = (props) => {
       </div>
     );
   }
+
+  const SubmitButton = () => {
+    // console.log("SubmitButton")
+    if (account) {
+      if (!ready) {
+        return <button className="default-btn w-100" disabled="disabled">Please wait...</button>;
+      }
+      else if (!(tokenA.amount > 0 || tokenB.amount > 0)) {
+        return <button className="default-btn w-100" disabled="disabled">Enter an amount</button>;
+      }
+      // else if (needApprove) {
+      //   return <button className="default-btn w-100" disabled={!ready} onClick={() => approve(from.address)}>Approve</button>;
+      // }
+      // else if (error) {
+      //   return <button className="default-btn w-100" disabled="disabled">{error}</button>;
+      // }
+      // else if (!confirmed) {
+      //   return <button className="default-btn w-100" disabled={!ready} onClick={() => confirm()}>Confirm</button>;
+      // }
+      else {
+        return <button className="default-btn w-100" disabled={!ready} onClick={() => addLiquidity()}>Supply</button>;
+      }
+    }
+    else {
+      return <ConnectButtonModal />;
+    }
+  };
 
   return (
     <div className='liquidityAddBody p-4' >
@@ -247,12 +303,7 @@ const LiquidityAddBody = (props) => {
           </div>
         </div>
       </div>
-      <div className='d-flex justify-content-center mt-4'>
-        <button className='disable-btn' disabled>
-          {"Invalid pair"}
-        </button>
-      </div>
-      <div className='mt-4 mb-4'>prices and pool share</div>
+      <div className='mt-4 mb-4'>Prices and pool share</div>
       <div className='d-flex justify-content-around'>
         <div className='text-center'>
           <div>1085.91</div>
@@ -267,7 +318,14 @@ const LiquidityAddBody = (props) => {
           <div>Share of Pool</div>
         </div>
       </div>
-      <div className='d-flex justify-content-center mt-4'><button className='default-btn'>Enter an amount</button></div>
+      <div className='d-flex justify-content-center mt-4'>
+      {/* <div className="form-group btns"> */}
+        <SubmitButton />
+        {/* <button className='disable-btn' disabled>
+          {"Invalid pair"}
+        </button>
+        <button className='default-btn'>Enter an amount</button> */}
+      </div>
 
       <TokenSelectModal
         showFor={showTokenSelectModal}

@@ -17,10 +17,10 @@ const ConnectButtonModal = () => {
 
 
     if (account) {
-        return (<button className="default-btn" onClick={disconnect}>{account.substring(0, 8)}... (Disconnect)</button>);
+        return (<button className="default-btn w-100" onClick={disconnect}>{account.substring(0, 8)}... (Disconnect)</button>);
     }
 
-    return (<button className="default-btn" onClick={connect}>Connect Wallet</button>);
+    return (<button className="default-btn w-100" onClick={connect}>Connect Wallet</button>);
 }
 
 export { ConnectButtonModal }

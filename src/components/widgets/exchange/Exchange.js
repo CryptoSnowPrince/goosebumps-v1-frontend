@@ -214,7 +214,7 @@ const Exchange = (props) => {
 				const newTarget = Object.assign({}, forTarget);
 				newTarget.balance = ethers.utils.formatUnits(balance, decimals);
 				if (setAmount) {
-					newTarget.amount = 0;
+					newTarget.amount = "";
 				}
 				newTarget.decimals = decimals;
 				setForTarget(newTarget);
@@ -426,7 +426,7 @@ const Exchange = (props) => {
 				symbol: props.fromSymbol,
 				address: props.fromAddress,
 				decimals: 0,
-				amount: 0,
+				amount: "",
 				balance: 0
 			};
 	
@@ -434,7 +434,7 @@ const Exchange = (props) => {
 				symbol: props.toSymbol,
 				address: props.toAddress,
 				decimals: 0,
-				amount: 0,
+				amount: "",
 				balance: 0
 			};
 	
