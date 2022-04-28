@@ -410,15 +410,15 @@ const Exchange = (props) => {
 		}
 	}
 
-	useEffect(() => {
-		// console.log("account useEffect")
-		updateBalance(from.address, from, setFrom).then(() => {
-			updateBalance(to.address, to, setTo).then(() => {
-				setLoading();
-				resetQuote();
-			});
-		});
-	}, [account])
+	// useEffect(() => {
+	// 	// console.log("account useEffect")
+	// 	updateBalance(from.address, from, setFrom).then(() => {
+	// 		updateBalance(to.address, to, setTo).then(() => {
+	// 			setLoading();
+	// 			resetQuote();
+	// 		});
+	// 	});
+	// }, [account])
 
 	useEffect(() => {
 		const newFrom = {
@@ -443,7 +443,7 @@ const Exchange = (props) => {
 				resetQuote();
 			});
 		});
-	}, [props.network])
+	}, [props.network, account])
 
 	// useEffect(() => {
 	// 	console.log("from token: ", from);
