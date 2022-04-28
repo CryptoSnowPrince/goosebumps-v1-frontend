@@ -19,48 +19,15 @@ const LiquidityAddBody = (props) => {
 
   const [loading, setLoading] = useState();
   const [ready, setReady] = useState();
+	const [needApprove, setNeedApprove] = useState();
 
   const [tokenA, setTokenA] = useState({ symbol: "", address: "", decimals: 0, amount: 0, balance: 0 });
   const [tokenB, setTokenB] = useState({ symbol: "", address: "", decimals: 0, amount: 0, balance: 0 });
 
   const [showTokenSelectModal, setShowTokenSelectModal] = useState();
 
-  const onSelectToken = (token, forTarget) => {
-    console.log("onSelectToken")
-    console.log(token, forTarget)
-    if ((token.Address === tokenB.address && forTarget === "tokenA") || (token.Address === tokenA.address && forTarget === "tokenB")) {
-      // invert();
-    }
-    else {
-      if (forTarget === "tokenA") {
-        const newFrom = Object.assign({}, tokenA);
-        newFrom.address = token.Address;
-        newFrom.symbol = token.Symbol;
-        newFrom.decimals = token.Decimals;
-        updateBalance(token.Address, newFrom, setTokenA, true).then(() => {
-          updateBalance(tokenB.address, tokenB, setTokenB, true).then(() => {
-            setLoading();
-            // resetQuote();
-          });
-        });
-      }
-      else {
-        const newTo = Object.assign({}, tokenB);
-        newTo.address = token.Address;
-        newTo.symbol = token.Symbol;
-        newTo.decimals = token.Decimals;
-        updateBalance(token.Address, newTo, setTokenB, true).then(() => {
-          updateBalance(tokenA.address, tokenA, setTokenA, true).then(() => {
-            setLoading();
-            // resetQuote();
-          });
-        });
-      }
-    }
-  }
-
   const updateBalance = async (forContract, forTarget, setForTarget, setAmount = false) => {
-    // console.log("updateBalance")
+    console.log("updateBalance")
     const provider = new ethers.providers.JsonRpcProvider(props.network.RPC);
     if (props.network.chainId === 97) // When bsc testnet
     {
@@ -101,6 +68,40 @@ const LiquidityAddBody = (props) => {
       console.log("update balance err: ", error)
     }
   };
+
+  const onSelectToken = (token, forTarget) => {
+    console.log("onSelectToken")
+    console.log(token, forTarget)
+    if ((token.Address === tokenB.address && forTarget === "tokenA") || (token.Address === tokenA.address && forTarget === "tokenB")) {
+      // invert();
+    }
+    else {
+      if (forTarget === "tokenA") {
+        const newFrom = Object.assign({}, tokenA);
+        newFrom.address = token.Address;
+        newFrom.symbol = token.Symbol;
+        newFrom.decimals = token.Decimals;
+        updateBalance(token.Address, newFrom, setTokenA, true).then(() => {
+          updateBalance(tokenB.address, tokenB, setTokenB, true).then(() => {
+            setLoading();
+            // resetQuote();
+          });
+        });
+      }
+      else {
+        const newTo = Object.assign({}, tokenB);
+        newTo.address = token.Address;
+        newTo.symbol = token.Symbol;
+        newTo.decimals = token.Decimals;
+        updateBalance(token.Address, newTo, setTokenB, true).then(() => {
+          updateBalance(tokenA.address, tokenA, setTokenA, true).then(() => {
+            setLoading();
+            // resetQuote();
+          });
+        });
+      }
+    }
+  }
 
   const fill = (side, value) => {
     console.log("fill")
@@ -162,34 +163,69 @@ const LiquidityAddBody = (props) => {
     fill(side, e.target.dataset.balance);
   };
 
-  const addLiquidity = async () => {
-		// const params = {
-		// 	sellToken: (from.address === "-" ? from.symbol : from.address),
-		// 	buyToken: (to.address === "-" ? to.symbol : to.address),
-		// 	sellAmount: quote.sellAmount, // 1 ETH = 10^18 wei
-		// 	takerAddress: account,
-		// }
+  const approve = async (tokenAddress) => {
+		// console.log("approve");
+		setReady();
+
+		// const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
+		const contract = new ethers.Contract(
+			tokenA.address,
+			tokenAbi,
+			web3Provider.getSigner()
+			// provider.getSigner()
+		);
 
 		// try {
-		// 	// Fetch the swap quote.
-		// 	const response = await fetch(
-		// 		`${props.network.SwapApi}swap/v1/quote?${qs.stringify(params)}`
-		// 	);
-
-		// 	const web3 = new Web3(provider);
-		// 	const ret = await response.json();
-		// 	await web3.eth.sendTransaction(ret);
-		// } catch (error) {
-		// 	console.log("trade error: ", error)
+		// 	const tx = await contract.approve(needApprove.target, tokenA.amount);
+		// 	const receipt = await tx.wait(tx);
+		// 	if (receipt.status === 1) {
+		// 		setNeedApprove();
+		// 	}
+		// } catch (err) {
+		// 	console.log("approve err: ", err);
 		// }
 
-		// updateBalance(from.address, from, setFrom, true).then(() => {
-		// 	updateBalance(to.address, to, setTo, true).then(() => {
-		// 		setLoading();
-		// 		resetQuote();
+		// updateBalance(from.address, from, setFrom).then(() => {
+		// 	updateBalance(to.address, to, setTo).then(() => {
 		// 	});
 		// });
-	}
+
+		setReady(true);
+	};
+
+  const addLiquidity = async () => {
+    // const params = {
+    // 	sellToken: (from.address === "-" ? from.symbol : from.address),
+    // 	buyToken: (to.address === "-" ? to.symbol : to.address),
+    // 	sellAmount: quote.sellAmount, // 1 ETH = 10^18 wei
+    // 	takerAddress: account,
+    // }
+
+    // try {
+    // 	// Fetch the swap quote.
+    // 	const response = await fetch(
+    // 		`${props.network.SwapApi}swap/v1/quote?${qs.stringify(params)}`
+    // 	);
+
+    // 	const web3 = new Web3(provider);
+    // 	const ret = await response.json();
+    // 	await web3.eth.sendTransaction(ret);
+    // } catch (error) {
+    // 	console.log("trade error: ", error)
+    // }
+
+    // updateBalance(from.address, from, setFrom, true).then(() => {
+    // 	updateBalance(to.address, to, setTo, true).then(() => {
+    // 		setLoading();
+    // 		resetQuote();
+    // 	});
+    // });
+  }
+
+  useEffect(() => {
+    console.log("tokenA: ", tokenA)
+    console.log("tokenB: ", tokenB)
+  }, [tokenA, tokenB])
 
   useEffect(() => {
     setTokenA({ symbol: "", address: "", decimals: 0, amount: "", balance: 0 })
@@ -209,16 +245,23 @@ const LiquidityAddBody = (props) => {
 
   const SubmitButton = () => {
     // console.log("SubmitButton")
-    if (account) {
+    if (
+      !(tokenA.symbol && tokenB.symbol) ||
+      (tokenA.address === "-" && tokenB.address === props.network.Currency.Address) ||
+      (tokenB.address === "-" && tokenA.address === props.network.Currency.Address)
+    ) {
+      return <button className="disable-btn w-100" disabled>Invalid pair</button>;
+    }
+    else if (account) {
       if (!ready) {
         return <button className="default-btn w-100" disabled="disabled">Please wait...</button>;
       }
       else if (!(tokenA.amount > 0 || tokenB.amount > 0)) {
         return <button className="default-btn w-100" disabled="disabled">Enter an amount</button>;
       }
-      // else if (needApprove) {
-      //   return <button className="default-btn w-100" disabled={!ready} onClick={() => approve(from.address)}>Approve</button>;
-      // }
+      else if (needApprove) {
+        return <button className="default-btn w-100" disabled={!ready} onClick={() => approve(tokenA.address)}>Approve</button>;
+      }
       // else if (error) {
       //   return <button className="default-btn w-100" disabled="disabled">{error}</button>;
       // }
@@ -319,7 +362,7 @@ const LiquidityAddBody = (props) => {
         </div>
       </div>
       <div className='d-flex justify-content-center mt-4'>
-      {/* <div className="form-group btns"> */}
+        {/* <div className="form-group btns"> */}
         <SubmitButton />
         {/* <button className='disable-btn' disabled>
           {"Invalid pair"}
