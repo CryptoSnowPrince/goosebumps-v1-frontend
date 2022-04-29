@@ -25,6 +25,7 @@ const LiquidityAddBody = (props) => {
   const [loading, setLoading] = useState();
   const [ready, setReady] = useState();
   const [newPair, setNewPair] = useState(false);
+  const [lpAddress, setLpAddress] = useState("")
   const [needApprove, setNeedApprove] = useState();
 
   const [tokenA, setTokenA] = useState({ symbol: "", address: "", decimals: 0, amount: 0, balance: 0 });
@@ -253,14 +254,28 @@ const LiquidityAddBody = (props) => {
     );
     try {
       const pairAddress = await contract.getPair(tokenA, tokenB)
+      setLpAddress(pairAddress);
       console.log("pairAddress: ", pairAddress);
       if (pairAddress === "0x0000000000000000000000000000000000000000") {
         // console.log("pair is not exist");
         setNewPair(true)
       } else {
-        setNewPair(false)
+        const tokenAContract = new ethers.Contract(tokenA, tokenAbi, provider);
+        const tokenABalance = await tokenAContract.balanceOf(pairAddress);
+        // console.log("tokenABalance._hex: ", tokenABalance._hex);
+        // console.log("typeof tokenABalance._hex: ", typeof tokenABalance._hex);
+        // console.log("tokenABalance.decimals: ", parseInt(tokenABalance._hex));
+        if (parseInt(tokenABalance._hex) > 0) {
+          // console.log("pass if")
+          setNewPair(false)
+        } else {
+          // console.log("pass else")
+          setNewPair(true)
+        }
       }
     } catch (error) {
+      setNewPair(false)
+      setLpAddress("");
       console.log("get Pair Address err: ", error)
     }
   }
@@ -276,6 +291,8 @@ const LiquidityAddBody = (props) => {
     console.log("tokenB: ", tokenB)
     if (!isInvalidPair()) {
       isNewPair(tokenA.address, tokenB.address);
+    } else {
+      setLpAddress("");
     }
   }, [tokenA, tokenB])
 
@@ -451,7 +468,10 @@ const LiquidityAddBody = (props) => {
           </div>
         </div>
       </div>
-      <UserLpToken lpAddress = {""}/>
+      <UserLpToken
+        network={props.network}
+        lpAddress={lpAddress}
+        account={account} />
       <TokenSelectModal
         showFor={showTokenSelectModal}
         hide={() => setShowTokenSelectModal()}

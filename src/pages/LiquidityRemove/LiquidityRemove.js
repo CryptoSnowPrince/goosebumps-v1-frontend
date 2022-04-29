@@ -9,9 +9,18 @@ import { UserLpToken } from "../LiquidityAdd/UserLpToken"
 import { TokenSelectModal } from "../LiquidityAdd/TokenModal"
 import '../Liquidity/Liquidity.scss'
 
-const LiquidityRemove = () => {
+import { useSelector } from 'react-redux';
+import * as selector from '../../store/selectors';
+import networks from '../../networks.json'
+
+const LiquidityRemove = (props) => {
+  const account = useSelector(selector.accountState);
   const [amount, setAmount] = useState(50);
   const [detailed, setDetailed] = useState(true);
+  const chainIndex = useSelector(selector.chainIndex);
+
+  const [lpAddress, setLpAddress] = useState("")
+
   const [showTokenSelectModal, setShowTokenSelectModal] = useState();
   const onSelectToken = (token, forTarget) => {
     console.log(token, forTarget)
@@ -163,7 +172,10 @@ const LiquidityRemove = () => {
           </div>
         </div>
       </div>
-      <UserLpToken lpAddress = {""}/>
+      <UserLpToken
+        network={networks[chainIndex]}
+        lpAddress={lpAddress}
+        account={account} />
       <TokenSelectModal
         showFor={showTokenSelectModal}
         hide={() => setShowTokenSelectModal()}
