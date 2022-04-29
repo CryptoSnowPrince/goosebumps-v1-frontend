@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { BiHelpCircle } from 'react-icons/bi';
 import { Contract, Provider, setMulticallAddress } from 'ethers-multicall';
 import { ethers } from 'ethers';
+import linq from "linq";
 
 import "./userLpToken.scss"
 
@@ -15,6 +16,8 @@ const UserLpToken = (props) => {
   const [tokenBBalance, setTokenBBalance] = useState(0);
   const [tokenASymbol, setTokenASymbol] = useState("");
   const [tokenBSymbol, setTokenBSymbol] = useState("");
+  const [tokenAAddress, setTokenAAddress] = useState("");
+  const [tokenBAddress, setTokenBAddress] = useState("");
 
   const updateLpInfo = async () => {
     console.log("UserLpToken updateBalance")
@@ -56,6 +59,20 @@ const UserLpToken = (props) => {
         const tokenAContract = new Contract(tokenAAddress, tokenAbi);
         const tokenBContract = new Contract(tokenBAddress, tokenAbi);
 
+        const tokenList = require("../../tokens/" + props.network.Name)
+        var sched = linq.from(tokenList).where(x => x.Address === tokenAAddress).toArray();
+        if (sched.length === 0) {
+          setTokenAAddress("");
+        } else {
+          setTokenAAddress(tokenAAddress);
+        }
+        sched = linq.from(tokenList).where(x => x.Address === tokenBAddress).toArray();
+        if (sched.length === 0) {
+          setTokenBAddress("");
+        } else {
+          setTokenBAddress(tokenBAddress);
+        }
+
         [
           tokenABalance,
           tokenASymbol,
@@ -87,6 +104,8 @@ const UserLpToken = (props) => {
         setTokenBBalance(0);
         setTokenASymbol("");
         setTokenBSymbol("");
+        setTokenAAddress("");
+        setTokenBAddress("");
       }
     } catch (error) {
       setLpBalance(0);
@@ -95,7 +114,9 @@ const UserLpToken = (props) => {
       setTokenBBalance(0);
       setTokenASymbol("");
       setTokenBSymbol("");
-      console.log("update balance err: ", error)
+      setTokenAAddress("");
+      setTokenBAddress("");
+      console.log("updateLpInfo err: ", error)
     }
   };
 
@@ -104,24 +125,28 @@ const UserLpToken = (props) => {
   }, [props.network, props.lpAddress, props.account])
 
   return (
-    <div className='mt-4 p-3' id="userLpToken">
+    <>
       {lpBalance > 0 ?
-        <>
+        <div className='mt-4 p-3' id="userLpToken">
           <div className='mt-2 fs-5'>LP tokens in your wallet</div>
           <div className='mt-2 d-flex justify-content-between'>
             <div className='d-flex fs-5 align-items-center'>
-              {/* <div><BiHelpCircle /> </div>
-              <div><BiHelpCircle /> </div> */}
               <div>
                 <img className='col-auto' style={{ height: 32 }}
-                  // src={token.Logo ? token.Logo : "/assets/tokens/empty.png"}
-                  src={`/assets/tokens/${tokenASymbol}.png` || "/assets/tokens/empty.png"}
+                  src={
+                    (tokenAAddress !== "" && props.network) ?
+                      `/assets/tokens/${props.network.chainId}/${tokenAAddress}.png` :
+                      "/assets/tokens/empty.png"
+                  }
                   alt={tokenASymbol} />
               </div>
               <div>
                 <img className='col-auto' style={{ height: 32 }}
-                  src={`/assets/tokens/${tokenBSymbol}.png` || "/assets/tokens/empty.png"}
-                  // src={tokenBSymbol ? token.Logo : "/assets/tokens/empty.png"}
+                  src={
+                    (tokenBAddress !== "" && props.network) ?
+                      `/assets/tokens/${props.network.chainId}/${tokenBAddress}.png` :
+                      "/assets/tokens/empty.png"
+                  }
                   alt={tokenBSymbol} />
               </div>
               <div>{tokenASymbol}-</div>
@@ -139,17 +164,17 @@ const UserLpToken = (props) => {
             <div className='d-flex align-items-center'>
               <div style={{ color: "#04C0D7" }}>Pooled {tokenASymbol}:</div>
             </div>
-            <div style={{ color: "#40FF97" }}>{tokenABalance}</div>
+            <div style={{ color: "#40FF97" }}>{tokenABalance * lpBalance / lpTotalSupply}</div>
           </div>
           <div className='mt-2 d-flex justify-content-between  mt-2'>
             <div style={{ color: "#04C0D7" }}>
               Pooled {tokenBSymbol}:
             </div>
-            <div style={{ color: "#40FF97" }}>{tokenBBalance}</div>
+            <div style={{ color: "#40FF97" }}>{tokenBBalance * lpBalance / lpTotalSupply}</div>
           </div>
-        </>
+        </div>
         : ""}
-    </div>
+    </>
   );
 }
 
