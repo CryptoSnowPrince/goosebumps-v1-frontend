@@ -3,7 +3,7 @@ import { BiHelpCircle } from 'react-icons/bi';
 
 import "./userLpToken.scss"
 
-const UserLpToken = () => {
+const UserLpToken = (props) => {
   return (
     <div className='mt-4 p-3' id="userLpToken">
       <div className='mt-2 fs-5'>LP tokens in your wallet</div>

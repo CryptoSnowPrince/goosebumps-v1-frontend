@@ -6,7 +6,12 @@ import { useSelector } from 'react-redux';
 // import { TokenSelectModal } from "./TokenModal"
 import { TokenSelectModal } from "../../components/widgets/exchange/TokenSelectModal"
 import { ConnectButtonModal } from '../../components/widgets/ConnectButtonModal';
+import { UserLpToken } from "./UserLpToken"
+import DEXSubmenu from '../../components/Submenu/DEXSubmenu'
+import { LiquidityHeader } from "../../components/LiquidityHeader/LiquidityHeader";
 import tokenAbi from '../../abis/token';
+import factoryAbi from '../../abis/factory';
+import routerAbi from '../../abis/router';
 import { /*getFullDisplayBalance, */formatNumberWithoutComma } from '../../utils/number';
 // import networks from '../../networks.json'
 import * as selector from '../../store/selectors';
@@ -70,19 +75,28 @@ const LiquidityAddBody = (props) => {
     }
   };
 
+  const invert = () => {
+    // console.log("invert")
+    const newTokenA = Object.assign({}, tokenB);
+    const newTokenB = Object.assign({}, tokenA);
+    setTokenA(newTokenA);
+    setTokenB(newTokenB);
+    // resetQuote(newTokenA, newTokenB);
+  }
+
   const onSelectToken = (token, forTarget) => {
     console.log("onSelectToken")
     console.log(token, forTarget)
     if ((token.Address === tokenB.address && forTarget === "tokenA") || (token.Address === tokenA.address && forTarget === "tokenB")) {
-      // invert();
+      invert();
     }
     else {
       if (forTarget === "tokenA") {
-        const newFrom = Object.assign({}, tokenA);
-        newFrom.address = token.Address;
-        newFrom.symbol = token.Symbol;
-        newFrom.decimals = token.Decimals;
-        updateBalance(token.Address, newFrom, setTokenA, true).then(() => {
+        const newTokenA = Object.assign({}, tokenA);
+        newTokenA.address = token.Address;
+        newTokenA.symbol = token.Symbol;
+        newTokenA.decimals = token.Decimals;
+        updateBalance(token.Address, newTokenA, setTokenA, true).then(() => {
           updateBalance(tokenB.address, tokenB, setTokenB, true).then(() => {
             setLoading();
             // resetQuote();
@@ -90,11 +104,11 @@ const LiquidityAddBody = (props) => {
         });
       }
       else {
-        const newTo = Object.assign({}, tokenB);
-        newTo.address = token.Address;
-        newTo.symbol = token.Symbol;
-        newTo.decimals = token.Decimals;
-        updateBalance(token.Address, newTo, setTokenB, true).then(() => {
+        const newTokenB = Object.assign({}, tokenB);
+        newTokenB.address = token.Address;
+        newTokenB.symbol = token.Symbol;
+        newTokenB.decimals = token.Decimals;
+        updateBalance(token.Address, newTokenB, setTokenB, true).then(() => {
           updateBalance(tokenA.address, tokenA, setTokenA, true).then(() => {
             setLoading();
             // resetQuote();
@@ -123,6 +137,11 @@ const LiquidityAddBody = (props) => {
     const newTarget = Object.assign({}, target);
     newTarget.amount = value;
     setTarget(newTarget);
+
+    if (newPair) {
+      setReady(true);
+      return;
+    }
 
     var newOther = Object.assign({}, other);
     newOther.amount = "";
@@ -186,8 +205,8 @@ const LiquidityAddBody = (props) => {
     // 	console.log("approve err: ", err);
     // }
 
-    // updateBalance(from.address, from, setFrom).then(() => {
-    // 	updateBalance(to.address, to, setTo).then(() => {
+    // updateBalance(tokenA.address, tokenA, setTokenA).then(() => {
+    // 	updateBalance(tokenB.address, tokenB, setTokenB).then(() => {
     // 	});
     // });
 
@@ -196,8 +215,8 @@ const LiquidityAddBody = (props) => {
 
   const addLiquidity = async () => {
     // const params = {
-    // 	sellToken: (from.address === "-" ? from.symbol : from.address),
-    // 	buyToken: (to.address === "-" ? to.symbol : to.address),
+    // 	sellToken: (tokenA.address === "-" ? tokenA.symbol : tokenA.address),
+    // 	buyToken: (tokenB.address === "-" ? tokenB.symbol : tokenB.address),
     // 	sellAmount: quote.sellAmount, // 1 ETH = 10^18 wei
     // 	takerAddress: account,
     // }
@@ -215,17 +234,49 @@ const LiquidityAddBody = (props) => {
     // 	console.log("trade error: ", error)
     // }
 
-    // updateBalance(from.address, from, setFrom, true).then(() => {
-    // 	updateBalance(to.address, to, setTo, true).then(() => {
+    // updateBalance(tokenA.address, tokenA, setTokenA, true).then(() => {
+    // 	updateBalance(tokenB.address, tokenB, setTokenB, true).then(() => {
     // 		setLoading();
     // 		resetQuote();
     // 	});
     // });
   }
 
+  const isNewPair = async (tokenA, tokenB) => {
+    if (tokenA === "-") tokenA = props.network.Currency.Address;
+    if (tokenB === "-") tokenB = props.network.Currency.Address;
+    const provider = new ethers.providers.JsonRpcProvider(props.network.RPC);
+    const contract = new ethers.Contract(
+      props.network.DEX.Factory,
+      factoryAbi,
+      provider
+    );
+    try {
+      const pairAddress = await contract.getPair(tokenA, tokenB)
+      console.log("pairAddress: ", pairAddress);
+      if (pairAddress === "0x0000000000000000000000000000000000000000") {
+        // console.log("pair is not exist");
+        setNewPair(true)
+      } else {
+        setNewPair(false)
+      }
+    } catch (error) {
+      console.log("get Pair Address err: ", error)
+    }
+  }
+
+  const isInvalidPair = () => {
+    return !(tokenA.symbol && tokenB.symbol) ||
+      (tokenA.address === "-" && tokenB.address === props.network.Currency.Address) ||
+      (tokenB.address === "-" && tokenA.address === props.network.Currency.Address)
+  }
+
   useEffect(() => {
     console.log("tokenA: ", tokenA)
     console.log("tokenB: ", tokenB)
+    if (!isInvalidPair()) {
+      isNewPair(tokenA.address, tokenB.address);
+    }
   }, [tokenA, tokenB])
 
   useEffect(() => {
@@ -246,11 +297,7 @@ const LiquidityAddBody = (props) => {
 
   const SubmitButton = () => {
     // console.log("SubmitButton")
-    if (
-      !(tokenA.symbol && tokenB.symbol) ||
-      (tokenA.address === "-" && tokenB.address === props.network.Currency.Address) ||
-      (tokenB.address === "-" && tokenA.address === props.network.Currency.Address)
-    ) {
+    if (isInvalidPair()) {
       return <button className="disable-btn w-100" disabled>Invalid pair</button>;
     }
     else if (account) {
@@ -279,118 +326,132 @@ const LiquidityAddBody = (props) => {
   };
 
   return (
-    <div className='liquidityAddBody p-4'>
-      <div className='wallet-tabs'>
-        <div className='tab_content p-0'>
-          <div className='form-group'>
-            <div className='d-flex justify-content-near' style={{color:"#04C0D7"}}>
-              <div style={{ padding: 10 }}>
-                <img className='col-auto' style={{ height: 24 }}
-                  src={"/assets/images/warn.png"}
-                  alt={"Warn"} />
-              </div>
-              <div style={{ paddingTop: 10, paddingBottom: 10 }}>
-                <div>
-                  You are the first liquidity provider.
+    <div className="dex">
+      <DEXSubmenu />
+      <div id='liquidity' >
+        <LiquidityHeader title="Add Liquidity" content="Add liquidity to receive LP tokens" />
+        <div className='liquidityAddBody p-4'>
+          <div className='wallet-tabs'>
+            <div className='tab_content p-0'>
+              {newPair && !isInvalidPair() ?
+                <div className='form-group'>
+                  <div className='d-flex justify-content-near' style={{ color: "#04C0D7" }}>
+                    <div style={{ padding: 10 }}>
+                      <img className='col-auto' style={{ height: 24 }}
+                        src={"/assets/images/warn.png"}
+                        alt={"Warn"} />
+                    </div>
+                    <div style={{ paddingTop: 10, paddingBottom: 10 }}>
+                      <div>
+                        You are the first liquidity provider.
+                      </div>
+                      <div>
+                        The ratio of tokens you add will set the price of this pool.
+                      </div>
+                      <div>
+                        Once you are happy with the rate click supply to add liquidity.
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                <div>
-                  The ratio of tokens you add will set the price of this pool.
+                : ""
+              }
+              <div className="form-group">
+                <div className="row justify-content-between">
+                  <div className="col">
+                    <label htmlFor="from" className="w-100">Token 1</label>
+                  </div>
+                  <div className="col text-end">
+                    <button
+                      data-balance={tokenA.balance}
+                      onClick={e => fillMaxAmount(e, "tokenA")}
+                      type="button" className="w-100 text-end badge btn text-white">
+                      Balance: {formatNumberWithoutComma(Number(tokenA.balance))}
+                    </button>
+                  </div>
                 </div>
-                <div>
-                  Once you are happy with the rate click supply to add liquidity.
+                <div className="input-group">
+                  <input id="from" type="text" className="form-control me-2"
+                    placeholder="0" autoComplete="off"
+                    onChange={e => onAmountChange(e, "tokenA")}
+                    min="0"
+                    max={tokenA.balance}
+                    value={tokenA.amount} />
+                  <div className="input-group-addon">
+                    <button type="button" className="default-btn"
+                      onClick={() => setShowTokenSelectModal("tokenA")}>
+                      {tokenA.symbol ? tokenA.symbol : "Select"}
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-          <div className="form-group">
-            <div className="row justify-content-between">
-              <div className="col">
-                <label htmlFor="from" className="w-100">TokenA</label>
-              </div>
-              <div className="col text-end">
-                <button
-                  data-balance={tokenA.balance}
-                  onClick={e => fillMaxAmount(e, "tokenA")}
-                  type="button" className="w-100 text-end badge btn text-white">
-                  Balance: {formatNumberWithoutComma(Number(tokenA.balance))}
-                </button>
-              </div>
-            </div>
-            <div className="input-group">
-              <input id="from" type="text" className="form-control me-2"
-                placeholder="0" autoComplete="off"
-                onChange={e => onAmountChange(e, "tokenA")}
-                min="0"
-                max={tokenA.balance}
-                value={tokenA.amount} />
-              <div className="input-group-addon">
-                <button type="button" className="default-btn"
-                  onClick={() => setShowTokenSelectModal("tokenA")}>
-                  {tokenA.symbol ? tokenA.symbol : "Select"}
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div className='d-flex justify-content-center m-4'>+</div>
-      <div className='wallet-tabs'>
-        <div className='tab_content p-0'>
-          <div className="form-group">
-            <div className="row justify-content-between">
-              <div className="col">
-                <label htmlFor="from" className="w-100">TokenB</label>
-              </div>
-              <div className="col text-end">
-                <button
-                  data-balance={tokenB.balance}
-                  onClick={e => fillMaxAmount(e, "tokenB")}
-                  type="button" className="w-100 text-end badge btn text-white">
-                  Balance: {formatNumberWithoutComma(Number(tokenB.balance))}
-                </button>
-              </div>
-            </div>
-            <div className="input-group">
-              <input id="from" type="text" className="form-control me-2"
-                placeholder="0" autoComplete="off"
-                onChange={e => onAmountChange(e, "tokenB")}
-                min="0"
-                max={tokenB.balance}
-                value={tokenB.amount} />
-              <div className="input-group-addon">
-                <button type="button" className="default-btn"
-                  onClick={() => setShowTokenSelectModal("tokenB")}>
-                  {tokenB.symbol ? tokenB.symbol : "Select"}
-                </button>
+          <div className='d-flex justify-content-center m-4'>+</div>
+          <div className='wallet-tabs'>
+            <div className='tab_content p-0'>
+              <div className="form-group">
+                <div className="row justify-content-between">
+                  <div className="col">
+                    <label htmlFor="from" className="w-100">Token 2</label>
+                  </div>
+                  <div className="col text-end">
+                    <button
+                      data-balance={tokenB.balance}
+                      onClick={e => fillMaxAmount(e, "tokenB")}
+                      type="button" className="w-100 text-end badge btn text-white">
+                      Balance: {formatNumberWithoutComma(Number(tokenB.balance))}
+                    </button>
+                  </div>
+                </div>
+                <div className="input-group">
+                  <input id="from" type="text" className="form-control me-2"
+                    placeholder="0" autoComplete="off"
+                    onChange={e => onAmountChange(e, "tokenB")}
+                    min="0"
+                    max={tokenB.balance}
+                    value={tokenB.amount} />
+                  <div className="input-group-addon">
+                    <button type="button" className="default-btn"
+                      onClick={() => setShowTokenSelectModal("tokenB")}>
+                      {tokenB.symbol ? tokenB.symbol : "Select"}
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </div>
-      <div className='mt-4 mb-4'>Prices and pool share</div>
-      <div className='d-flex justify-content-around'>
-        <div className='text-center'>
-          <div>1085.91</div>
-          <div>DSP per BNB</div>
-        </div>
-        <div className='text-center'>
-          <div>0.000920886</div>
-          <div>BNB per DSP</div>
-        </div>
-        <div className='text-center'>
-          <div>9%</div>
-          <div>Share of Pool</div>
-        </div>
-      </div>
-      <div className='d-flex justify-content-center mt-4'>
-        {/* <div className="form-group btns"> */}
-        <SubmitButton />
-        {/* <button className='disable-btn' disabled>
+
+          {isInvalidPair() ? "" :
+            <div>
+              <div className='mt-4 mb-4'>Prices and pool share</div>
+              <div className='d-flex justify-content-around'>
+                <div className='text-center'>
+                  <div>{(tokenA.amount > 0 && tokenB.amount > 0) ? tokenA.amount / tokenB.amount : 0}</div>
+                  <div>{tokenA.symbol} per {tokenB.symbol}</div>
+                </div>
+                <div className='text-center'>
+                  <div>{(tokenA.amount > 0 && tokenB.amount > 0) ? tokenB.amount / tokenA.amount : 0}</div>
+                  <div>{tokenB.symbol} per {tokenA.symbol}</div>
+                </div>
+                <div className='text-center'>
+                  <div>{(newPair && tokenA.amount > 0 && tokenB.amount > 0) ? 100 : 0}%</div>
+                  <div>Share of Pool</div>
+                </div>
+              </div>
+            </div>
+          }
+          <div className='d-flex justify-content-center mt-4'>
+            {/* <div className="form-group btns"> */}
+            <SubmitButton />
+            {/* <button className='disable-btn' disabled>
           {"Invalid pair"}
         </button>
         <button className='default-btn'>Enter an amount</button> */}
+          </div>
+        </div>
       </div>
-
+      <UserLpToken lpAddress = {""}/>
       <TokenSelectModal
         showFor={showTokenSelectModal}
         hide={() => setShowTokenSelectModal()}
