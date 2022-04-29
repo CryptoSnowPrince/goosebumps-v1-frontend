@@ -459,12 +459,7 @@ const LiquidityAddBody = (props) => {
             </div>
           }
           <div className='d-flex justify-content-center mt-4'>
-            {/* <div className="form-group btns"> */}
             <SubmitButton />
-            {/* <button className='disable-btn' disabled>
-          {"Invalid pair"}
-        </button>
-        <button className='default-btn'>Enter an amount</button> */}
           </div>
         </div>
       </div>

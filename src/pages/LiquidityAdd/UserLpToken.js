@@ -141,7 +141,7 @@ const UserLpToken = (props) => {
                   alt={tokenASymbol} />
               </div>
               <div>
-                <img className='col-auto' style={{ height: 32 }}
+                <img className='col-auto' style={{ height: 32, paddingLeft: 5, paddingRight: 15}}
                   src={
                     (tokenBAddress !== "" && props.network) ?
                       `/assets/tokens/${props.network.chainId}/${tokenBAddress}.png` :
@@ -149,8 +149,7 @@ const UserLpToken = (props) => {
                   }
                   alt={tokenBSymbol} />
               </div>
-              <div>{tokenASymbol}-</div>
-              <div>{tokenBSymbol} {" LP"}</div>
+              <div>{tokenASymbol}{"-"}{tokenBSymbol} {"LP"}</div>
             </div>
             <div className='fs-6'>{lpBalance}</div>
           </div>
