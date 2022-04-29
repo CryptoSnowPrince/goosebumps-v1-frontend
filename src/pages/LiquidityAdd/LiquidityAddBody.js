@@ -22,11 +22,11 @@ const LiquidityAddBody = (props) => {
   const provider = useSelector(selector.providerState);
   const web3Provider = useSelector(selector.web3ProviderState);
 
-  const [loading, setLoading] = useState();
-  const [ready, setReady] = useState();
+  const [loading, setLoading] = useState(false);
+  const [ready, setReady] = useState(false);
   const [newPair, setNewPair] = useState(false);
   const [lpAddress, setLpAddress] = useState("")
-  const [needApprove, setNeedApprove] = useState();
+  const [tokenAApproved, setTokenAApproved] = useState();
 
   const [tokenA, setTokenA] = useState({ symbol: "", address: "", decimals: 0, amount: 0, balance: 0 });
   const [tokenB, setTokenB] = useState({ symbol: "", address: "", decimals: 0, amount: 0, balance: 0 });
@@ -35,6 +35,7 @@ const LiquidityAddBody = (props) => {
 
   const updateBalance = async (forContract, forTarget, setForTarget, setAmount = false) => {
     // console.log("updateBalance")
+    setReady(false)
     const provider = new ethers.providers.JsonRpcProvider(props.network.RPC);
     if (props.network.chainId === 97) // When bsc testnet
     {
@@ -74,6 +75,7 @@ const LiquidityAddBody = (props) => {
       setForTarget(forTarget);
       console.log("update balance err: ", error)
     }
+    setReady(true)
   };
 
   const invert = () => {
@@ -92,6 +94,7 @@ const LiquidityAddBody = (props) => {
       invert();
     }
     else {
+      setLoading(true);
       if (forTarget === "tokenA") {
         const newTokenA = Object.assign({}, tokenA);
         newTokenA.address = token.Address;
@@ -99,8 +102,7 @@ const LiquidityAddBody = (props) => {
         newTokenA.decimals = token.Decimals;
         updateBalance(token.Address, newTokenA, setTokenA, true).then(() => {
           updateBalance(tokenB.address, tokenB, setTokenB, true).then(() => {
-            setLoading();
-            // resetQuote();
+            setLoading(false);
           });
         });
       }
@@ -111,8 +113,7 @@ const LiquidityAddBody = (props) => {
         newTokenB.decimals = token.Decimals;
         updateBalance(token.Address, newTokenB, setTokenB, true).then(() => {
           updateBalance(tokenA.address, tokenA, setTokenA, true).then(() => {
-            setLoading();
-            // resetQuote();
+            setLoading(false);
           });
         });
       }
@@ -121,7 +122,7 @@ const LiquidityAddBody = (props) => {
 
   const fill = (side, value) => {
     console.log("fill")
-    setReady();
+    setReady(false);
     if (side === "tokenA") {
       var target = tokenA;
       var setTarget = setTokenA;
@@ -147,31 +148,7 @@ const LiquidityAddBody = (props) => {
     var newOther = Object.assign({}, other);
     newOther.amount = "";
     setOther(newOther);
-    // setQuote();
-
-    // if (pendingQuote) {
-    // 	clearTimeout(pendingQuote);
-    // }
-    // console.log("L292")
-    if (value > 0) {
-      // setPendingQuote(setTimeout(() => {
-      // 	// console.log("L295")
-      // 	updateQuote(tokenA.address, tokenA.decimals, tokenB.address, tokenB.decimals, value, slippage, side).then(quote => {
-      // 		if (quote?.price > 0) {
-      // 			const buyAmount = ethers.utils.formatUnits(quote.buyAmount, tokenB.decimals);
-      // 			const sellAmount = ethers.utils.formatUnits(quote.sellAmount, tokenA.decimals);
-
-      // 			newOther.amount = side === "tokenA" ? buyAmount : sellAmount;
-      // 			setOther(newOther);
-      // 		}
-      setReady(true);
-      // 	});
-      // 	setPendingQuote();
-      // }, 1500));
-    }
-    else {
-      setReady(true);
-    }
+    setReady(true)
   }
 
   const onAmountChange = (e, side) => {
@@ -186,7 +163,7 @@ const LiquidityAddBody = (props) => {
 
   const approve = async (tokenAddress) => {
     // console.log("approve");
-    setReady();
+    setReady(false);
 
     // const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
     const contract = new ethers.Contract(
@@ -197,10 +174,10 @@ const LiquidityAddBody = (props) => {
     );
 
     // try {
-    // 	const tx = await contract.approve(needApprove.target, tokenA.amount);
+    // 	const tx = await contract.approve(tokenAApproved.target, tokenA.amount);
     // 	const receipt = await tx.wait(tx);
     // 	if (receipt.status === 1) {
-    // 		setNeedApprove();
+    // 		setTokenAApproved();
     // 	}
     // } catch (err) {
     // 	console.log("approve err: ", err);
@@ -215,6 +192,7 @@ const LiquidityAddBody = (props) => {
   };
 
   const addLiquidity = async () => {
+    setReady(false)
     // const params = {
     // 	sellToken: (tokenA.address === "-" ? tokenA.symbol : tokenA.address),
     // 	buyToken: (tokenB.address === "-" ? tokenB.symbol : tokenB.address),
@@ -241,9 +219,11 @@ const LiquidityAddBody = (props) => {
     // 		resetQuote();
     // 	});
     // });
+    setReady(true);
   }
 
   const isNewPair = async (tokenA, tokenB) => {
+    setReady(false);
     if (tokenA === "-") tokenA = props.network.Currency.Address;
     if (tokenB === "-") tokenB = props.network.Currency.Address;
     const provider = new ethers.providers.JsonRpcProvider(props.network.RPC);
@@ -278,6 +258,7 @@ const LiquidityAddBody = (props) => {
       setLpAddress("");
       console.log("get Pair Address err: ", error)
     }
+    setReady(true)
   }
 
   const isInvalidPair = () => {
@@ -324,7 +305,7 @@ const LiquidityAddBody = (props) => {
       else if (!(tokenA.amount > 0 || tokenB.amount > 0)) {
         return <button className="default-btn w-100" disabled="disabled">Enter an amount</button>;
       }
-      else if (needApprove) {
+      else if (tokenAApproved) {
         return <button className="default-btn w-100" disabled={!ready} onClick={() => approve(tokenA.address)}>Approve</button>;
       }
       // else if (error) {
@@ -350,7 +331,7 @@ const LiquidityAddBody = (props) => {
         <div className='liquidityAddBody p-4'>
           <div className='wallet-tabs'>
             <div className='tab_content p-0'>
-              {newPair && !isInvalidPair() ?
+              { newPair && !isInvalidPair() ?
                 <div className='form-group'>
                   <div className='d-flex justify-content-near' style={{ color: "#04C0D7" }}>
                     <div style={{ padding: 12.9 }}>

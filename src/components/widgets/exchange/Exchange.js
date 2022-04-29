@@ -15,6 +15,8 @@ import * as selector from '../../../store/selectors';
 import { /*getFullDisplayBalance, */formatNumberWithoutComma } from '../../../utils/number';
 import qs from 'qs';
 
+import "./Exchange.scss"
+
 const Exchange = (props) => {
 	const account = useSelector(selector.accountState);
 	const provider = useSelector(selector.providerState);
@@ -210,7 +212,7 @@ const Exchange = (props) => {
 					balance = await provider.getBalance(account);
 					decimals = props.network.Currency.Decimals;
 				}
-				
+
 				const newTarget = Object.assign({}, forTarget);
 				newTarget.balance = ethers.utils.formatUnits(balance, decimals);
 				if (setAmount) {
@@ -293,6 +295,7 @@ const Exchange = (props) => {
 			console.log("trade error: ", error)
 		}
 
+		setLoading(true);
 		updateBalance(from.address, from, setFrom, true).then(() => {
 			updateBalance(to.address, to, setTo, true).then(() => {
 				setLoading();
@@ -383,6 +386,7 @@ const Exchange = (props) => {
 			invert();
 		}
 		else {
+			setLoading(true);
 			if (forTarget === "from") {
 				const newFrom = Object.assign({}, from);
 				newFrom.address = token.Address;
@@ -429,7 +433,7 @@ const Exchange = (props) => {
 				amount: "",
 				balance: 0
 			};
-	
+
 			const newTo = {
 				symbol: props.toSymbol,
 				address: props.toAddress,
@@ -437,7 +441,8 @@ const Exchange = (props) => {
 				amount: "",
 				balance: 0
 			};
-	
+
+			setLoading(true);
 			updateBalance(newFrom.address, newFrom, setFrom, true).then(() => {
 				updateBalance(newTo.address, newTo, setTo, true).then(() => {
 					setLoading();
@@ -460,6 +465,7 @@ const Exchange = (props) => {
 		setQuote();
 		setReady();
 
+		setLoading(true);
 		updateBalance(from.address, from, setFrom).then(() => {
 			updateBalance(to.address, to, setTo).then(() => {
 				setLoading();
@@ -474,15 +480,6 @@ const Exchange = (props) => {
 
 		resetBalances();
 		resetQuote();
-	}
-
-	if (loading) {
-		// console.log("loading")
-		return (
-			<div className="text-center p-5 w-100">
-				<span className="spinner-border" role="status"></span>
-			</div>
-		);
 	}
 
 	const SubmitButton = () => {
@@ -514,7 +511,7 @@ const Exchange = (props) => {
 
 	return (
 		<>
-			<div className="wallet-tabs wallet-tabs-h">
+			<div className={`wallet-tabs wallet-tabs-h ${loading ? "loading-state" : ""}`}>
 				<div className="tab">
 					<ul className="tabs bg-need">
 						<li>EXCHANGE</li>
@@ -633,11 +630,26 @@ const Exchange = (props) => {
 					</div>
 				</div>
 			</div>
+			{loading ?
+				<div style={{
+					position: "fixed",
+					display: "flex",
+					alignItems: "center",
+					justifyContent: "center",
+					top: "0px", left: "0px",
+					height: "100%", width: "100%",
+					zIndex: 100000, opacity: 0.8
+				}}>
+					<span className="spinner-border" role="status"></span>
+				</div>
+				: ""
+			}
 			<TokenSelectModal
 				showFor={showTokenSelectModal}
 				hide={() => setShowTokenSelectModal()}
 				onSelect={onSelectToken}
 				network={props.network} />
+
 		</>
 	);
 }
