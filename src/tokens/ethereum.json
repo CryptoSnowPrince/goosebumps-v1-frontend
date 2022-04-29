@@ -4,41 +4,41 @@
     "Symbol": "ETH",
     "Address": "-",
     "Decimals": 18,
-    "Logo": "/assets/tokens/ETH.png"
+    "Logo": "/assets/tokens/1/0x0000000000000000000000000000000000000000.png"
   },
   {
     "Name": "Wrapped Ether",
     "Symbol": "WETH",
     "Address": "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
     "Decimals": 18,
-    "Logo": "/assets/tokens/WETH.png"
+    "Logo": "/assets/tokens/1/0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2.png"
   },
   {
     "Name": "Tether USD",
     "Symbol": "USDT",
     "Address": "0xdAC17F958D2ee523a2206206994597C13D831ec7",
     "Decimals": 6,
-    "Logo": "/assets/tokens/USDT.png"
+    "Logo": "/assets/tokens/1/0xdAC17F958D2ee523a2206206994597C13D831ec7.png"
   },
   {
     "Name": "Dai Stablecoin",
     "Symbol": "DAI",
     "Address": "0x6B175474E89094C44Da98b954EedeAC495271d0F",
     "Decimals": 18,
-    "Logo": "/assets/tokens/DAI.png"
+    "Logo": "/assets/tokens/1/0x6B175474E89094C44Da98b954EedeAC495271d0F.png"
   },
   {
     "Name": "Matic Token",
     "Symbol": "MATIC",
     "Address": "0x7D1AfA7B718fb893dB30A3aBc0Cfc608AaCfeBB0",
     "Decimals": 18,
-    "Logo": "/assets/tokens/MATIC.png"
+    "Logo": "/assets/tokens/1/0x7D1AfA7B718fb893dB30A3aBc0Cfc608AaCfeBB0.png"
   },
   {
     "Name": "LooksRare Token",
     "Symbol": "LOOKS",
     "Address": "0xf4d2888d29D722226FafA5d9B24F9164c092421E",
     "Decimals": 18,
-    "Logo": "/assets/tokens/LOOKS.png"
+    "Logo": "/assets/tokens/1/0xf4d2888d29D722226FafA5d9B24F9164c092421E.png"
   }
 ]
