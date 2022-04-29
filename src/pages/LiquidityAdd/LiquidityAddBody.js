@@ -19,7 +19,8 @@ const LiquidityAddBody = (props) => {
 
   const [loading, setLoading] = useState();
   const [ready, setReady] = useState();
-	const [needApprove, setNeedApprove] = useState();
+  const [newPair, setNewPair] = useState(false);
+  const [needApprove, setNeedApprove] = useState();
 
   const [tokenA, setTokenA] = useState({ symbol: "", address: "", decimals: 0, amount: 0, balance: 0 });
   const [tokenB, setTokenB] = useState({ symbol: "", address: "", decimals: 0, amount: 0, balance: 0 });
@@ -164,34 +165,34 @@ const LiquidityAddBody = (props) => {
   };
 
   const approve = async (tokenAddress) => {
-		// console.log("approve");
-		setReady();
+    // console.log("approve");
+    setReady();
 
-		// const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
-		const contract = new ethers.Contract(
-			tokenA.address,
-			tokenAbi,
-			web3Provider.getSigner()
-			// provider.getSigner()
-		);
+    // const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
+    const contract = new ethers.Contract(
+      tokenA.address,
+      tokenAbi,
+      web3Provider.getSigner()
+      // provider.getSigner()
+    );
 
-		// try {
-		// 	const tx = await contract.approve(needApprove.target, tokenA.amount);
-		// 	const receipt = await tx.wait(tx);
-		// 	if (receipt.status === 1) {
-		// 		setNeedApprove();
-		// 	}
-		// } catch (err) {
-		// 	console.log("approve err: ", err);
-		// }
+    // try {
+    // 	const tx = await contract.approve(needApprove.target, tokenA.amount);
+    // 	const receipt = await tx.wait(tx);
+    // 	if (receipt.status === 1) {
+    // 		setNeedApprove();
+    // 	}
+    // } catch (err) {
+    // 	console.log("approve err: ", err);
+    // }
 
-		// updateBalance(from.address, from, setFrom).then(() => {
-		// 	updateBalance(to.address, to, setTo).then(() => {
-		// 	});
-		// });
+    // updateBalance(from.address, from, setFrom).then(() => {
+    // 	updateBalance(to.address, to, setTo).then(() => {
+    // 	});
+    // });
 
-		setReady(true);
-	};
+    setReady(true);
+  };
 
   const addLiquidity = async () => {
     // const params = {
@@ -278,9 +279,29 @@ const LiquidityAddBody = (props) => {
   };
 
   return (
-    <div className='liquidityAddBody p-4' >
+    <div className='liquidityAddBody p-4'>
       <div className='wallet-tabs'>
         <div className='tab_content p-0'>
+          <div className='form-group'>
+            <div className='d-flex justify-content-near' style={{color:"#04C0D7"}}>
+              <div style={{ padding: 10 }}>
+                <img className='col-auto' style={{ height: 24 }}
+                  src={"/assets/images/warn.png"}
+                  alt={"Warn"} />
+              </div>
+              <div style={{ paddingTop: 10, paddingBottom: 10 }}>
+                <div>
+                  You are the first liquidity provider.
+                </div>
+                <div>
+                  The ratio of tokens you add will set the price of this pool.
+                </div>
+                <div>
+                  Once you are happy with the rate click supply to add liquidity.
+                </div>
+              </div>
+            </div>
+          </div>
           <div className="form-group">
             <div className="row justify-content-between">
               <div className="col">

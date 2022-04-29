@@ -8,6 +8,10 @@
     "Explorer": "https://etherscan.io/",
     "MulticallAddress": "0xeefba1e63905ef1d7acba5a8513c70307c1ce441",
     "SwapApi": "https://api.0x.org/",
+    "DEX": {
+      "Factory": "",
+      "Router": ""
+    },
     "Currency": {
       "Name": "ETH",
       "WrappedName": "WETH",
@@ -38,6 +42,10 @@
     "Explorer": "https://ropsten.etherscan.io",
     "MulticallAddress": "0x53c43764255c17bd724f74c4ef150724ac50a3ed",
     "SwapApi": "https://ropsten.api.0x.org/",
+    "DEX": {
+      "Factory": "",
+      "Router": ""
+    },
     "Currency": {
       "Name": "ETH",
       "WrappedName": "WETH",
@@ -63,6 +71,10 @@
     "Explorer": "https://bscscan.com/",
     "MulticallAddress": "0x41263cba59eb80dc200f3e2544eda4ed6a90e76c",
     "SwapApi": "https://bsc.api.0x.org/",
+    "DEX": {
+      "Factory": "",
+      "Router": ""
+    },
     "Currency": {
       "Name": "BNB",
       "WrappedName": "WBNB",
@@ -94,6 +106,10 @@
     "Explorer": "https://testnet.bscscan.com/",
     "MulticallAddress": "0x8F3273Fb89B075b1645095ABaC6ed17B2d4Bc576",
     "SwapApi": "",
+    "DEX": {
+      "Factory": "0x75C821CCD003CC9E9Ea06008fAf9Ab8189B1EC56",
+      "Router": "0x31cB34991756FD1564b0DEBF2BFF3E522085EC02"
+    },
     "Currency": {
       "Name": "BNB",
       "WrappedName": "WBNB",
@@ -119,6 +135,10 @@
     "Explorer": "https://polygonscan.com/",
     "MulticallAddress": "0x11ce4B23bD875D7F5C6a31084f55fDe1e9A87507",
     "SwapApi": "https://polygon.api.0x.org/",
+    "DEX": {
+      "Factory": "",
+      "Router": ""
+    },
     "Currency": {
       "Name": "MATIC",
       "WrappedName": "WMATIC",
