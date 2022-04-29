@@ -34,7 +34,7 @@ const LiquidityAddBody = (props) => {
   const [showTokenSelectModal, setShowTokenSelectModal] = useState();
 
   const updateBalance = async (forContract, forTarget, setForTarget, setAmount = false) => {
-    console.log("updateBalance")
+    // console.log("updateBalance")
     const provider = new ethers.providers.JsonRpcProvider(props.network.RPC);
     if (props.network.chainId === 97) // When bsc testnet
     {
@@ -353,7 +353,7 @@ const LiquidityAddBody = (props) => {
               {newPair && !isInvalidPair() ?
                 <div className='form-group'>
                   <div className='d-flex justify-content-near' style={{ color: "#04C0D7" }}>
-                    <div style={{ padding: 10 }}>
+                    <div style={{ padding: 12.9 }}>
                       <img className='col-auto' style={{ height: 24 }}
                         src={"/assets/images/warn.png"}
                         alt={"Warn"} />

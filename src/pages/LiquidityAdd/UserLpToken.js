@@ -20,7 +20,7 @@ const UserLpToken = (props) => {
   const [tokenBAddress, setTokenBAddress] = useState("");
 
   const updateLpInfo = async () => {
-    console.log("UserLpToken updateBalance")
+    // console.log("UserLpToken updateBalance")
     const provider = new ethers.providers.JsonRpcProvider(props.network.RPC);
     if (props.network.chainId === 97) // When bsc testnet
     {
