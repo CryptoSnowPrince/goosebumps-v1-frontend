@@ -16,6 +16,8 @@ import { /*getFullDisplayBalance, */formatNumberWithoutComma } from '../../utils
 // import networks from '../../networks.json'
 import * as selector from '../../store/selectors';
 
+import '../../components/components.scss'
+
 const LiquidityAddBody = (props) => {
 
   const account = useSelector(selector.accountState);
@@ -284,14 +286,14 @@ const LiquidityAddBody = (props) => {
     console.log("account: ", account);
   }, [props.network, account])
 
-  if (loading) {
-    // console.log("loading")
-    return (
-      <div className="text-center p-5 w-100">
-        <span className="spinner-border" role="status"></span>
-      </div>
-    );
-  }
+  // if (loading) {
+  //   // console.log("loading")
+  //   return (
+  //     <div className="text-center p-5 w-100">
+  //       <span className="spinner-border" role="status"></span>
+  //     </div>
+  //   );
+  // }
 
   const SubmitButton = () => {
     // console.log("SubmitButton")
@@ -324,136 +326,152 @@ const LiquidityAddBody = (props) => {
   };
 
   return (
-    <div className="dex">
-      <DEXSubmenu />
-      <div id='liquidity' >
-        <LiquidityHeader title="Add Liquidity" content="Add liquidity to receive LP tokens" />
-        <div className='liquidityAddBody p-4'>
-          <div className='wallet-tabs'>
-            <div className='tab_content p-0'>
-              { newPair && !isInvalidPair() ?
-                <div className='form-group'>
-                  <div className='d-flex justify-content-near' style={{ color: "#04C0D7" }}>
-                    <div style={{ padding: 12.9 }}>
-                      <img className='col-auto' style={{ height: 24 }}
-                        src={"/assets/images/warn.png"}
-                        alt={"Warn"} />
+    <>
+      <div className="dex" >
+        <DEXSubmenu />
+        <div id='liquidity' className={`${loading ? "loading-state" : ""}`} >
+          <LiquidityHeader title="Add Liquidity" content="Add liquidity to receive LP tokens" />
+          <div className='liquidityAddBody p-4'>
+            <div className='wallet-tabs'>
+              <div className='tab_content p-0'>
+                {newPair && !isInvalidPair() ?
+                  <div className='form-group'>
+                    <div className='d-flex justify-content-near' style={{ color: "#04C0D7" }}>
+                      <div style={{ padding: 12.9 }}>
+                        <img className='col-auto' style={{ height: 24 }}
+                          src={"/assets/images/warn.png"}
+                          alt={"Warn"} />
+                      </div>
+                      <div style={{ paddingTop: 10, paddingBottom: 10 }}>
+                        <div>
+                          You are the first liquidity provider.
+                        </div>
+                        <div>
+                          The ratio of tokens you add will set the price of this pool.
+                        </div>
+                        <div>
+                          Once you are happy with the rate click supply to add liquidity.
+                        </div>
+                      </div>
                     </div>
-                    <div style={{ paddingTop: 10, paddingBottom: 10 }}>
-                      <div>
-                        You are the first liquidity provider.
-                      </div>
-                      <div>
-                        The ratio of tokens you add will set the price of this pool.
-                      </div>
-                      <div>
-                        Once you are happy with the rate click supply to add liquidity.
-                      </div>
+                  </div>
+                  : ""
+                }
+                <div className="form-group">
+                  <div className="row justify-content-between">
+                    <div className="col">
+                      <label htmlFor="from" className="w-100">Token 1</label>
+                    </div>
+                    <div className="col text-end">
+                      <button
+                        data-balance={tokenA.balance}
+                        onClick={e => fillMaxAmount(e, "tokenA")}
+                        type="button" className="w-100 text-end badge btn text-white">
+                        Balance: {formatNumberWithoutComma(Number(tokenA.balance))}
+                      </button>
                     </div>
                   </div>
-                </div>
-                : ""
-              }
-              <div className="form-group">
-                <div className="row justify-content-between">
-                  <div className="col">
-                    <label htmlFor="from" className="w-100">Token 1</label>
-                  </div>
-                  <div className="col text-end">
-                    <button
-                      data-balance={tokenA.balance}
-                      onClick={e => fillMaxAmount(e, "tokenA")}
-                      type="button" className="w-100 text-end badge btn text-white">
-                      Balance: {formatNumberWithoutComma(Number(tokenA.balance))}
-                    </button>
-                  </div>
-                </div>
-                <div className="input-group">
-                  <input id="from" type="text" className="form-control me-2"
-                    placeholder="0" autoComplete="off"
-                    onChange={e => onAmountChange(e, "tokenA")}
-                    min="0"
-                    max={tokenA.balance}
-                    value={tokenA.amount} />
-                  <div className="input-group-addon">
-                    <button type="button" className="default-btn"
-                      onClick={() => setShowTokenSelectModal("tokenA")}>
-                      {tokenA.symbol ? tokenA.symbol : "Select"}
-                    </button>
+                  <div className="input-group">
+                    <input id="from" type="text" className="form-control me-2"
+                      placeholder="0" autoComplete="off"
+                      onChange={e => onAmountChange(e, "tokenA")}
+                      min="0"
+                      max={tokenA.balance}
+                      value={tokenA.amount} />
+                    <div className="input-group-addon">
+                      <button type="button" className="default-btn"
+                        onClick={() => setShowTokenSelectModal("tokenA")}>
+                        {tokenA.symbol ? tokenA.symbol : "Select"}
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-          <div className='d-flex justify-content-center m-4'>+</div>
-          <div className='wallet-tabs'>
-            <div className='tab_content p-0'>
-              <div className="form-group">
-                <div className="row justify-content-between">
-                  <div className="col">
-                    <label htmlFor="from" className="w-100">Token 2</label>
+            <div className='d-flex justify-content-center m-4'>+</div>
+            <div className='wallet-tabs'>
+              <div className='tab_content p-0'>
+                <div className="form-group">
+                  <div className="row justify-content-between">
+                    <div className="col">
+                      <label htmlFor="from" className="w-100">Token 2</label>
+                    </div>
+                    <div className="col text-end">
+                      <button
+                        data-balance={tokenB.balance}
+                        onClick={e => fillMaxAmount(e, "tokenB")}
+                        type="button" className="w-100 text-end badge btn text-white">
+                        Balance: {formatNumberWithoutComma(Number(tokenB.balance))}
+                      </button>
+                    </div>
                   </div>
-                  <div className="col text-end">
-                    <button
-                      data-balance={tokenB.balance}
-                      onClick={e => fillMaxAmount(e, "tokenB")}
-                      type="button" className="w-100 text-end badge btn text-white">
-                      Balance: {formatNumberWithoutComma(Number(tokenB.balance))}
-                    </button>
-                  </div>
-                </div>
-                <div className="input-group">
-                  <input id="from" type="text" className="form-control me-2"
-                    placeholder="0" autoComplete="off"
-                    onChange={e => onAmountChange(e, "tokenB")}
-                    min="0"
-                    max={tokenB.balance}
-                    value={tokenB.amount} />
-                  <div className="input-group-addon">
-                    <button type="button" className="default-btn"
-                      onClick={() => setShowTokenSelectModal("tokenB")}>
-                      {tokenB.symbol ? tokenB.symbol : "Select"}
-                    </button>
+                  <div className="input-group">
+                    <input id="from" type="text" className="form-control me-2"
+                      placeholder="0" autoComplete="off"
+                      onChange={e => onAmountChange(e, "tokenB")}
+                      min="0"
+                      max={tokenB.balance}
+                      value={tokenB.amount} />
+                    <div className="input-group-addon">
+                      <button type="button" className="default-btn"
+                        onClick={() => setShowTokenSelectModal("tokenB")}>
+                        {tokenB.symbol ? tokenB.symbol : "Select"}
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
 
-          {isInvalidPair() ? "" :
-            <div>
-              <div className='mt-4 mb-4'>Prices and pool share</div>
-              <div className='d-flex justify-content-around'>
-                <div className='text-center'>
-                  <div>{(tokenA.amount > 0 && tokenB.amount > 0) ? tokenA.amount / tokenB.amount : 0}</div>
-                  <div>{tokenA.symbol} per {tokenB.symbol}</div>
-                </div>
-                <div className='text-center'>
-                  <div>{(tokenA.amount > 0 && tokenB.amount > 0) ? tokenB.amount / tokenA.amount : 0}</div>
-                  <div>{tokenB.symbol} per {tokenA.symbol}</div>
-                </div>
-                <div className='text-center'>
-                  <div>{(newPair && tokenA.amount > 0 && tokenB.amount > 0) ? 100 : 0}%</div>
-                  <div>Share of Pool</div>
+            {isInvalidPair() ? "" :
+              <div>
+                <div className='mt-4 mb-4'>Prices and pool share</div>
+                <div className='d-flex justify-content-around'>
+                  <div className='text-center'>
+                    <div>{(tokenA.amount > 0 && tokenB.amount > 0) ? tokenA.amount / tokenB.amount : 0}</div>
+                    <div>{tokenA.symbol} per {tokenB.symbol}</div>
+                  </div>
+                  <div className='text-center'>
+                    <div>{(tokenA.amount > 0 && tokenB.amount > 0) ? tokenB.amount / tokenA.amount : 0}</div>
+                    <div>{tokenB.symbol} per {tokenA.symbol}</div>
+                  </div>
+                  <div className='text-center'>
+                    <div>{(newPair && tokenA.amount > 0 && tokenB.amount > 0) ? 100 : 0}%</div>
+                    <div>Share of Pool</div>
+                  </div>
                 </div>
               </div>
+            }
+            <div className='d-flex justify-content-center mt-4'>
+              <SubmitButton />
             </div>
-          }
-          <div className='d-flex justify-content-center mt-4'>
-            <SubmitButton />
           </div>
         </div>
+        <UserLpToken
+          network={props.network}
+          lpAddress={lpAddress}
+          account={account} />
+        <TokenSelectModal
+          showFor={showTokenSelectModal}
+          hide={() => setShowTokenSelectModal()}
+          onSelect={onSelectToken}
+          network={props.network} />
       </div>
-      <UserLpToken
-        network={props.network}
-        lpAddress={lpAddress}
-        account={account} />
-      <TokenSelectModal
-        showFor={showTokenSelectModal}
-        hide={() => setShowTokenSelectModal()}
-        onSelect={onSelectToken}
-        network={props.network} />
-    </div>
+      {loading ?
+        <div style={{
+          position: "fixed",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          top: "0px", left: "0px",
+          height: "100%", width: "100%",
+          zIndex: 100000, opacity: 0.8
+        }}>
+          <span className="spinner-border" role="status"></span>
+        </div>
+        : ""
+      }
+    </>
   );
 }
 

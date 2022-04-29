@@ -15,7 +15,7 @@ import * as selector from '../../../store/selectors';
 import { /*getFullDisplayBalance, */formatNumberWithoutComma } from '../../../utils/number';
 import qs from 'qs';
 
-import "./Exchange.scss"
+import '../../components.scss'
 
 const Exchange = (props) => {
 	const account = useSelector(selector.accountState);
