@@ -419,17 +419,17 @@ const LiquidityAddBody = (props) => {
       (tokenB.address === "-" && tokenA.address === props.network.Currency.Address)
   }
 
-  const test = async () => {
-    console.log("===============test================")
-    const aaprovider = new ethers.providers.JsonRpcProvider(props.network.RPC);
-    console.log("aaprovider lastblock: ", (await aaprovider.getBlock()).timestamp)
-    console.log("web3Provider lastblock: ", (await web3Provider.getBlock()).timestamp)
-  }
+  // const test = async () => {
+  //   console.log("===============test================")
+  //   const aaprovider = new ethers.providers.JsonRpcProvider(props.network.RPC);
+  //   console.log("aaprovider lastblock: ", (await aaprovider.getBlock()).timestamp)
+  //   console.log("web3Provider lastblock: ", (await web3Provider.getBlock()).timestamp)
+  // }
 
-  useEffect(() => {
-    console.log("tokenABalOfPool: ", tokenABalOfPool)
-    console.log("tokenBBalOfPool: ", tokenBBalOfPool)
-  }, [tokenABalOfPool, tokenBBalOfPool])
+  // useEffect(() => {
+  //   console.log("tokenABalOfPool: ", tokenABalOfPool)
+  //   console.log("tokenBBalOfPool: ", tokenBBalOfPool)
+  // }, [tokenABalOfPool, tokenBBalOfPool])
 
   useEffect(() => {
     // test()
