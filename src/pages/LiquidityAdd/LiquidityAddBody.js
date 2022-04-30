@@ -27,10 +27,12 @@ const LiquidityAddBody = (props) => {
 
   const [loading, setLoading] = useState(false);
   const [ready, setReady] = useState(false);
+  const [error, setError] = useState(false);
+
   const [newPool, setNewPool] = useState(false);
   const [lpAddress, setLpAddress] = useState("")
-  const [tokenAApproved, setTokenAApproved] = useState();
-  const [tokenBApproved, setTokenBApproved] = useState();
+  const [tokenAApproved, setTokenAApproved] = useState(false);
+  const [tokenBApproved, setTokenBApproved] = useState(false);
 
   const [tokenA, setTokenA] = useState({ symbol: "", address: "", decimals: 0, amount: 0, balance: 0 });
   const [tokenB, setTokenB] = useState({ symbol: "", address: "", decimals: 0, amount: 0, balance: 0 });
@@ -177,14 +179,14 @@ const LiquidityAddBody = (props) => {
       var setTarget = setTokenA;
       var other = tokenB;
       var setOther = setTokenB;
-      var rate = tokenBBalOfPool/tokenABalOfPool;
+      var rate = tokenABalOfPool > 0 ? tokenBBalOfPool / tokenABalOfPool : 0;
     }
     else if (side === "tokenB") {
       target = tokenB;
       setTarget = setTokenB;
       other = tokenA;
       setOther = setTokenA;
-      rate = tokenABalOfPool/tokenBBalOfPool;
+      rate = tokenBBalOfPool > 0 ? tokenABalOfPool / tokenBBalOfPool : 0;
     }
 
     const newTarget = Object.assign({}, target);
@@ -222,35 +224,77 @@ const LiquidityAddBody = (props) => {
     fill(side, e.target.dataset.balance);
   };
 
-  const approve = async (token) => {
+  const approve = async (side) => {
     // console.log("approve");
-    setReady(false);
+    var setTargetApproved = null;
+    var targetToken = null;
+    if (side === "tokenA") {
+      targetToken = tokenA;
+      setTargetApproved = setTokenAApproved;
+    } else if (side === "tokenB") {
+      targetToken = tokenB;
+      setTargetApproved = setTokenBApproved;
+    }
 
-    // const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
+    if (targetToken.address === "-") {
+      console.log("Native coin: Don't need approve");
+      return;
+    }
+
     const contract = new ethers.Contract(
-      token.address,
+      targetToken.address,
       tokenAbi,
       web3Provider.getSigner()
-      // provider.getSigner()
     );
-
-    // try {
-    // 	const tx = await contract.approve(tokenAApproved.target, tokenA.amount);
-    // 	const receipt = await tx.wait(tx);
-    // 	if (receipt.status === 1) {
-    // 		setTokenAApproved();
-    // 	}
-    // } catch (err) {
-    // 	console.log("approve err: ", err);
-    // }
-
-    // updateBalance(tokenA.address, tokenA, setTokenA).then(() => {
-    // 	updateBalance(tokenB.address, tokenB, setTokenB).then(() => {
-    // 	});
-    // });
-
+    setReady(false);
+    try {
+      const tx = await contract.approve(
+        props.network.DEX.Router,
+        ethers.utils.parseUnits(targetToken.amount.toString(), targetToken.decimals));
+      const receipt = await tx.wait(tx);
+      if (receipt.status === 1) {
+        setTargetApproved(true);
+      }
+    } catch (err) {
+      console.log("approve err: ", err);
+    }
     setReady(true);
   };
+
+  const isApproved = async (side) => {
+    if (side === "tokenA") {
+      var targetToken = tokenA;
+      var targetTokenApproved = setTokenAApproved;
+    } else if (side === "tokenB") {
+      targetToken = tokenB;
+      targetTokenApproved = setTokenBApproved;
+    }
+
+    if (targetToken.address === "-") {
+      targetTokenApproved(true);
+      return;
+    }
+
+    const contract = new ethers.Contract(
+      targetToken.address,
+      tokenAbi,
+      web3Provider
+    );
+
+    try {
+      var allowance = await contract.allowance(account, props.network.DEX.Router);
+    } catch(error) {
+      console.log("isApproved err: ", error)
+    }
+
+    if (BigNumber.from(ethers.utils.parseUnits(targetToken.amount.toString(), targetToken.decimals))
+      .gt(allowance)) {
+      targetTokenApproved(false)
+    }
+    else {
+      targetTokenApproved(true);
+    }
+  }
 
   const addLiquidity = async () => {
     setReady(false)
@@ -329,8 +373,15 @@ const LiquidityAddBody = (props) => {
   useEffect(() => {
     console.log("tokenA: ", tokenA)
     console.log("tokenB: ", tokenB)
+    try {
+      console.log("approve amount: ", ethers.utils.parseUnits(tokenA.amount.toString(), tokenA.decimals))
+    } catch (error) {
+      console.log();
+    }
     if (!isInvalidPair()) {
       isNewPair(tokenA.address, tokenB.address);
+      isApproved("tokenA");
+      isApproved("tokenB");
     } else {
       setLpAddress("");
     }
@@ -370,17 +421,17 @@ const LiquidityAddBody = (props) => {
       else if (!(tokenA.amount > 0 || tokenB.amount > 0)) {
         return <button className="default-btn w-100" disabled="disabled">Enter an amount</button>;
       }
-      else if (tokenAApproved) {
+      else if (!tokenAApproved) {
         return <button className="default-btn w-100" disabled={!ready}
-          onClick={() => approve(tokenA)}>Enable {tokenA.symbol}</button>;
+          onClick={() => approve("tokenA")}>Enable {tokenA.symbol}</button>;
       }
-      else if (tokenBApproved) {
+      else if (!tokenBApproved) {
         return <button className="default-btn w-100" disabled={!ready}
-          onClick={() => approve(tokenB)}>Enable {tokenB.symbol}</button>;
+          onClick={() => approve("tokenB")}>Enable {tokenB.symbol}</button>;
       }
-      // else if (error) {
-      //   return <button className="default-btn w-100" disabled="disabled">{error}</button>;
-      // }
+      else if (error) {
+        return <button className="default-btn w-100" disabled="disabled">{error}</button>;
+      }
       // else if (!confirmed) {
       //   return <button className="default-btn w-100" disabled={!ready} onClick={() => confirm()}>Confirm</button>;
       // }
@@ -491,7 +542,7 @@ const LiquidityAddBody = (props) => {
               </div>
             </div>
 
-            {isInvalidPair() ? "" :
+            {isInvalidPair() || lpAddress === "" ? "" :
               <div>
                 <div className='mt-4 mb-4'>Prices and pool share</div>
                 <div className='d-flex justify-content-around'>
@@ -503,7 +554,7 @@ const LiquidityAddBody = (props) => {
                             tokenA.amount / tokenB.amount :
                             0
                         ) :
-                        tokenABalOfPool / tokenBBalOfPool
+                        (tokenBBalOfPool > 0 ? (tokenABalOfPool / tokenBBalOfPool) : 0)
                     }</div>
                     <div>{tokenA.symbol} per {tokenB.symbol}</div>
                   </div>
@@ -515,14 +566,18 @@ const LiquidityAddBody = (props) => {
                             tokenB.amount / tokenA.amount :
                             0
                         ) :
-                        tokenBBalOfPool / tokenABalOfPool
+                        (tokenABalOfPool ? (tokenBBalOfPool / tokenABalOfPool) : 0)
                     }</div>
                     <div>{tokenB.symbol} per {tokenA.symbol}</div>
                   </div>
                   <div className='text-center'>
-                    <div>{(newPool && tokenA.amount > 0 && tokenB.amount > 0) ?
+                    <div>{(newPool && parseFloat(tokenA.amount) > 0 && parseFloat(tokenB.amount) > 0) ?
                       100 :
-                      (tokenA.amount * 100 / (tokenABalOfPool + tokenA.amount))}%</div>
+                      (
+                        (parseFloat(tokenA.amount) > 0 && parseFloat(tokenB.amount) > 0) ?
+                          parseFloat(tokenA.amount) * 100 /
+                          (parseFloat(tokenABalOfPool) + parseFloat(tokenA.amount)) : 0
+                      )}%</div>
                     <div>Share of Pool</div>
                   </div>
                 </div>
