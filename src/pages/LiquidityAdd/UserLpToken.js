@@ -126,7 +126,7 @@ const UserLpToken = (props) => {
 
   return (
     <>
-      {lpBalance > 0 ?
+      {parseFloat(lpBalance) > 0 && parseFloat(lpTotalSupply) > 0 ?
         <div className='mt-4 p-3' id="userLpToken">
           <div className='mt-2 fs-5'>LP tokens in your wallet</div>
           <div className='mt-2 d-flex justify-content-between'>

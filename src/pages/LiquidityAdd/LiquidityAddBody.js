@@ -12,6 +12,7 @@ import { LiquidityHeader } from "../../components/LiquidityHeader/LiquidityHeade
 import tokenAbi from '../../abis/token';
 import factoryAbi from '../../abis/factory';
 import routerAbi from '../../abis/router';
+import pairAbi from '../../abis/pair';
 import { /*getFullDisplayBalance, */formatNumberWithoutComma } from '../../utils/number';
 // import networks from '../../networks.json'
 import * as selector from '../../store/selectors';
@@ -26,14 +27,59 @@ const LiquidityAddBody = (props) => {
 
   const [loading, setLoading] = useState(false);
   const [ready, setReady] = useState(false);
-  const [newPair, setNewPair] = useState(false);
+  const [newPool, setNewPool] = useState(false);
   const [lpAddress, setLpAddress] = useState("")
   const [tokenAApproved, setTokenAApproved] = useState();
+  const [tokenBApproved, setTokenBApproved] = useState();
 
   const [tokenA, setTokenA] = useState({ symbol: "", address: "", decimals: 0, amount: 0, balance: 0 });
   const [tokenB, setTokenB] = useState({ symbol: "", address: "", decimals: 0, amount: 0, balance: 0 });
 
   const [showTokenSelectModal, setShowTokenSelectModal] = useState();
+
+  const [tokenABalOfPool, setTokenABalOfPool] = useState(0);
+  const [tokenBBalOfPool, setTokenBBalOfPool] = useState(0);
+
+  const getTokenBalOfPool = async () => {
+    console.log("getTokenBalOfPool")
+    const provider = new ethers.providers.JsonRpcProvider(props.network.RPC);
+    if (props.network.chainId === 97) // When bsc testnet
+    {
+      setMulticallAddress(props.network.chainId, props.network.MulticallAddress);
+    }
+    const ethcallProvider = new Provider(provider);
+
+    try {
+      await ethcallProvider.init();
+
+      if (ethers.utils.isAddress(lpAddress)) {
+        var tokenABalOfPool = 0;
+        var tokenBBalOfPool = 0;
+
+        const tokenAContract = new Contract(tokenA.address === "-" ? props.network.Currency.Address : tokenA.address, tokenAbi);
+        const tokenBContract = new Contract(tokenB.address === "-" ? props.network.Currency.Address : tokenB.address, tokenAbi);
+
+        [
+          tokenABalOfPool,
+          tokenBBalOfPool,
+        ] = await ethcallProvider.all([
+          tokenAContract.balanceOf(lpAddress),
+          tokenBContract.balanceOf(lpAddress),
+        ])
+
+        setTokenABalOfPool(ethers.utils.formatUnits(tokenABalOfPool, tokenA.decimals));
+        setTokenBBalOfPool(ethers.utils.formatUnits(tokenBBalOfPool, tokenB.decimals));
+      } else {
+        setTokenABalOfPool(0);
+        setTokenBBalOfPool(0);
+      }
+    } catch (error) {
+      setTokenABalOfPool(0);
+      setTokenBBalOfPool(0);
+      console.log("getTokenBalOfPool err: ", error)
+    }
+  };
+
 
   const updateBalance = async (forContract, forTarget, setForTarget, setAmount = false) => {
     // console.log("updateBalance")
@@ -66,7 +112,7 @@ const LiquidityAddBody = (props) => {
         const newTarget = Object.assign({}, forTarget);
         newTarget.balance = ethers.utils.formatUnits(balance, decimals);
         if (setAmount) {
-          newTarget.amount = 0;
+          newTarget.amount = "";
         }
         newTarget.decimals = decimals;
         setForTarget(newTarget);
@@ -86,7 +132,6 @@ const LiquidityAddBody = (props) => {
     const newTokenB = Object.assign({}, tokenA);
     setTokenA(newTokenA);
     setTokenB(newTokenB);
-    // resetQuote(newTokenA, newTokenB);
   }
 
   const onSelectToken = (token, forTarget) => {
@@ -124,31 +169,45 @@ const LiquidityAddBody = (props) => {
 
   const fill = (side, value) => {
     console.log("fill")
+    console.log("tokenABalOfPool: ", tokenABalOfPool);
+    console.log("tokenBBalOfPool: ", tokenBBalOfPool);
     setReady(false);
     if (side === "tokenA") {
       var target = tokenA;
       var setTarget = setTokenA;
       var other = tokenB;
       var setOther = setTokenB;
+      var rate = tokenBBalOfPool/tokenABalOfPool;
     }
-    else {
+    else if (side === "tokenB") {
       target = tokenB;
       setTarget = setTokenB;
       other = tokenA;
       setOther = setTokenA;
+      rate = tokenABalOfPool/tokenBBalOfPool;
     }
 
     const newTarget = Object.assign({}, target);
     newTarget.amount = value;
     setTarget(newTarget);
 
-    if (newPair) {
+    var newOther = null;
+    if (isInvalidPair()) {
+      newOther = Object.assign({}, other);
+      newOther.amount = "";
+      setOther(newOther);
       setReady(true);
       return;
     }
 
-    var newOther = Object.assign({}, other);
-    newOther.amount = "";
+    if (newPool) {
+      setReady(true);
+      return;
+    }
+
+    // pool already exists
+    newOther = Object.assign({}, other);
+    newOther.amount = value * rate;
     setOther(newOther);
     setReady(true)
   }
@@ -163,13 +222,13 @@ const LiquidityAddBody = (props) => {
     fill(side, e.target.dataset.balance);
   };
 
-  const approve = async (tokenAddress) => {
+  const approve = async (token) => {
     // console.log("approve");
     setReady(false);
 
     // const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
     const contract = new ethers.Contract(
-      tokenA.address,
+      token.address,
       tokenAbi,
       web3Provider.getSigner()
       // provider.getSigner()
@@ -240,7 +299,7 @@ const LiquidityAddBody = (props) => {
       console.log("pairAddress: ", pairAddress);
       if (pairAddress === "0x0000000000000000000000000000000000000000") {
         // console.log("pair is not exist");
-        setNewPair(true)
+        setNewPool(true)
       } else {
         const tokenAContract = new ethers.Contract(tokenA, tokenAbi, provider);
         const tokenABalance = await tokenAContract.balanceOf(pairAddress);
@@ -248,15 +307,13 @@ const LiquidityAddBody = (props) => {
         // console.log("typeof tokenABalance._hex: ", typeof tokenABalance._hex);
         // console.log("tokenABalance.decimals: ", parseInt(tokenABalance._hex));
         if (parseInt(tokenABalance._hex) > 0) {
-          // console.log("pass if")
-          setNewPair(false)
+          setNewPool(false)
         } else {
-          // console.log("pass else")
-          setNewPair(true)
+          setNewPool(true)
         }
       }
     } catch (error) {
-      setNewPair(false)
+      setNewPool(false)
       setLpAddress("");
       console.log("get Pair Address err: ", error)
     }
@@ -280,8 +337,14 @@ const LiquidityAddBody = (props) => {
   }, [tokenA, tokenB])
 
   useEffect(() => {
-    setTokenA({ symbol: "", address: "", decimals: 0, amount: "", balance: 0 })
-    setTokenB({ symbol: "", address: "", decimals: 0, amount: "", balance: 0 })
+    if (ethers.utils.isAddress(lpAddress) && !newPool && !isInvalidPair()) {
+      getTokenBalOfPool();
+    }
+  }, [lpAddress])
+
+  useEffect(() => {
+    setTokenA({ symbol: "", address: "", decimals: 0, amount: 0, balance: 0 })
+    setTokenB({ symbol: "", address: "", decimals: 0, amount: 0, balance: 0 })
     console.log("props.network: ", props.network);
     console.log("account: ", account);
   }, [props.network, account])
@@ -308,7 +371,12 @@ const LiquidityAddBody = (props) => {
         return <button className="default-btn w-100" disabled="disabled">Enter an amount</button>;
       }
       else if (tokenAApproved) {
-        return <button className="default-btn w-100" disabled={!ready} onClick={() => approve(tokenA.address)}>Approve</button>;
+        return <button className="default-btn w-100" disabled={!ready}
+          onClick={() => approve(tokenA)}>Enable {tokenA.symbol}</button>;
+      }
+      else if (tokenBApproved) {
+        return <button className="default-btn w-100" disabled={!ready}
+          onClick={() => approve(tokenB)}>Enable {tokenB.symbol}</button>;
       }
       // else if (error) {
       //   return <button className="default-btn w-100" disabled="disabled">{error}</button>;
@@ -334,7 +402,7 @@ const LiquidityAddBody = (props) => {
           <div className='liquidityAddBody p-4'>
             <div className='wallet-tabs'>
               <div className='tab_content p-0'>
-                {newPair && !isInvalidPair() ?
+                {newPool && !isInvalidPair() ?
                   <div className='form-group'>
                     <div className='d-flex justify-content-near' style={{ color: "#04C0D7" }}>
                       <div style={{ padding: 12.9 }}>
@@ -428,15 +496,33 @@ const LiquidityAddBody = (props) => {
                 <div className='mt-4 mb-4'>Prices and pool share</div>
                 <div className='d-flex justify-content-around'>
                   <div className='text-center'>
-                    <div>{(tokenA.amount > 0 && tokenB.amount > 0) ? tokenA.amount / tokenB.amount : 0}</div>
+                    <div>{
+                      newPool ?
+                        (
+                          (tokenA.amount > 0 && tokenB.amount > 0) ?
+                            tokenA.amount / tokenB.amount :
+                            0
+                        ) :
+                        tokenABalOfPool / tokenBBalOfPool
+                    }</div>
                     <div>{tokenA.symbol} per {tokenB.symbol}</div>
                   </div>
                   <div className='text-center'>
-                    <div>{(tokenA.amount > 0 && tokenB.amount > 0) ? tokenB.amount / tokenA.amount : 0}</div>
+                    <div>{
+                      newPool ?
+                        (
+                          (tokenA.amount > 0 && tokenB.amount > 0) ?
+                            tokenB.amount / tokenA.amount :
+                            0
+                        ) :
+                        tokenBBalOfPool / tokenABalOfPool
+                    }</div>
                     <div>{tokenB.symbol} per {tokenA.symbol}</div>
                   </div>
                   <div className='text-center'>
-                    <div>{(newPair && tokenA.amount > 0 && tokenB.amount > 0) ? 100 : 0}%</div>
+                    <div>{(newPool && tokenA.amount > 0 && tokenB.amount > 0) ?
+                      100 :
+                      (tokenA.amount * 100 / (tokenABalOfPool + tokenA.amount))}%</div>
                     <div>Share of Pool</div>
                   </div>
                 </div>
