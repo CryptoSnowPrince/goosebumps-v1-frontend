@@ -130,6 +130,10 @@ const LiquidityAddBody = (props) => {
     const newTokenB = Object.assign({}, tokenA);
     setTokenA(newTokenA);
     setTokenB(newTokenB);
+    const newTokenABalOfPool = Object.assign({}, tokenBBalOfPool);
+    const newTokenBBalOfPool = Object.assign({}, tokenABalOfPool);
+    setTokenABalOfPool(newTokenABalOfPool)
+    setTokenBBalOfPool(newTokenBBalOfPool)
   }
 
   const onSelectToken = (token, forTarget) => {
@@ -355,7 +359,7 @@ const LiquidityAddBody = (props) => {
         );
       }
       const receipt = await tx.wait(tx);
-      console.log("receipt: ", receipt);
+      // console.log("receipt: ", receipt);
       updateBalance(tokenA.address, tokenA, setTokenA, true).then(() => {
         updateBalance(tokenB.address, tokenB, setTokenB, true).then(() => {
         });
@@ -423,6 +427,11 @@ const LiquidityAddBody = (props) => {
     console.log("aaprovider lastblock: ", (await aaprovider.getBlock()).timestamp)
     console.log("web3Provider lastblock: ", (await web3Provider.getBlock()).timestamp)
   }
+
+  // useEffect(() => {
+  //   console.log("tokenABalOfPool: ", tokenABalOfPool)
+  //   console.log("tokenBBalOfPool: ", tokenBBalOfPool)
+  // }, [tokenABalOfPool, tokenBBalOfPool])
 
   useEffect(() => {
     // test()
