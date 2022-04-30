@@ -96,7 +96,7 @@ const LiquidityAddBody = (props) => {
     try {
       await ethcallProvider.init();
 
-      if (ethers.utils.isAddress(account)) {
+      if (ethers.utils.isAddress(account) && (ethers.utils.isAddress(forContract) || forContract === "-")) {
         var balance = 0;
         var decimals = 0;
 
@@ -123,7 +123,7 @@ const LiquidityAddBody = (props) => {
       }
     } catch (error) {
       setForTarget(forTarget);
-      console.log("update balance err: ", error)
+      console.log("update balance err: ", error, "\nupdate balance forTarget err: ", forTarget)
     }
     setReady(true)
   };
@@ -256,7 +256,7 @@ const LiquidityAddBody = (props) => {
         setTargetApproved(true);
       }
     } catch (err) {
-      console.log("approve err: ", err);
+      console.log("approve err: ", err, "\napprove err targetToken: ", targetToken);
     }
     setReady(true);
   };
@@ -272,6 +272,10 @@ const LiquidityAddBody = (props) => {
 
     if (targetToken.address === "-") {
       targetTokenApproved(true);
+      return;
+    }
+
+    if (!ethers.utils.isAddress(targetToken.address) || targetToken.amount === "") {
       return;
     }
 
@@ -291,14 +295,45 @@ const LiquidityAddBody = (props) => {
       else {
         targetTokenApproved(true);
       }
-    } catch(error) {
-      console.log("isApproved err: ", error)
+    } catch (error) {
+      console.log("isApproved err: ", error, "\nisApproved targetToken: ", targetToken)
     }
     setReady(true);
   }
 
   const addLiquidity = async () => {
-    setReady(false)
+    const contract = new ethers.Contract(
+      props.network.DEX.Router,
+      routerAbi,
+      web3Provider.getSigner()
+    );
+
+    console.log("===============test================")
+    const aaprovider = new ethers.providers.JsonRpcProvider(props.network.RPC);
+    console.log("aaprovider lastblock: ", aaprovider.getBlockNumber())
+    console.log("web3Provider lastblock: ", web3Provider.getBlockNumber())
+
+
+    setReady(false);
+    if (tokenA.address === "-" || tokenB.address === "-") {
+
+    }
+    else {
+
+    }
+    // try {
+    //   const tx = await contract.approve(
+    //     props.network.DEX.Router,
+    //     ethers.utils.parseUnits(targetToken.amount.toString(), targetToken.decimals));
+    //   const receipt = await tx.wait(tx);
+    //   if (receipt.status === 1) {
+    //     setTargetApproved(true);
+    //   }
+    // } catch (err) {
+    //   console.log("approve err: ", err);
+    // }
+    setReady(true);
+    // setReady(false)
     // const params = {
     // 	sellToken: (tokenA.address === "-" ? tokenA.symbol : tokenA.address),
     // 	buyToken: (tokenB.address === "-" ? tokenB.symbol : tokenB.address),
@@ -325,7 +360,7 @@ const LiquidityAddBody = (props) => {
     // 		resetQuote();
     // 	});
     // });
-    setReady(true);
+    // setReady(true);
   }
 
   const isNewPair = async (tokenA, tokenB) => {
@@ -433,9 +468,6 @@ const LiquidityAddBody = (props) => {
       else if (error) {
         return <button className="default-btn w-100" disabled="disabled">{error}</button>;
       }
-      // else if (!confirmed) {
-      //   return <button className="default-btn w-100" disabled={!ready} onClick={() => confirm()}>Confirm</button>;
-      // }
       else {
         return <button className="default-btn w-100" disabled={!ready} onClick={() => addLiquidity()}>Supply</button>;
       }
@@ -551,11 +583,11 @@ const LiquidityAddBody = (props) => {
                     <div>{
                       newPool ?
                         (
-                          (tokenA.amount > 0 && tokenB.amount > 0) ?
+                          (parseFloat(tokenA.amount) > 0 && parseFloat(tokenB.amount) > 0) ?
                             tokenA.amount / tokenB.amount :
                             0
                         ) :
-                        (tokenBBalOfPool > 0 ? (tokenABalOfPool / tokenBBalOfPool) : 0)
+                        (parseFloat(tokenBBalOfPool) > 0 ? (parseFloat(tokenABalOfPool) / parseFloat(tokenBBalOfPool)) : 0)
                     }</div>
                     <div>{tokenA.symbol} per {tokenB.symbol}</div>
                   </div>
@@ -563,11 +595,11 @@ const LiquidityAddBody = (props) => {
                     <div>{
                       newPool ?
                         (
-                          (tokenA.amount > 0 && tokenB.amount > 0) ?
+                          (parseFloat(tokenA.amount) > 0 && parseFloat(tokenB.amount) > 0) ?
                             tokenB.amount / tokenA.amount :
                             0
                         ) :
-                        (tokenABalOfPool ? (tokenBBalOfPool / tokenABalOfPool) : 0)
+                        (parseFloat(tokenABalOfPool) ? (parseFloat(tokenBBalOfPool) / parseFloat(tokenABalOfPool)) : 0)
                     }</div>
                     <div>{tokenB.symbol} per {tokenA.symbol}</div>
                   </div>
