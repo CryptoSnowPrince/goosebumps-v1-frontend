@@ -175,7 +175,8 @@ const LiquidityRemove = (props) => {
       <UserLpToken
         network={networks[chainIndex]}
         lpAddress={lpAddress}
-        account={account} />
+        account={account}
+        reload={false} />
       <TokenSelectModal
         showFor={showTokenSelectModal}
         hide={() => setShowTokenSelectModal()}

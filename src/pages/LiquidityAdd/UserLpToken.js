@@ -122,7 +122,7 @@ const UserLpToken = (props) => {
 
   useEffect(() => {
     updateLpInfo()
-  }, [props.network, props.lpAddress, props.account])
+  }, [props.network, props.lpAddress, props.account, props.reload])
 
   return (
     <>
