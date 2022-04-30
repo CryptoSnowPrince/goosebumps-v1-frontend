@@ -281,19 +281,20 @@ const LiquidityAddBody = (props) => {
       web3Provider
     );
 
+    setReady(false);
     try {
       var allowance = await contract.allowance(account, props.network.DEX.Router);
+      if (BigNumber.from(ethers.utils.parseUnits(targetToken.amount.toString(), targetToken.decimals))
+        .gt(allowance)) {
+        targetTokenApproved(false)
+      }
+      else {
+        targetTokenApproved(true);
+      }
     } catch(error) {
       console.log("isApproved err: ", error)
     }
-
-    if (BigNumber.from(ethers.utils.parseUnits(targetToken.amount.toString(), targetToken.decimals))
-      .gt(allowance)) {
-      targetTokenApproved(false)
-    }
-    else {
-      targetTokenApproved(true);
-    }
+    setReady(true);
   }
 
   const addLiquidity = async () => {
