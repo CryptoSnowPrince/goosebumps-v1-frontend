@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Contract, Provider, setMulticallAddress } from 'ethers-multicall';
-import { /*singer, */ethers, BigNumber } from 'ethers';
-import Web3 from 'web3';
+import { ethers, BigNumber } from 'ethers';
 import { useSelector } from 'react-redux';
-// import { TokenSelectModal } from "./TokenModal"
 import { TokenSelectModal } from "../../components/widgets/exchange/TokenSelectModal"
 import { ConnectButtonModal } from '../../components/widgets/ConnectButtonModal';
 import { UserLpToken } from "./UserLpToken"
@@ -12,9 +10,7 @@ import { LiquidityHeader } from "../../components/LiquidityHeader/LiquidityHeade
 import tokenAbi from '../../abis/token';
 import factoryAbi from '../../abis/factory';
 import routerAbi from '../../abis/router';
-import pairAbi from '../../abis/pair';
-import { /*getFullDisplayBalance, */formatNumberWithoutComma } from '../../utils/number';
-// import networks from '../../networks.json'
+import { formatNumberWithoutComma } from '../../utils/number';
 import * as selector from '../../store/selectors';
 
 import '../../components/components.scss'
@@ -22,10 +18,10 @@ import '../../components/components.scss'
 const LiquidityAddBody = (props) => {
 
   const account = useSelector(selector.accountState);
-  const provider = useSelector(selector.providerState);
   const web3Provider = useSelector(selector.web3ProviderState);
 
   const [loading, setLoading] = useState(false);
+  const [reloadUserLp, setReloadUserLp] = useState(false);
   const [ready, setReady] = useState(false);
   const [error, setError] = useState(false);
 
@@ -246,7 +242,9 @@ const LiquidityAddBody = (props) => {
       tokenAbi,
       web3Provider.getSigner()
     );
+
     setReady(false);
+
     try {
       const tx = await contract.approve(
         props.network.DEX.Router,
@@ -258,6 +256,7 @@ const LiquidityAddBody = (props) => {
     } catch (err) {
       console.log("approve err: ", err, "\napprove err targetToken: ", targetToken);
     }
+
     setReady(true);
   };
 
@@ -311,7 +310,8 @@ const LiquidityAddBody = (props) => {
     // console.log("===============test================")
     // console.log("web3Provider lastblock: ", (await web3Provider.getBlock()).timestamp)
 
-    setReady(false);
+    setLoading(true);
+    setReloadUserLp(false);
     // Slippage Tolerance 5%
     const slippageTolerance = 5;
     try {
@@ -328,45 +328,26 @@ const LiquidityAddBody = (props) => {
           ethers.utils.parseUnits((parseFloat(tokenA.amount) * (100 - slippageTolerance) / 100).toString(), tokenA.decimals),
           ethers.utils.parseUnits((parseFloat(tokenB.amount) * (100 - slippageTolerance) / 100).toString(), tokenB.decimals),
           account,
-          nowTimestamp + 1200
+          nowTimestamp + 1200 // deadline: 20mins
         );
         const receipt = await tx.wait(tx);
+        console.log("receipt: ", receipt);
+        updateBalance(tokenA.address, tokenA, setTokenA, true).then(() => {
+          updateBalance(tokenB.address, tokenB, setTokenB, true).then(() => {
+          });
+        });
         if (receipt.status === 1) {
           alert(`add liquidity success`);
         }
       }
     } catch (err) {
       console.log("add liquidity err: ", err);
+      if (err.code === 4001) {
+        alert(`User denied transaction signature.`)
+      }
     }
-    setReady(true);
-    // setReady(false)
-    // const params = {
-    // 	sellToken: (tokenA.address === "-" ? tokenA.symbol : tokenA.address),
-    // 	buyToken: (tokenB.address === "-" ? tokenB.symbol : tokenB.address),
-    // 	sellAmount: quote.sellAmount, // 1 ETH = 10^18 wei
-    // 	takerAddress: account,
-    // }
-
-    // try {
-    // 	// Fetch the swap quote.
-    // 	const response = await fetch(
-    // 		`${props.network.SwapApi}swap/v1/quote?${qs.stringify(params)}`
-    // 	);
-
-    // 	const web3 = new Web3(provider);
-    // 	const ret = await response.json();
-    // 	await web3.eth.sendTransaction(ret);
-    // } catch (error) {
-    // 	console.log("trade error: ", error)
-    // }
-
-    // updateBalance(tokenA.address, tokenA, setTokenA, true).then(() => {
-    // 	updateBalance(tokenB.address, tokenB, setTokenB, true).then(() => {
-    // 		setLoading();
-    // 		resetQuote();
-    // 	});
-    // });
-    // setReady(true);
+    setLoading(false);
+    setReloadUserLp(true);
   }
 
   const isNewPair = async (tokenA, tokenB) => {
@@ -468,7 +449,7 @@ const LiquidityAddBody = (props) => {
       if (!ready) {
         return <button className="default-btn w-100" disabled="disabled">Please wait...</button>;
       }
-      else if (!(tokenA.amount > 0 || tokenB.amount > 0)) {
+      else if (!(parseFloat(tokenA.amount) > 0 && parseFloat(tokenB.amount) > 0)) {
         return <button className="default-btn w-100" disabled="disabled">Enter an amount</button>;
       }
       else if (!tokenAApproved) {
@@ -638,7 +619,8 @@ const LiquidityAddBody = (props) => {
         <UserLpToken
           network={props.network}
           lpAddress={newPool ? "" : lpAddress}
-          account={account} />
+          account={account}
+          reload={reloadUserLp} />
         <TokenSelectModal
           showFor={showTokenSelectModal}
           hide={() => setShowTokenSelectModal()}
