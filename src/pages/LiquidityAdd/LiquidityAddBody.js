@@ -244,6 +244,7 @@ const LiquidityAddBody = (props) => {
     );
 
     setReady(false);
+    setLoading(true);
 
     try {
       const tx = await contract.approve(
@@ -258,6 +259,7 @@ const LiquidityAddBody = (props) => {
     }
 
     setReady(true);
+    setLoading(false);
   };
 
   const isApproved = async (side) => {
@@ -315,12 +317,33 @@ const LiquidityAddBody = (props) => {
     // Slippage Tolerance 5%
     const slippageTolerance = 5;
     try {
-      if (tokenA.address === "-" || tokenB.address === "-") {
-
+      var nowTimestamp = (await web3Provider.getBlock()).timestamp;
+      if (tokenA.address === "-") {
+        var options = { value: ethers.utils.parseUnits(tokenA.amount.toString(), tokenA.decimals) };
+        var tx = await contract.addLiquidityETH(
+          tokenB.address,
+          ethers.utils.parseUnits(tokenB.amount.toString(), tokenB.decimals),
+          ethers.utils.parseUnits((parseFloat(tokenB.amount) * (100 - slippageTolerance) / 100).toString(), tokenB.decimals),
+          ethers.utils.parseUnits((parseFloat(tokenA.amount) * (100 - slippageTolerance) / 100).toString(), tokenA.decimals),
+          account,
+          nowTimestamp + 1200, // deadline: 20mins
+          options
+        )
+      }
+      else if (tokenB.address === "-") {
+        options = { value: ethers.utils.parseUnits(tokenB.amount.toString(), tokenB.decimals) };
+        tx = await contract.addLiquidityETH(
+          tokenA.address,
+          ethers.utils.parseUnits(tokenA.amount.toString(), tokenA.decimals),
+          ethers.utils.parseUnits((parseFloat(tokenA.amount) * (100 - slippageTolerance) / 100).toString(), tokenA.decimals),
+          ethers.utils.parseUnits((parseFloat(tokenB.amount) * (100 - slippageTolerance) / 100).toString(), tokenB.decimals),
+          account,
+          nowTimestamp + 1200, // deadline: 20mins
+          options
+        )
       }
       else {
-        var nowTimestamp = (await web3Provider.getBlock()).timestamp;
-        const tx = await contract.addLiquidity(
+        tx = await contract.addLiquidity(
           tokenA.address,
           tokenB.address,
           ethers.utils.parseUnits(tokenA.amount.toString(), tokenA.decimals),
@@ -330,15 +353,16 @@ const LiquidityAddBody = (props) => {
           account,
           nowTimestamp + 1200 // deadline: 20mins
         );
-        const receipt = await tx.wait(tx);
-        console.log("receipt: ", receipt);
-        updateBalance(tokenA.address, tokenA, setTokenA, true).then(() => {
-          updateBalance(tokenB.address, tokenB, setTokenB, true).then(() => {
-          });
+      }
+      const receipt = await tx.wait(tx);
+      console.log("receipt: ", receipt);
+      updateBalance(tokenA.address, tokenA, setTokenA, true).then(() => {
+        updateBalance(tokenB.address, tokenB, setTokenB, true).then(() => {
         });
-        if (receipt.status === 1) {
-          alert(`add liquidity success`);
-        }
+      });
+      if (receipt.status === 1) {
+        alert(`add liquidity success`);
+        isNewPair(tokenA.address, tokenB.address);
       }
     } catch (err) {
       console.log("add liquidity err: ", err);
@@ -350,10 +374,10 @@ const LiquidityAddBody = (props) => {
     setReloadUserLp(true);
   }
 
-  const isNewPair = async (tokenA, tokenB) => {
+  const isNewPair = async (tokenAAddress, tokenBAddress) => {
     setReady(false);
-    if (tokenA === "-") tokenA = props.network.Currency.Address;
-    if (tokenB === "-") tokenB = props.network.Currency.Address;
+    if (tokenAAddress === "-") tokenAAddress = props.network.Currency.Address;
+    if (tokenBAddress === "-") tokenBAddress = props.network.Currency.Address;
     const provider = new ethers.providers.JsonRpcProvider(props.network.RPC);
     const contract = new ethers.Contract(
       props.network.DEX.Factory,
@@ -361,14 +385,14 @@ const LiquidityAddBody = (props) => {
       provider
     );
     try {
-      const pairAddress = await contract.getPair(tokenA, tokenB)
+      const pairAddress = await contract.getPair(tokenAAddress, tokenBAddress)
       setLpAddress(pairAddress);
       // console.log("pairAddress: ", pairAddress);
       if (pairAddress === "0x0000000000000000000000000000000000000000") {
         // console.log("pair is not exist");
         setNewPool(true)
       } else {
-        const tokenAContract = new ethers.Contract(tokenA, tokenAbi, provider);
+        const tokenAContract = new ethers.Contract(tokenAAddress, tokenAbi, provider);
         const tokenABalance = await tokenAContract.balanceOf(pairAddress);
         // console.log("tokenABalance._hex: ", tokenABalance._hex);
         // console.log("typeof tokenABalance._hex: ", typeof tokenABalance._hex);
@@ -430,15 +454,6 @@ const LiquidityAddBody = (props) => {
     // console.log("props.network: ", props.network);
     // console.log("account: ", account);
   }, [props.network, account])
-
-  // if (loading) {
-  //   // console.log("loading")
-  //   return (
-  //     <div className="text-center p-5 w-100">
-  //       <span className="spinner-border" role="status"></span>
-  //     </div>
-  //   );
-  // }
 
   const SubmitButton = () => {
     // console.log("SubmitButton")
