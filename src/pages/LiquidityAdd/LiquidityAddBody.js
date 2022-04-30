@@ -43,7 +43,7 @@ const LiquidityAddBody = (props) => {
   const [tokenBBalOfPool, setTokenBBalOfPool] = useState(0);
 
   const getTokenBalOfPool = async () => {
-    console.log("getTokenBalOfPool")
+    // console.log("getTokenBalOfPool")
     const provider = new ethers.providers.JsonRpcProvider(props.network.RPC);
     if (props.network.chainId === 97) // When bsc testnet
     {
@@ -137,8 +137,8 @@ const LiquidityAddBody = (props) => {
   }
 
   const onSelectToken = (token, forTarget) => {
-    console.log("onSelectToken")
-    console.log(token, forTarget)
+    // console.log("onSelectToken")
+    // console.log(token, forTarget)
     if ((token.Address === tokenB.address && forTarget === "tokenA") || (token.Address === tokenA.address && forTarget === "tokenB")) {
       invert();
     }
@@ -170,9 +170,9 @@ const LiquidityAddBody = (props) => {
   }
 
   const fill = (side, value) => {
-    console.log("fill")
-    console.log("tokenABalOfPool: ", tokenABalOfPool);
-    console.log("tokenBBalOfPool: ", tokenBBalOfPool);
+    // console.log("fill")
+    // console.log("tokenABalOfPool: ", tokenABalOfPool);
+    // console.log("tokenBBalOfPool: ", tokenBBalOfPool);
     setReady(false);
     if (side === "tokenA") {
       var target = tokenA;
@@ -237,7 +237,7 @@ const LiquidityAddBody = (props) => {
     }
 
     if (targetToken.address === "-") {
-      console.log("Native coin: Don't need approve");
+      // console.log("Native coin: Don't need approve");
       return;
     }
 
@@ -308,30 +308,36 @@ const LiquidityAddBody = (props) => {
       web3Provider.getSigner()
     );
 
-    console.log("===============test================")
-    const aaprovider = new ethers.providers.JsonRpcProvider(props.network.RPC);
-    console.log("aaprovider lastblock: ", aaprovider.getBlockNumber())
-    console.log("web3Provider lastblock: ", web3Provider.getBlockNumber())
-
+    // console.log("===============test================")
+    // console.log("web3Provider lastblock: ", (await web3Provider.getBlock()).timestamp)
 
     setReady(false);
-    if (tokenA.address === "-" || tokenB.address === "-") {
+    // Slippage Tolerance 5%
+    const slippageTolerance = 5;
+    try {
+      if (tokenA.address === "-" || tokenB.address === "-") {
 
+      }
+      else {
+        var nowTimestamp = (await web3Provider.getBlock()).timestamp;
+        const tx = await contract.addLiquidity(
+          tokenA.address,
+          tokenB.address,
+          ethers.utils.parseUnits(tokenA.amount.toString(), tokenA.decimals),
+          ethers.utils.parseUnits(tokenB.amount.toString(), tokenB.decimals),
+          ethers.utils.parseUnits((parseFloat(tokenA.amount) * (100 - slippageTolerance) / 100).toString(), tokenA.decimals),
+          ethers.utils.parseUnits((parseFloat(tokenB.amount) * (100 - slippageTolerance) / 100).toString(), tokenB.decimals),
+          account,
+          nowTimestamp + 1200
+        );
+        const receipt = await tx.wait(tx);
+        if (receipt.status === 1) {
+          alert(`add liquidity success`);
+        }
+      }
+    } catch (err) {
+      console.log("add liquidity err: ", err);
     }
-    else {
-
-    }
-    // try {
-    //   const tx = await contract.approve(
-    //     props.network.DEX.Router,
-    //     ethers.utils.parseUnits(targetToken.amount.toString(), targetToken.decimals));
-    //   const receipt = await tx.wait(tx);
-    //   if (receipt.status === 1) {
-    //     setTargetApproved(true);
-    //   }
-    // } catch (err) {
-    //   console.log("approve err: ", err);
-    // }
     setReady(true);
     // setReady(false)
     // const params = {
@@ -376,7 +382,7 @@ const LiquidityAddBody = (props) => {
     try {
       const pairAddress = await contract.getPair(tokenA, tokenB)
       setLpAddress(pairAddress);
-      console.log("pairAddress: ", pairAddress);
+      // console.log("pairAddress: ", pairAddress);
       if (pairAddress === "0x0000000000000000000000000000000000000000") {
         // console.log("pair is not exist");
         setNewPool(true)
@@ -406,14 +412,22 @@ const LiquidityAddBody = (props) => {
       (tokenB.address === "-" && tokenA.address === props.network.Currency.Address)
   }
 
+  const test = async () => {
+    console.log("===============test================")
+    const aaprovider = new ethers.providers.JsonRpcProvider(props.network.RPC);
+    console.log("aaprovider lastblock: ", (await aaprovider.getBlock()).timestamp)
+    console.log("web3Provider lastblock: ", (await web3Provider.getBlock()).timestamp)
+  }
+
   useEffect(() => {
-    console.log("tokenA: ", tokenA)
-    console.log("tokenB: ", tokenB)
-    try {
-      console.log("approve amount: ", ethers.utils.parseUnits(tokenA.amount.toString(), tokenA.decimals))
-    } catch (error) {
-      console.log();
-    }
+    // test()
+    // console.log("tokenA: ", tokenA)
+    // console.log("tokenB: ", tokenB)
+    // try {
+    //   console.log("approve amount: ", ethers.utils.parseUnits(tokenA.amount.toString(), tokenA.decimals))
+    // } catch (error) {
+    //   console.log();
+    // }
     if (!isInvalidPair()) {
       isNewPair(tokenA.address, tokenB.address);
       isApproved("tokenA");
@@ -432,8 +446,8 @@ const LiquidityAddBody = (props) => {
   useEffect(() => {
     setTokenA({ symbol: "", address: "", decimals: 0, amount: 0, balance: 0 })
     setTokenB({ symbol: "", address: "", decimals: 0, amount: 0, balance: 0 })
-    console.log("props.network: ", props.network);
-    console.log("account: ", account);
+    // console.log("props.network: ", props.network);
+    // console.log("account: ", account);
   }, [props.network, account])
 
   // if (loading) {
@@ -623,7 +637,7 @@ const LiquidityAddBody = (props) => {
         </div>
         <UserLpToken
           network={props.network}
-          lpAddress={lpAddress}
+          lpAddress={newPool ? "" : lpAddress}
           account={account} />
         <TokenSelectModal
           showFor={showTokenSelectModal}
