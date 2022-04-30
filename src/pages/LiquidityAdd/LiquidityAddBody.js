@@ -130,10 +130,8 @@ const LiquidityAddBody = (props) => {
     const newTokenB = Object.assign({}, tokenA);
     setTokenA(newTokenA);
     setTokenB(newTokenB);
-    const newTokenABalOfPool = Object.assign({}, tokenBBalOfPool);
-    const newTokenBBalOfPool = Object.assign({}, tokenABalOfPool);
-    setTokenABalOfPool(newTokenABalOfPool)
-    setTokenBBalOfPool(newTokenBBalOfPool)
+    setTokenABalOfPool(tokenBBalOfPool)
+    setTokenBBalOfPool(tokenABalOfPool)
   }
 
   const onSelectToken = (token, forTarget) => {
@@ -428,10 +426,10 @@ const LiquidityAddBody = (props) => {
     console.log("web3Provider lastblock: ", (await web3Provider.getBlock()).timestamp)
   }
 
-  // useEffect(() => {
-  //   console.log("tokenABalOfPool: ", tokenABalOfPool)
-  //   console.log("tokenBBalOfPool: ", tokenBBalOfPool)
-  // }, [tokenABalOfPool, tokenBBalOfPool])
+  useEffect(() => {
+    console.log("tokenABalOfPool: ", tokenABalOfPool)
+    console.log("tokenBBalOfPool: ", tokenBBalOfPool)
+  }, [tokenABalOfPool, tokenBBalOfPool])
 
   useEffect(() => {
     // test()
