@@ -1,13 +1,59 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 import { UserTokenPair } from './UserTokenPair'
+import * as selector from '../../store/selectors'
+import config from '../../constants/config'
+import networks from '../../networks'
 
 const LiquidityBody = ({ walletConnectStatus, userLiquidityFound }) => {
-  const userTokenPairList = [
-    {},
-    {},
-  ];
+  const account = useSelector(selector.accountState);
+  const chainIndex = useSelector(selector.chainIndex);
+
+  const [lpList, setLpList] = useState([])
+
+  const fetchLpList = async (address, chainIndex) => {
+    var userAllTokenBalance;
+    try {
+      if (address) {
+        let url = "https://graphql.bitquery.io/";
+        let query = `query ($network: EthereumNetwork!, $address: String!) {ethereum(network: $network) {address(address: {is: $address}) {balances {currency {symbol address}}}}}`;
+        let variables = `{"limit": 10,"offset": 0,"network": "bsc_testnet","address": "` + address + `"}`;
+        let opts = {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "X-API-KEY": config.GET_TOEKN_LIST_API_KEY
+          },
+          body: JSON.stringify({
+            query,
+            variables
+          })
+        };
+        await fetch(url, opts).then(res => res.json())
+          .then(data => userAllTokenBalance = data.data.ethereum.address[0].balances)
+          .catch(console.error);
+        const lpList = (userAllTokenBalance ? userAllTokenBalance : []).filter(e => e.currency.symbol === "GooseBumps-LP").map(t => t.currency.address);
+        setLpList(lpList)
+      }
+    } catch (error) {
+      setLpList([])
+      console.log("fetchLpList err: ", error)
+    }
+  }
+
+  useEffect(() => {
+    fetchLpList(account, chainIndex)
+  }, [account, chainIndex]);
+
+  useEffect(() => {
+    console.log("lpList: ", lpList)
+    // lpList.map((lpaddress, idx) => {
+    //   console.log("map: ", lpaddress)
+    //   console.log("map: ", idx)
+    // })
+  }, [lpList])
 
   return (
     <div className='liquidityBody p-3'>
@@ -16,8 +62,13 @@ const LiquidityBody = ({ walletConnectStatus, userLiquidityFound }) => {
       </div>) :
         (<>
           {!userLiquidityFound ? (<div className='text-center'>No liquidity found.</div>) : (
-            userTokenPairList.map((token, idx) => (
-              <UserTokenPair key={idx} />
+            lpList.map((lpaddress, idx) => (
+              <UserTokenPair
+                key={idx}
+                network={networks[chainIndex]}
+                lpAddress={lpaddress}
+                account={account}
+                reload={false} />
             ))
           )}
           <div className='text-center mt-4'>Don't see a pool you joined?</div>

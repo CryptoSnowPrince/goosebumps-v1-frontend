@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { BiHelpCircle } from 'react-icons/bi';
 import { Contract, Provider, setMulticallAddress } from 'ethers-multicall';
 import { ethers } from 'ethers';
 import linq from "linq";
@@ -8,6 +7,7 @@ import "./userLpToken.scss"
 
 import pairAbi from '../../abis/pair.json';
 import tokenAbi from '../../abis/token.json';
+import { formatNumberWithoutComma } from '../../utils/number';
 
 const UserLpToken = (props) => {
   const [lpBalance, setLpBalance] = useState(0);
@@ -141,7 +141,7 @@ const UserLpToken = (props) => {
                   alt={tokenASymbol} />
               </div>
               <div>
-                <img className='col-auto' style={{ height: 32, paddingLeft: 5, paddingRight: 15}}
+                <img className='col-auto' style={{ height: 32, paddingLeft: 5, paddingRight: 15 }}
                   src={
                     (tokenBAddress !== "" && props.network) ?
                       `/assets/tokens/${props.network.chainId}/${tokenBAddress}.png` :
@@ -151,25 +151,31 @@ const UserLpToken = (props) => {
               </div>
               <div>{tokenASymbol}{"-"}{tokenBSymbol} {"LP"}</div>
             </div>
-            <div className='fs-6'>{lpBalance}</div>
+            <div className='fs-6'>{formatNumberWithoutComma(Number(lpBalance), 1, 5)}</div>
           </div>
           <div className='mt-2 d-flex justify-content-between'>
             <div className='d-flex align-items-center'>
               <div style={{ color: "#04C0D7" }}>Share of Pool:</div>
             </div>
-            <div style={{ color: "#40FF97" }}>{lpBalance / lpTotalSupply * 100}%</div>
+            <div style={{ color: "#40FF97" }}>
+              {formatNumberWithoutComma(Number(lpBalance / lpTotalSupply * 100), 1, 5)}%
+            </div>
           </div>
           <div className='mt-2 d-flex justify-content-between  mt-2'>
             <div className='d-flex align-items-center'>
-              <div style={{ color: "#04C0D7" }}>Pooled {tokenASymbol}:</div>
+              <div style={{ color: "#04C0D7" }}>
+                Pooled {tokenASymbol}:
+              </div>
             </div>
-            <div style={{ color: "#40FF97" }}>{tokenABalance * lpBalance / lpTotalSupply}</div>
+            <div style={{ color: "#40FF97" }}>{formatNumberWithoutComma(Number(tokenABalance * lpBalance / lpTotalSupply), 1, 5)}</div>
           </div>
           <div className='mt-2 d-flex justify-content-between  mt-2'>
-            <div style={{ color: "#04C0D7" }}>
-              Pooled {tokenBSymbol}:
+            <div className='d-flex align-items-center'>
+              <div style={{ color: "#04C0D7" }}>
+                Pooled {tokenBSymbol}:
+              </div>
             </div>
-            <div style={{ color: "#40FF97" }}>{tokenBBalance * lpBalance / lpTotalSupply}</div>
+            <div style={{ color: "#40FF97" }}>{formatNumberWithoutComma(Number(tokenBBalance * lpBalance / lpTotalSupply), 1, 5)}</div>
           </div>
         </div>
         : ""}
