@@ -12,9 +12,11 @@ const LiquidityBody = () => {
   const account = useSelector(selector.accountState);
   const chainIndex = useSelector(selector.chainIndex);
 
+  const [ready, setReady] = useState(true)
   const [lpList, setLpList] = useState([])
 
   const fetchLpList = async (address, chainIndex) => {
+    setReady(false)
     var userAllTokenBalance;
     var chainName = "";
     switch (networks[chainIndex].Name) {
@@ -60,6 +62,7 @@ const LiquidityBody = () => {
       setLpList([])
       console.log("fetchLpList err: ", error)
     }
+    setReady(true)
   }
 
   useEffect(() => {
@@ -74,15 +77,22 @@ const LiquidityBody = () => {
   // })
   // }, [lpList])
 
-  return (
-    <div className='liquidityBody p-3'>
-      {!ethers.utils.isAddress(account) ?
-        (
-          <div className='text-center content d-flex align-items-center justify-content-center'>
-            Connect to a wallet to view your liquidity.
-          </div>
-        ) :
-        (<>
+  const MainBody = () => {
+    if (!ready) {
+      return (
+        <div className='text-center content d-flex align-items-center justify-content-center'>
+          Please wait...
+        </div>
+      );
+    } else if (!ethers.utils.isAddress(account)) {
+      return (
+        <div className='text-center content d-flex align-items-center justify-content-center'>
+          Connect to a wallet to view your liquidity.
+        </div>
+      );
+    } else {
+      return (
+        <>
           {(lpList.length < 1) ? (<div className='text-center'>No liquidity found.</div>) :
             (
               lpList.map((lpaddress, idx) => (
@@ -102,7 +112,14 @@ const LiquidityBody = () => {
               </button>
             </Link>
           </div>
-        </>)}
+        </>
+      )
+    }
+  }
+
+  return (
+    <div className='liquidityBody p-3'>
+      <MainBody />
       <hr />
       <div className='d-flex justify-content-center mt-4'>
         <Link to="/liquidityAdd">
