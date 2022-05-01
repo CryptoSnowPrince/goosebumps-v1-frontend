@@ -6,8 +6,9 @@ import { UserTokenPair } from './UserTokenPair'
 import * as selector from '../../store/selectors'
 import config from '../../constants/config'
 import networks from '../../networks'
+import { ethers } from 'ethers';
 
-const LiquidityBody = ({ walletConnectStatus, userLiquidityFound }) => {
+const LiquidityBody = () => {
   const account = useSelector(selector.accountState);
   const chainIndex = useSelector(selector.chainIndex);
 
@@ -15,11 +16,29 @@ const LiquidityBody = ({ walletConnectStatus, userLiquidityFound }) => {
 
   const fetchLpList = async (address, chainIndex) => {
     var userAllTokenBalance;
+    var chainName = "";
+    switch (networks[chainIndex].Name) {
+      case "ethereum":
+        chainName = "ethereum";
+        break;
+      case "bsc":
+        chainName = "bsc";
+        break;
+      case "bsctestnet":
+        chainName = "bsc_testnet";
+        break;
+      case "polygon":
+        chainName = "matic";
+        break;
+      default:
+        break;
+    }
+    // console.log("chainName: ", chainName);
     try {
-      if (address) {
+      if (address && chainName !== "") {
         let url = "https://graphql.bitquery.io/";
         let query = `query ($network: EthereumNetwork!, $address: String!) {ethereum(network: $network) {address(address: {is: $address}) {balances {currency {symbol address}}}}}`;
-        let variables = `{"limit": 10,"offset": 0,"network": "bsc_testnet","address": "` + address + `"}`;
+        let variables = `{"limit": 10,"offset": 0,"network": "` + chainName + `","address": "` + address + `"}`;
         let opts = {
           method: "POST",
           headers: {
@@ -47,36 +66,50 @@ const LiquidityBody = ({ walletConnectStatus, userLiquidityFound }) => {
     fetchLpList(account, chainIndex)
   }, [account, chainIndex]);
 
-  useEffect(() => {
-    console.log("lpList: ", lpList)
-    // lpList.map((lpaddress, idx) => {
-    //   console.log("map: ", lpaddress)
-    //   console.log("map: ", idx)
-    // })
-  }, [lpList])
+  // useEffect(() => {
+  //   console.log("lpList: ", lpList)
+  // lpList.map((lpaddress, idx) => {
+  //   console.log("map: ", lpaddress)
+  //   console.log("map: ", idx)
+  // })
+  // }, [lpList])
 
   return (
     <div className='liquidityBody p-3'>
-      {!walletConnectStatus ? (<div className='text-center content d-flex align-items-center justify-content-center'>
-        Connect to a wallet to view your liquidity.
-      </div>) :
+      {!ethers.utils.isAddress(account) ?
+        (
+          <div className='text-center content d-flex align-items-center justify-content-center'>
+            Connect to a wallet to view your liquidity.
+          </div>
+        ) :
         (<>
-          {!userLiquidityFound ? (<div className='text-center'>No liquidity found.</div>) : (
-            lpList.map((lpaddress, idx) => (
-              <UserTokenPair
-                key={idx}
-                network={networks[chainIndex]}
-                lpAddress={lpaddress}
-                account={account}
-                reload={false} />
-            ))
-          )}
+          {(lpList.length < 1) ? (<div className='text-center'>No liquidity found.</div>) :
+            (
+              lpList.map((lpaddress, idx) => (
+                <UserTokenPair
+                  key={idx}
+                  network={networks[chainIndex]}
+                  lpAddress={lpaddress}
+                  account={account}
+                  reload={false} />
+              ))
+            )}
           <div className='text-center mt-4'>Don't see a pool you joined?</div>
-          <div className='d-flex justify-content-center mt-3 mb-4'><Link to="/liquidityFindToken"><button className='default-btn fs-6'>Find other LP tokens</button></Link></div>
+          <div className='d-flex justify-content-center mt-3 mb-4'>
+            <Link to="/liquidityFindToken">
+              <button className='default-btn fs-6'>
+                Find other LP tokens
+              </button>
+            </Link>
+          </div>
         </>)}
       <hr />
       <div className='d-flex justify-content-center mt-4'>
-        <Link to="/liquidityAdd"><button className='default-btn liquidity-btn fs-6'>+ Add Liquidity</button></Link>
+        <Link to="/liquidityAdd">
+          <button className='default-btn liquidity-btn fs-6'>
+            + Add Liquidity
+          </button>
+        </Link>
       </div>
     </div>
   );

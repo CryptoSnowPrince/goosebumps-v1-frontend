@@ -1,20 +1,116 @@
-import React, { useState } from 'react';
-import { BiHelpCircle } from 'react-icons/bi';
-import InputRange from "react-input-range";
-import "react-input-range/lib/css/index.css";
+import React, { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import { ethers } from 'ethers';
 
 import DEXSubmenu from '../../components/Submenu/DEXSubmenu'
 import { LiquidityHeader } from "../../components/LiquidityHeader/LiquidityHeader";
 import { UserLpToken } from "../LiquidityAdd/UserLpToken"
-import { TokenSelectModal } from "../LiquidityAdd/TokenModal"
+import { TokenSelectModal } from "../../components/widgets/exchange/TokenSelectModal"
+import tokenAbi from '../../abis/token';
+import factoryAbi from '../../abis/factory';
+
+import * as selector from '../../store/selectors'
+import networks from '../../networks.json'
+
+import "react-input-range/lib/css/index.css";
 import '../Liquidity/Liquidity.scss'
 
 const LiquidityFindToken = () => {
-  const [amount, setAmount] = useState(50);
+  const chainIndex = useSelector(selector.chainIndex);
+  const account = useSelector(selector.accountState);
+
+  const [newPool, setNewPool] = useState(false);
+  const [lpAddress, setLpAddress] = useState("")
+
+  const [tokenA, setTokenA] = useState({ symbol: "", address: "", decimals: 0 });
+  const [tokenB, setTokenB] = useState({ symbol: "", address: "", decimals: 0 });
+
   const [showTokenSelectModal, setShowTokenSelectModal] = useState();
+
   const onSelectToken = (token, forTarget) => {
-    console.log(token, forTarget)
+    // console.log("LiquidityFindToken onSelectToken")
+    // console.log(token, forTarget)
+    if ((token.Address === tokenB.address && forTarget === "tokenA") || (token.Address === tokenA.address && forTarget === "tokenB")) {
+      invert();
+    }
+    else {
+      if (forTarget === "tokenA") {
+        const newTokenA = Object.assign({}, tokenA);
+        newTokenA.address = token.Address;
+        newTokenA.symbol = token.Symbol;
+        newTokenA.decimals = token.Decimals;
+        setTokenA(newTokenA);
+      }
+      else {
+        const newTokenB = Object.assign({}, tokenB);
+        newTokenB.address = token.Address;
+        newTokenB.symbol = token.Symbol;
+        newTokenB.decimals = token.Decimals;
+        setTokenB(newTokenB);
+      }
+    }
   }
+
+  const invert = () => {
+    // console.log("invert")
+    const newTokenA = Object.assign({}, tokenB);
+    const newTokenB = Object.assign({}, tokenA);
+    setTokenA(newTokenA);
+    setTokenB(newTokenB);
+  }
+
+  const isInvalidPair = () => {
+    return !(tokenA.symbol && tokenB.symbol) ||
+      (tokenA.address === "-" && tokenB.address === networks[chainIndex].Currency.Address) ||
+      (tokenB.address === "-" && tokenA.address === networks[chainIndex].Currency.Address)
+  }
+
+  const isNewPair = async (tokenAAddress, tokenBAddress) => {
+    if (tokenAAddress === "-") tokenAAddress = networks[chainIndex].Currency.Address;
+    if (tokenBAddress === "-") tokenBAddress = networks[chainIndex].Currency.Address;
+    const provider = new ethers.providers.JsonRpcProvider(networks[chainIndex].RPC);
+    const contract = new ethers.Contract(
+      networks[chainIndex].DEX.Factory,
+      factoryAbi,
+      provider
+    );
+    try {
+      const pairAddress = await contract.getPair(tokenAAddress, tokenBAddress)
+      setLpAddress(pairAddress);
+      if (pairAddress === "0x0000000000000000000000000000000000000000") {
+        setNewPool(true)
+      } else {
+        const tokenAContract = new ethers.Contract(tokenAAddress, tokenAbi, provider);
+        const tokenABalance = await tokenAContract.balanceOf(pairAddress);
+        if (parseInt(tokenABalance._hex) > 0) {
+          setNewPool(false)
+        } else {
+          setNewPool(true)
+        }
+      }
+    } catch (error) {
+      setNewPool(false)
+      setLpAddress("");
+      console.log("get Pair Address err: ", error)
+    }
+  }
+
+  useEffect(() => {
+    // console.log("tokenA: ", tokenA)
+    // console.log("tokenB: ", tokenB)
+    if (!isInvalidPair()) {
+      isNewPair(tokenA.address, tokenB.address);
+    } else {
+      setLpAddress("");
+    }
+  }, [tokenA, tokenB])
+
+  useEffect(() => {
+    setTokenA({ symbol: "", address: "", decimals: 0, amount: 0, balance: 0 })
+    setTokenB({ symbol: "", address: "", decimals: 0, amount: 0, balance: 0 })
+    // console.log("networks[chainIndex]: ", networks[chainIndex]);
+    // console.log("account: ", account);
+  }, [chainIndex, account])
 
   return (
     <>
@@ -25,19 +121,25 @@ const LiquidityFindToken = () => {
           <div className='liquidityfindtoken-body p-4'>
             <div className='wallet-tabs mt-4'>
               <div className='tab_content p-0'>
-                <div className="form-group">
-                  <div className="row justify-content-between">
-                    <div className="col">
-                      <label htmlFor="from" className="w-100">From</label>
+                <div className="form-group" style={{ padding: 8 }}>
+                  <div className="input-group justify-content-between">
+                    <div className='d-flex fs-5 align-items-center' style={{ paddingLeft: 10 }} >
+                      {
+                        tokenA.symbol !== "" ?
+                          <>
+                            <img className='col-auto' style={{ height: 40, paddingRight: 10 }}
+                              src={"/assets/tokens/empty.png"}
+                              alt={tokenA.symbol} />
+                            <div>{tokenA.symbol}</div>
+                          </>
+                          : <div>Select a Token</div>
+                      }
                     </div>
-                    <div className="col text-end">
-                      <button type="button" className="w-100 text-end badge btn text-white">Balance: 0.0</button>
-                    </div>
-                  </div>
-                  <div className="input-group">
-                    <input id="from" type="text" className="form-control me-2" placeholder="0" autoComplete="off" min="0" value={0} />
                     <div className="input-group-addon">
-                      <button type="button" className="default-btn" onClick={() => setShowTokenSelectModal("from")}>BNB</button>
+                      <button type="button" className="default-btn"
+                        onClick={() => setShowTokenSelectModal("tokenA")}>
+                        {tokenA.symbol ? tokenA.symbol : "Select"}
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -46,31 +148,59 @@ const LiquidityFindToken = () => {
             <div className='d-flex justify-content-center m-4'>+</div>
             <div className='wallet-tabs mt-4'>
               <div className='tab_content p-0'>
-                <div className="form-group">
-                  <div className="row justify-content-between">
-                    <div className="col">
-                      <label htmlFor="from" className="w-100">From</label>
+                <div className="form-group" style={{ padding: 8 }}>
+                  <div className="input-group justify-content-between">
+                    <div className='d-flex fs-5 align-items-center' style={{ paddingLeft: 10 }} >
+                      {
+                        tokenB.symbol !== "" ?
+                          <>
+                            <img className='col-auto' style={{ height: 40, paddingRight: 10 }}
+                              src={"/assets/tokens/empty.png"}
+                              alt={tokenB.symbol} />
+                            <div>{tokenB.symbol}</div>
+                          </>
+                          : <div>Select a Token</div>
+                      }
                     </div>
-                    <div className="col text-end">
-                      <button type="button" className="w-100 text-end badge btn text-white">Balance: 0.0</button>
-                    </div>
-                  </div>
-                  <div className="input-group">
-                    <input id="from" type="text" className="form-control me-2" placeholder="0" autoComplete="off" min="0" value={0} />
                     <div className="input-group-addon">
-                      <button type="button" className="default-btn" onClick={() => setShowTokenSelectModal("from")}>BNB</button>
+                      <button type="button" className="default-btn"
+                        onClick={() => setShowTokenSelectModal("tokenB")}>
+                        {tokenB.symbol ? tokenB.symbol : "Select"}
+                      </button>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-            <div className='mt-5 text-center'>
-              You don't have liquidity in this pool yet.
-            </div>
-            <div className='d-flex justify-content-center mt-3'> <button className='default-btn'>Add Liquidity</button></div>
+            {
+              !ethers.utils.isAddress(account) ?
+                (
+                  <div className='mt-5 text-center'>
+                    <div className='text-center content d-flex align-items-center justify-content-center'>
+                      Connect to a wallet to find pools
+                    </div>
+                  </div>
+                ) :
+                (
+                  <div className='mt-5 text-center'>
+                    <div className='text-center content d-flex align-items-center justify-content-center'>
+                      Select a token to find your liquidity.
+                    </div>
+                  </div>
+                )
+            }
           </div>
         </div>
-        <TokenSelectModal showFor={showTokenSelectModal} hide={() => setShowTokenSelectModal()} onSelect={onSelectToken} networkName={"bsctestnet"} />
+        <UserLpToken
+          network={networks[chainIndex]}
+          lpAddress={newPool ? "" : lpAddress}
+          account={account}
+          reload={false} />
+        <TokenSelectModal
+          showFor={showTokenSelectModal}
+          hide={() => setShowTokenSelectModal()}
+          onSelect={onSelectToken}
+          network={networks[chainIndex]} />
       </div>
     </>
   );

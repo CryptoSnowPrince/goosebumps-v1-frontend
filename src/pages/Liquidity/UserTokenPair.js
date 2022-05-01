@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { BiHelpCircle } from 'react-icons/bi';
 import { Contract, Provider, setMulticallAddress } from 'ethers-multicall';
 import { ethers } from 'ethers';
 import linq from "linq";
@@ -9,7 +8,7 @@ import tokenAbi from '../../abis/token.json';
 import { formatNumberWithoutComma } from '../../utils/number';
 
 const UserTokenPair = (props) => {
-  console.log("props: ", props)
+  // console.log("props: ", props)
   const [detailShow, setDetailShow] = useState(false);
   const [lpBalance, setLpBalance] = useState(0);
   const [lpTotalSupply, setLpTotalSupply] = useState(0);
@@ -17,8 +16,8 @@ const UserTokenPair = (props) => {
   const [tokenBBalance, setTokenBBalance] = useState(0);
   const [tokenASymbol, setTokenASymbol] = useState("");
   const [tokenBSymbol, setTokenBSymbol] = useState("");
-  const [tokenAAddress, setTokenAAddress] = useState("");
-  const [tokenBAddress, setTokenBAddress] = useState("");
+  const [tokenAAddrIsInList, setTokenAAddrIsInList] = useState("");
+  const [tokenBAddrIsInList, setTokenBAddrIsInList] = useState("");
 
   const updateLpInfo = async () => {
     // console.log("UserLpToken updateBalance")
@@ -63,15 +62,15 @@ const UserTokenPair = (props) => {
         const tokenList = require("../../tokens/" + props.network.Name)
         var sched = linq.from(tokenList).where(x => x.Address === tokenAAddress).toArray();
         if (sched.length === 0) {
-          setTokenAAddress("");
+          setTokenAAddrIsInList("");
         } else {
-          setTokenAAddress(tokenAAddress);
+          setTokenAAddrIsInList(tokenAAddress);
         }
         sched = linq.from(tokenList).where(x => x.Address === tokenBAddress).toArray();
         if (sched.length === 0) {
-          setTokenBAddress("");
+          setTokenBAddrIsInList("");
         } else {
-          setTokenBAddress(tokenBAddress);
+          setTokenBAddrIsInList(tokenBAddress);
         }
 
         [
@@ -105,8 +104,8 @@ const UserTokenPair = (props) => {
         setTokenBBalance(0);
         setTokenASymbol("");
         setTokenBSymbol("");
-        setTokenAAddress("");
-        setTokenBAddress("");
+        setTokenAAddrIsInList("");
+        setTokenBAddrIsInList("");
       }
     } catch (error) {
       setLpBalance(0);
@@ -115,8 +114,8 @@ const UserTokenPair = (props) => {
       setTokenBBalance(0);
       setTokenASymbol("");
       setTokenBSymbol("");
-      setTokenAAddress("");
-      setTokenBAddress("");
+      setTokenAAddrIsInList("");
+      setTokenBAddrIsInList("");
       console.log("updateLpInfo err: ", error)
     }
   };
@@ -142,8 +141,8 @@ const UserTokenPair = (props) => {
                   <div>
                     <img className='col-auto' style={{ height: 32 }}
                       src={
-                        (tokenAAddress !== "" && props.network) ?
-                          `/assets/tokens/${props.network.chainId}/${tokenAAddress}.png` :
+                        (tokenAAddrIsInList !== "" && props.network) ?
+                          `/assets/tokens/${props.network.chainId}/${tokenAAddrIsInList}.png` :
                           "/assets/tokens/empty.png"
                       }
                       alt={tokenASymbol} />
@@ -151,8 +150,8 @@ const UserTokenPair = (props) => {
                   <div>
                     <img className='col-auto' style={{ height: 32, paddingLeft: 5, paddingRight: 15 }}
                       src={
-                        (tokenBAddress !== "" && props.network) ?
-                          `/assets/tokens/${props.network.chainId}/${tokenBAddress}.png` :
+                        (tokenBAddrIsInList !== "" && props.network) ?
+                          `/assets/tokens/${props.network.chainId}/${tokenBAddrIsInList}.png` :
                           "/assets/tokens/empty.png"
                       }
                       alt={tokenBSymbol} />
@@ -176,8 +175,8 @@ const UserTokenPair = (props) => {
                 <div className='d-flex align-items-center'>
                   <img className='col-auto' style={{ height: 32, paddingLeft: 5, paddingRight: 15 }}
                     src={
-                      (tokenAAddress !== "" && props.network) ?
-                        `/assets/tokens/${props.network.chainId}/${tokenAAddress}.png` :
+                      (tokenAAddrIsInList !== "" && props.network) ?
+                        `/assets/tokens/${props.network.chainId}/${tokenAAddrIsInList}.png` :
                         "/assets/tokens/empty.png"
                     }
                     alt={tokenASymbol} />
@@ -191,8 +190,8 @@ const UserTokenPair = (props) => {
                 <div className='d-flex align-items-center'>
                   <img className='col-auto' style={{ height: 32, paddingLeft: 5, paddingRight: 15 }}
                     src={
-                      (tokenBAddress !== "" && props.network) ?
-                        `/assets/tokens/${props.network.chainId}/${tokenBAddress}.png` :
+                      (tokenBAddrIsInList !== "" && props.network) ?
+                        `/assets/tokens/${props.network.chainId}/${tokenBAddrIsInList}.png` :
                         "/assets/tokens/empty.png"
                     }
                     alt={tokenBSymbol} />
@@ -207,8 +206,8 @@ const UserTokenPair = (props) => {
                   <div>
                     <img className='col-auto' style={{ height: 20 }}
                       src={
-                        (tokenAAddress !== "" && props.network) ?
-                          `/assets/tokens/${props.network.chainId}/${tokenAAddress}.png` :
+                        (tokenAAddrIsInList !== "" && props.network) ?
+                          `/assets/tokens/${props.network.chainId}/${tokenAAddrIsInList}.png` :
                           "/assets/tokens/empty.png"
                       }
                       alt={tokenASymbol} />
@@ -216,8 +215,8 @@ const UserTokenPair = (props) => {
                   <div>
                     <img className='col-auto' style={{ height: 20, paddingLeft: 3, paddingRight: 9 }}
                       src={
-                        (tokenBAddress !== "" && props.network) ?
-                          `/assets/tokens/${props.network.chainId}/${tokenBAddress}.png` :
+                        (tokenBAddrIsInList !== "" && props.network) ?
+                          `/assets/tokens/${props.network.chainId}/${tokenBAddrIsInList}.png` :
                           "/assets/tokens/empty.png"
                       }
                       alt={tokenBSymbol} />

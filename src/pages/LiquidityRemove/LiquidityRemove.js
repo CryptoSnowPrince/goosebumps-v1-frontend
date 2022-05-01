@@ -6,7 +6,8 @@ import "react-input-range/lib/css/index.css";
 import DEXSubmenu from '../../components/Submenu/DEXSubmenu'
 import { LiquidityHeader } from "../../components/LiquidityHeader/LiquidityHeader";
 import { UserLpToken } from "../LiquidityAdd/UserLpToken"
-import { TokenSelectModal } from "../LiquidityAdd/TokenModal"
+import { TokenSelectModal } from "../../components/widgets/exchange/TokenSelectModal"
+
 import '../Liquidity/Liquidity.scss'
 
 import { useSelector } from 'react-redux';
