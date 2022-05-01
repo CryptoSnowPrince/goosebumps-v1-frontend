@@ -175,7 +175,11 @@ const LiquidityRemove = (props) => {
       </div>
       <UserLpToken
         network={networks[chainIndex]}
-        lpAddress={lpAddress}
+        lpAddress={
+          (lpAddress && lpAddress !== "0x0000000000000000000000000000000000000000") ?
+            lpAddress :
+            ""
+        }
         account={account}
         reload={false} />
       <TokenSelectModal

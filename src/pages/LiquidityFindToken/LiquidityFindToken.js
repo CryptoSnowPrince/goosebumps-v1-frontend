@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { ethers } from 'ethers';
+import linq from "linq";
 
 import DEXSubmenu from '../../components/Submenu/DEXSubmenu'
 import { LiquidityHeader } from "../../components/LiquidityHeader/LiquidityHeader";
@@ -25,6 +26,9 @@ const LiquidityFindToken = () => {
   const [tokenA, setTokenA] = useState({ symbol: "", address: "", decimals: 0 });
   const [tokenB, setTokenB] = useState({ symbol: "", address: "", decimals: 0 });
 
+  const [tokenAAddrIsInList, setTokenAAddrIsInList] = useState("");
+  const [tokenBAddrIsInList, setTokenBAddrIsInList] = useState("");
+
   const [showTokenSelectModal, setShowTokenSelectModal] = useState();
 
   const onSelectToken = (token, forTarget) => {
@@ -47,6 +51,31 @@ const LiquidityFindToken = () => {
         newTokenB.symbol = token.Symbol;
         newTokenB.decimals = token.Decimals;
         setTokenB(newTokenB);
+      }
+    }
+  }
+
+  const tokenIsInList = (tokenAaddress, tokenBaddress) => {
+    console.log("tokenIsInList: \n    tokenAaddress: ", tokenAaddress, "\n    tokenBaddress: ", tokenBaddress)
+    const tokenList = require("../../tokens/" + networks[chainIndex].Name)
+    if (tokenAaddress === "-") {
+      setTokenAAddrIsInList("0x0000000000000000000000000000000000000000");
+    } else {
+      var sched = linq.from(tokenList).where(x => x.Address === tokenAaddress).toArray();
+      if (sched.length === 0) {
+        setTokenAAddrIsInList("");
+      } else {
+        setTokenAAddrIsInList(tokenAaddress);
+      }
+    }
+    if (tokenBaddress === "-") {
+      setTokenBAddrIsInList("0x0000000000000000000000000000000000000000");
+    } else {
+      sched = linq.from(tokenList).where(x => x.Address === tokenBaddress).toArray();
+      if (sched.length === 0) {
+        setTokenBAddrIsInList("");
+      } else {
+        setTokenBAddrIsInList(tokenBaddress);
       }
     }
   }
@@ -98,6 +127,7 @@ const LiquidityFindToken = () => {
   useEffect(() => {
     // console.log("tokenA: ", tokenA)
     // console.log("tokenB: ", tokenB)
+    tokenIsInList(tokenA.address, tokenB.address);
     if (!isInvalidPair()) {
       isNewPair(tokenA.address, tokenB.address);
     } else {
@@ -128,11 +158,15 @@ const LiquidityFindToken = () => {
                         tokenA.symbol !== "" ?
                           <>
                             <img className='col-auto' style={{ height: 40, paddingRight: 10 }}
-                              src={"/assets/tokens/empty.png"}
+                              src={
+                                (tokenAAddrIsInList !== "" && networks[chainIndex]) ?
+                                  `/assets/tokens/${networks[chainIndex].chainId}/${tokenAAddrIsInList}.png` :
+                                  "/assets/tokens/empty.png"
+                              }
                               alt={tokenA.symbol} />
                             <div>{tokenA.symbol}</div>
                           </>
-                          : <div>Select a Token</div>
+                          : <div onClick={() => setShowTokenSelectModal("tokenA")}>Select a Token</div>
                       }
                     </div>
                     <div className="input-group-addon">
@@ -155,11 +189,15 @@ const LiquidityFindToken = () => {
                         tokenB.symbol !== "" ?
                           <>
                             <img className='col-auto' style={{ height: 40, paddingRight: 10 }}
-                              src={"/assets/tokens/empty.png"}
+                              src={
+                                (tokenBAddrIsInList !== "" && networks[chainIndex]) ?
+                                  `/assets/tokens/${networks[chainIndex].chainId}/${tokenBAddrIsInList}.png` :
+                                  "/assets/tokens/empty.png"
+                              }
                               alt={tokenB.symbol} />
                             <div>{tokenB.symbol}</div>
                           </>
-                          : <div>Select a Token</div>
+                          : <div onClick={() => setShowTokenSelectModal("tokenB")}>Select a Token</div>
                       }
                     </div>
                     <div className="input-group-addon">
@@ -193,7 +231,11 @@ const LiquidityFindToken = () => {
         </div>
         <UserLpToken
           network={networks[chainIndex]}
-          lpAddress={newPool ? "" : lpAddress}
+          lpAddress={
+            (lpAddress && lpAddress !== "0x0000000000000000000000000000000000000000") ?
+              lpAddress :
+              ""
+          }
           account={account}
           reload={false} />
         <TokenSelectModal

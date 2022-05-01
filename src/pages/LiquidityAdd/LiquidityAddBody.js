@@ -640,7 +640,11 @@ const LiquidityAddBody = (props) => {
         </div>
         <UserLpToken
           network={props.network}
-          lpAddress={newPool ? "" : lpAddress}
+          lpAddress={
+            (lpAddress && lpAddress !== "0x0000000000000000000000000000000000000000") ?
+              lpAddress :
+              ""
+          }
           account={account}
           reload={reloadUserLp} />
         <TokenSelectModal

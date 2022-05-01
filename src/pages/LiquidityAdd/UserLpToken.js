@@ -10,6 +10,7 @@ import tokenAbi from '../../abis/token.json';
 import { formatNumberWithoutComma } from '../../utils/number';
 
 const UserLpToken = (props) => {
+  // console.log("UserLpToken props", props)
   const [lpBalance, setLpBalance] = useState(0);
   const [lpTotalSupply, setLpTotalSupply] = useState(0);
   const [tokenABalance, setTokenABalance] = useState(0);
