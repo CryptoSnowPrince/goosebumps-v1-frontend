@@ -101,12 +101,14 @@ const LiquidityFindToken = () => {
     setReady(false)
     if (tokenAAddress === "-") tokenAAddress = networks[chainIndex].Currency.Address;
     if (tokenBAddress === "-") tokenBAddress = networks[chainIndex].Currency.Address;
+
     const provider = new ethers.providers.JsonRpcProvider(networks[chainIndex].RPC);
     const contract = new ethers.Contract(
       networks[chainIndex].DEX.Factory,
       factoryAbi,
       provider
     );
+
     setLpBalance(0);
     try {
       const pairAddress = await contract.getPair(tokenAAddress, tokenBAddress)
@@ -116,20 +118,32 @@ const LiquidityFindToken = () => {
       } else {
         const tokenAContract = new ethers.Contract(tokenAAddress, tokenAbi, provider);
         const tokenABalance = await tokenAContract.balanceOf(pairAddress);
+
         if (parseInt(tokenABalance._hex) > 0) {
           setNewPool(false)
         } else {
           setNewPool(true)
         }
+
         const pairContract = new ethers.Contract(pairAddress, pairAbi, provider);
         const lpBalance = await pairContract.balanceOf(account);
+
         if (parseInt(lpBalance._hex) > 0) {
           const lpDecimals = await pairContract.decimals();
           setLpBalance(ethers.utils.formatUnits(lpBalance, lpDecimals));
-          // if (localStorage.getItem("")) {
-          //TODO
 
-          // }
+          const item = networks[chainIndex].Name + "LpList";
+
+          if (localStorage.getItem(item)) {
+            var lpList = JSON.parse(localStorage.getItem(item));
+
+            if (lpList.filter(e => e === pairAddress).length <= 0) {
+              lpList.push(pairAddress);
+              localStorage.setItem(item, JSON.stringify(lpList))
+            }
+          } else {
+            localStorage.setItem(item, `["${pairAddress}"]`)
+          }
         }
 
       }
@@ -145,6 +159,7 @@ const LiquidityFindToken = () => {
   useEffect(() => {
     // console.log("tokenA: ", tokenA)
     // console.log("tokenB: ", tokenB)
+
     tokenIsInList(tokenA.address, tokenB.address);
     if (!isInvalidPair()) {
       isNewPair(tokenA.address, tokenB.address);
