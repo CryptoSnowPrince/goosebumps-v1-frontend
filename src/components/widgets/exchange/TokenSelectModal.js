@@ -94,7 +94,7 @@ const TokenSelectModal = (props) => {
         if (ethers.utils.isAddress(tokenSchKey)) {
             try {
                 const sched = linq.from(tokens.concat(tokensAddedByUser))
-                    .where(x => x.Address === tokenSchKey).toArray();
+                    .where(x => x.Address.toLowerCase() === tokenSchKey.toLowerCase()).toArray();
                 setSchedTokens(sched);
                 if (sched.length === 0) {
                     getTokenInfo(tokenSchKey);

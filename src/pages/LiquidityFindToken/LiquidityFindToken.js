@@ -137,12 +137,12 @@ const LiquidityFindToken = () => {
           if (localStorage.getItem(item)) {
             var lpList = JSON.parse(localStorage.getItem(item));
 
-            if (lpList.filter(e => e === pairAddress).length <= 0) {
+            if (lpList.filter(e => e === pairAddress.toLowerCase()).length <= 0) {
               lpList.push(pairAddress);
-              localStorage.setItem(item, JSON.stringify(lpList))
+              localStorage.setItem(item, JSON.stringify(lpList).toLowerCase())
             }
           } else {
-            localStorage.setItem(item, `["${pairAddress}"]`)
+            localStorage.setItem(item, `["${pairAddress.toLowerCase()}"]`)
           }
         }
 

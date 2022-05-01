@@ -37,26 +37,48 @@ const LiquidityBody = () => {
     }
     // console.log("chainName: ", chainName);
     try {
-      if (address && chainName !== "") {
-        let url = "https://graphql.bitquery.io/";
-        let query = `query ($network: EthereumNetwork!, $address: String!) {ethereum(network: $network) {address(address: {is: $address}) {balances {currency {symbol address}}}}}`;
-        let variables = `{"limit": 10,"offset": 0,"network": "` + chainName + `","address": "` + address + `"}`;
-        let opts = {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "X-API-KEY": config.GET_TOEKN_LIST_API_KEY
-          },
-          body: JSON.stringify({
-            query,
-            variables
-          })
-        };
-        await fetch(url, opts).then(res => res.json())
-          .then(data => userAllTokenBalance = data.data.ethereum.address[0].balances)
-          .catch(console.error);
-        const lpList = (userAllTokenBalance ? userAllTokenBalance : []).filter(e => e.currency.symbol === "GooseBumps-LP").map(t => t.currency.address);
-        setLpList(lpList)
+      if (ethers.utils.isAddress(address)) {
+        if (chainName !== "") {
+          let url = "https://graphql.bitquery.io/";
+          let query = `query ($network: EthereumNetwork!, $address: String!) {ethereum(network: $network) {address(address: {is: $address}) {balances {currency {symbol address}}}}}`;
+          let variables = `{"limit": 10,"offset": 0,"network": "` + chainName + `","address": "` + address + `"}`;
+          let opts = {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "X-API-KEY": config.GET_TOEKN_LIST_API_KEY
+            },
+            body: JSON.stringify({
+              query,
+              variables
+            })
+          };
+          await fetch(url, opts).then(res => res.json())
+            .then(data => userAllTokenBalance = data.data.ethereum.address[0].balances)
+            .catch(console.error);
+          var schedLpList = (userAllTokenBalance ? userAllTokenBalance : []).filter(e => e.currency.symbol === "GooseBumps-LP").map(t => t.currency.address);
+          schedLpList = JSON.parse(JSON.stringify(schedLpList).toLowerCase())
+          if (localStorage.getItem(networks[chainIndex].Name + "LpList")) {
+            setLpList([...new Set(
+              [
+                ...schedLpList,
+                ...JSON.parse(
+                  localStorage
+                    .getItem(networks[chainIndex].Name + "LpList")
+                )
+              ]
+            )
+            ]);
+          } else {
+            setLpList(schedLpList)
+          }
+        } else {
+          if (localStorage.getItem(networks[chainIndex].Name + "LpList")) {
+            setLpList(JSON.parse(localStorage.getItem(networks[chainIndex].Name + "LpList")));
+          }
+        }
+      } else {
+        setLpList([])
       }
     } catch (error) {
       setLpList([])
@@ -69,13 +91,13 @@ const LiquidityBody = () => {
     fetchLpList(account, chainIndex)
   }, [account, chainIndex]);
 
-  // useEffect(() => {
-  //   console.log("lpList: ", lpList)
-  // lpList.map((lpaddress, idx) => {
-  //   console.log("map: ", lpaddress)
-  //   console.log("map: ", idx)
-  // })
-  // }, [lpList])
+  useEffect(() => {
+    console.log("lpList: ", lpList)
+    // lpList.map((lpaddress, idx) => {
+    //   console.log("map: ", lpaddress)
+    //   console.log("map: ", idx)
+    // })
+  }, [lpList])
 
   const MainBody = () => {
     if (!ready) {
