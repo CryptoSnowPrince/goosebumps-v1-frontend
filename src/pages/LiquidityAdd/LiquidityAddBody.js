@@ -21,7 +21,7 @@ const LiquidityAddBody = (props) => {
   const web3Provider = useSelector(selector.web3ProviderState);
 
   const [loading, setLoading] = useState(false);
-  const [reloadUserLp, setReloadUserLp] = useState(false);
+  const [reloadUserLp, setReloadUserLp] = useState(0);
   const [ready, setReady] = useState(false);
   const [error, setError] = useState(false);
 
@@ -311,11 +311,8 @@ const LiquidityAddBody = (props) => {
       web3Provider.getSigner()
     );
 
-    // console.log("===============test================")
-    // console.log("web3Provider lastblock: ", (await web3Provider.getBlock()).timestamp)
-
     setLoading(true);
-    setReloadUserLp(false);
+    setReloadUserLp(1);
     // Slippage Tolerance 5%
     const slippageTolerance = 5;
     try {
@@ -373,7 +370,7 @@ const LiquidityAddBody = (props) => {
       }
     }
     setLoading(false);
-    setReloadUserLp(true);
+    setReloadUserLp(2);
   }
 
   const isNewPair = async (tokenAAddress, tokenBAddress) => {

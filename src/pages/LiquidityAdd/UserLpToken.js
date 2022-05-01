@@ -9,6 +9,12 @@ import pairAbi from '../../abis/pair.json';
 import tokenAbi from '../../abis/token.json';
 import { formatNumberWithoutComma } from '../../utils/number';
 
+/**
+ * props.reload
+ *     0: hide and update
+ *     others: show and update
+ */
+
 const UserLpToken = (props) => {
   // console.log("UserLpToken props", props)
   const [lpBalance, setLpBalance] = useState(0);
@@ -127,7 +133,11 @@ const UserLpToken = (props) => {
 
   return (
     <>
-      {parseFloat(lpBalance) > 0 && parseFloat(lpTotalSupply) > 0 ?
+      {(props.reload !== 0 &&
+        parseFloat(lpBalance) > 0 &&
+        parseFloat(lpTotalSupply) > 0 &&
+        tokenASymbol !== "" &&
+        tokenBSymbol !== "") ?
         <div className='mt-4 p-3' id="userLpToken">
           <div className='mt-2 fs-5'>LP tokens in your wallet</div>
           <div className='mt-2 d-flex justify-content-between'>

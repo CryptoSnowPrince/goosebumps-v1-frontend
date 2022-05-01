@@ -181,7 +181,7 @@ const LiquidityRemove = (props) => {
             ""
         }
         account={account}
-        reload={false} />
+        reload={1} />
       <TokenSelectModal
         showFor={showTokenSelectModal}
         hide={() => setShowTokenSelectModal()}

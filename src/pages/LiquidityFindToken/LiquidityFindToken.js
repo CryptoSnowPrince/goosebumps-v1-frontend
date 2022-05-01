@@ -7,8 +7,9 @@ import DEXSubmenu from '../../components/Submenu/DEXSubmenu'
 import { LiquidityHeader } from "../../components/LiquidityHeader/LiquidityHeader";
 import { UserLpToken } from "../LiquidityAdd/UserLpToken"
 import { TokenSelectModal } from "../../components/widgets/exchange/TokenSelectModal"
-import tokenAbi from '../../abis/token';
-import factoryAbi from '../../abis/factory';
+import tokenAbi from '../../abis/token'
+import pairAbi from '../../abis/pair'
+import factoryAbi from '../../abis/factory'
 
 import * as selector from '../../store/selectors'
 import networks from '../../networks.json'
@@ -22,6 +23,8 @@ const LiquidityFindToken = () => {
 
   const [newPool, setNewPool] = useState(false);
   const [lpAddress, setLpAddress] = useState("")
+  const [lpBalance, setLpBalance] = useState(0)
+  const [ready, setReady] = useState(true)
 
   const [tokenA, setTokenA] = useState({ symbol: "", address: "", decimals: 0 });
   const [tokenB, setTokenB] = useState({ symbol: "", address: "", decimals: 0 });
@@ -56,7 +59,7 @@ const LiquidityFindToken = () => {
   }
 
   const tokenIsInList = (tokenAaddress, tokenBaddress) => {
-    console.log("tokenIsInList: \n    tokenAaddress: ", tokenAaddress, "\n    tokenBaddress: ", tokenBaddress)
+    // console.log("tokenIsInList: \n    tokenAaddress: ", tokenAaddress, "\n    tokenBaddress: ", tokenBaddress)
     const tokenList = require("../../tokens/" + networks[chainIndex].Name)
     if (tokenAaddress === "-") {
       setTokenAAddrIsInList("0x0000000000000000000000000000000000000000");
@@ -95,6 +98,7 @@ const LiquidityFindToken = () => {
   }
 
   const isNewPair = async (tokenAAddress, tokenBAddress) => {
+    setReady(false)
     if (tokenAAddress === "-") tokenAAddress = networks[chainIndex].Currency.Address;
     if (tokenBAddress === "-") tokenBAddress = networks[chainIndex].Currency.Address;
     const provider = new ethers.providers.JsonRpcProvider(networks[chainIndex].RPC);
@@ -103,6 +107,7 @@ const LiquidityFindToken = () => {
       factoryAbi,
       provider
     );
+    setLpBalance(0);
     try {
       const pairAddress = await contract.getPair(tokenAAddress, tokenBAddress)
       setLpAddress(pairAddress);
@@ -116,12 +121,25 @@ const LiquidityFindToken = () => {
         } else {
           setNewPool(true)
         }
+        const pairContract = new ethers.Contract(pairAddress, pairAbi, provider);
+        const lpBalance = await pairContract.balanceOf(account);
+        if (parseInt(lpBalance._hex) > 0) {
+          const lpDecimals = await pairContract.decimals();
+          setLpBalance(ethers.utils.formatUnits(lpBalance, lpDecimals));
+          // if (localStorage.getItem("")) {
+          //TODO
+
+          // }
+        }
+
       }
     } catch (error) {
       setNewPool(false)
       setLpAddress("");
+      setLpBalance(0);
       console.log("get Pair Address err: ", error)
     }
+    setReady(true)
   }
 
   useEffect(() => {
@@ -132,8 +150,9 @@ const LiquidityFindToken = () => {
       isNewPair(tokenA.address, tokenB.address);
     } else {
       setLpAddress("");
+      setLpBalance(0);
     }
-  }, [tokenA, tokenB])
+  }, [tokenA.address, tokenB.address])
 
   useEffect(() => {
     setTokenA({ symbol: "", address: "", decimals: 0, amount: 0, balance: 0 })
@@ -141,6 +160,69 @@ const LiquidityFindToken = () => {
     // console.log("networks[chainIndex]: ", networks[chainIndex]);
     // console.log("account: ", account);
   }, [chainIndex, account])
+
+  useEffect(() => {
+    setTokenA({ symbol: "", address: "", decimals: 0 });
+    setTokenB({ symbol: "", address: "", decimals: 0 });
+  }, [])
+
+  const Message = () => {
+    if (!ready) {
+      return (
+        <div className='mt-5 text-center'>
+          <div className='text-center content d-flex align-items-center justify-content-center'>
+            Please wait...
+          </div>
+        </div>
+      );
+    } else if (!ethers.utils.isAddress(account)) {
+      return (
+        <div className='mt-5 text-center'>
+          <div className='text-center content d-flex align-items-center justify-content-center'>
+            Connect to a wallet to find pools
+          </div>
+        </div>
+      );
+    } else if (!(tokenA.symbol && tokenB.symbol)) {
+      return (
+        <div className='mt-5 text-center'>
+          <div className='text-center content d-flex align-items-center justify-content-center'>
+            Select a token to find your liquidity.
+          </div>
+        </div>
+      )
+    } else if (isInvalidPair()) {
+      return (
+        <div className='mt-5 text-center'>
+          <div className='text-center content d-flex align-items-center justify-content-center'>
+            Invalid pair.
+          </div>
+        </div>
+      )
+    } else if (parseFloat(lpBalance) > 0) {
+      return (
+        <div className='mt-5 text-center'>
+          <div className='text-center content d-flex align-items-center justify-content-center'>
+            Pool Found!
+          </div>
+          <div className='text-center content d-flex align-items-center justify-content-center'>
+            Manage this pool.
+          </div>
+        </div>
+      )
+    } else {
+      return (
+        <div className='mt-5 text-center'>
+          <div className='text-center content d-flex align-items-center justify-content-center'>
+            No pool found.
+          </div>
+          <div className='text-center content d-flex align-items-center justify-content-center'>
+            Create pool.
+          </div>
+        </div>
+      )
+    }
+  }
 
   return (
     <>
@@ -210,23 +292,7 @@ const LiquidityFindToken = () => {
                 </div>
               </div>
             </div>
-            {
-              !ethers.utils.isAddress(account) ?
-                (
-                  <div className='mt-5 text-center'>
-                    <div className='text-center content d-flex align-items-center justify-content-center'>
-                      Connect to a wallet to find pools
-                    </div>
-                  </div>
-                ) :
-                (
-                  <div className='mt-5 text-center'>
-                    <div className='text-center content d-flex align-items-center justify-content-center'>
-                      Select a token to find your liquidity.
-                    </div>
-                  </div>
-                )
-            }
+            <Message />
           </div>
         </div>
         <UserLpToken
@@ -237,7 +303,7 @@ const LiquidityFindToken = () => {
               ""
           }
           account={account}
-          reload={false} />
+          reload={ready ? 2 : 1} />
         <TokenSelectModal
           showFor={showTokenSelectModal}
           hide={() => setShowTokenSelectModal()}
