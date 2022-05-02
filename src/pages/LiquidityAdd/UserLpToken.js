@@ -67,13 +67,13 @@ const UserLpToken = (props) => {
         const tokenBContract = new Contract(tokenBAddress, tokenAbi);
 
         const tokenList = require("../../tokens/" + props.network.Name)
-        var sched = linq.from(tokenList).where(x => x.Address === tokenAAddress).toArray();
+        var sched = linq.from(tokenList).where(x => x.Address.toLowerCase() === tokenAAddress.toLowerCase()).toArray();
         if (sched.length === 0) {
           setTokenAAddrIsInList("");
         } else {
           setTokenAAddrIsInList(tokenAAddress);
         }
-        sched = linq.from(tokenList).where(x => x.Address === tokenBAddress).toArray();
+        sched = linq.from(tokenList).where(x => x.Address.toLowerCase() === tokenBAddress.toLowerCase()).toArray();
         if (sched.length === 0) {
           setTokenBAddrIsInList("");
         } else {
@@ -99,10 +99,10 @@ const UserLpToken = (props) => {
         setTokenABalance(ethers.utils.formatUnits(tokenABalance, tokenADecimals));
         setTokenBBalance(ethers.utils.formatUnits(tokenBBalance, tokenBDecimals));
         setTokenASymbol(
-          tokenAAddress === props.network.Currency.Address ? props.network.Currency.Name : tokenASymbol
+          tokenAAddress.toLowerCase() === props.network.Currency.Address.toLowerCase() ? props.network.Currency.Name : tokenASymbol
         )
         setTokenBSymbol(
-          tokenBAddress === props.network.Currency.Address ? props.network.Currency.Name : tokenBSymbol
+          tokenBAddress.toLowerCase() === props.network.Currency.Address.toLowerCase() ? props.network.Currency.Name : tokenBSymbol
         )
       } else {
         setLpBalance(0);
