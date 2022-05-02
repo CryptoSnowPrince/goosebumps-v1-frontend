@@ -8,7 +8,7 @@ import { Contract, Provider, setMulticallAddress } from 'ethers-multicall';
 import linq from "linq";
 import pairAbi from '../../abis/pair.json';
 import tokenAbi from '../../abis/token.json';
-import routerAbi from '../../abis/token.json';
+import routerAbi from '../../abis/router.json';
 
 import DEXSubmenu from '../../components/Submenu/DEXSubmenu'
 import { LiquidityHeader } from "../../components/LiquidityHeader/LiquidityHeader";
@@ -65,6 +65,11 @@ const LiquidityRemove = () => {
   const [tokenBBalance, setTokenBBalance] = useState(0);
   const [tokenASymbol, setTokenASymbol] = useState("");
   const [tokenBSymbol, setTokenBSymbol] = useState("");
+  // to remove liquidity
+  const [tokenAAddr, setTokenAAddr] = useState("");
+  const [tokenBAddr, setTokenBAddr] = useState("");
+  const [tokenADecimals, setTokenADecimals] = useState(0);
+  const [tokenBDecimals, setTokenBDecimals] = useState(0);
   const [tokenAAddrIsInList, setTokenAAddrIsInList] = useState("");
   const [tokenBAddrIsInList, setTokenBAddrIsInList] = useState("");
 
@@ -116,6 +121,9 @@ const LiquidityRemove = () => {
         const tokenAContract = new Contract(tokenAAddress, tokenAbi);
         const tokenBContract = new Contract(tokenBAddress, tokenAbi);
 
+        setTokenAAddr(tokenAAddress);
+        setTokenBAddr(tokenBAddress);
+
         const tokenList = require("../../tokens/" + networks[chainIndex].Name)
         var sched = linq.from(tokenList).where(x => x.Address.toLowerCase() === tokenAAddress.toLowerCase()).toArray();
         if (sched.length === 0) {
@@ -153,6 +161,10 @@ const LiquidityRemove = () => {
 
         setTokenABalance(ethers.utils.formatUnits(tokenABalance, tokenADecimals));
         setTokenBBalance(ethers.utils.formatUnits(tokenBBalance, tokenBDecimals));
+
+        setTokenADecimals(tokenADecimals);
+        setTokenBDecimals(tokenBDecimals);
+
         setTokenASymbol(
           tokenAAddress.toLowerCase() === networks[chainIndex].Currency.Address.toLowerCase() ? networks[chainIndex].Currency.Name : tokenASymbol
         )
@@ -166,6 +178,10 @@ const LiquidityRemove = () => {
         setTokenBBalance(0);
         setTokenASymbol("");
         setTokenBSymbol("");
+        setTokenAAddr("");
+        setTokenBAddr("");
+        setTokenADecimals(0);
+        setTokenBDecimals(0);
         setTokenAAddrIsInList("");
         setTokenBAddrIsInList("");
       }
@@ -176,17 +192,14 @@ const LiquidityRemove = () => {
       setTokenBBalance(0);
       setTokenASymbol("");
       setTokenBSymbol("");
+      setTokenAAddr("");
+      setTokenBAddr("");
+      setTokenADecimals(0);
+      setTokenBDecimals(0);
       setTokenAAddrIsInList("");
       setTokenBAddrIsInList("");
       console.log("LiquidityRemove updateLpInfo err: ", error)
     }
-    if (ethers.utils.isAddress(account) &&
-      ethers.utils.isAddress(lpAddress) &&
-      lpAddress !== "0x0000000000000000000000000000000000000000" &&
-      chainIndex >= 0) {
-      setReceiveNToken(GENERAL_TOKEN)
-      setReady(true);
-    };
   };
 
   const isApproved = async () => {
@@ -257,6 +270,17 @@ const LiquidityRemove = () => {
     const slippageTolerance = 5;
     try {
       var nowTimestamp = (await web3Provider.getBlock()).timestamp;
+      if (receiveNToken === GENERAL_TOKEN) {
+        var tx = await routerContract.removeLiquidity(
+          tokenAAddr,
+          tokenBAddr,
+          ethers.utils.parseUnits((lpBalance * removeAmount / 100).toString(), lpDecimals),
+          ethers.utils.parseUnits((tokenABalance * lpBalance / lpTotalSupply * removeAmount * (100 - slippageTolerance) / 10000).toString(), tokenADecimals),
+          ethers.utils.parseUnits((tokenBBalance * lpBalance / lpTotalSupply * removeAmount * (100 - slippageTolerance) / 10000).toString(), tokenBDecimals),
+          account,
+          nowTimestamp + 1200, // deadline: 20 mins
+        )
+      }
       // if (tokenAaddress === "-") {
       //   var options = { value: ethers.utils.parseUnits(tokenA.amount.toString(), tokenA.decimals) };
       //   var tx = await contract.addLiquidityETH(
@@ -293,16 +317,12 @@ const LiquidityRemove = () => {
       //     nowTimestamp + 1200 // deadline: 20mins
       //   );
       // }
-      // const receipt = await tx.wait(tx);
-      // // console.log("receipt: ", receipt);
-      // updateBalance(tokenA.address, tokenA, setTokenA, true).then(() => {
-      //   updateBalance(tokenB.address, tokenB, setTokenB, true).then(() => {
-      //   });
-      // });
-      // if (receipt.status === 1) {
-      //   alert(`add liquidity success`);
-      //   isNewPair(tokenA.address, tokenB.address);
-      // }
+      const receipt = await tx.wait(tx);
+      // console.log("receipt: ", receipt);
+      await updateLpInfo();
+      if (receipt.status === 1) {
+        alert(`remove liquidity success`);
+      }
     } catch (err) {
       console.log("remove liquidity err: ", err);
       if (err.code === 4001) {
@@ -336,6 +356,13 @@ const LiquidityRemove = () => {
 
     const reUpdateLpInfo = async () => {
       await updateLpInfo()
+      if (ethers.utils.isAddress(account) &&
+        ethers.utils.isAddress(lpAddress) &&
+        lpAddress !== "0x0000000000000000000000000000000000000000" &&
+        chainIndex >= 0) {
+        setReceiveNToken(GENERAL_TOKEN)
+        setReady(true);
+      };
     }
     reUpdateLpInfo()
   }, [chainIndex, lpAddress, account])
@@ -356,7 +383,7 @@ const LiquidityRemove = () => {
   // }, [tokenAAddrIsInList, tokenBAddrIsInList])
 
   useEffect(() => {
-    // console.log("useEffect receiveNToken: ", receiveNToken)
+    console.log("useEffect receiveNToken: ", receiveNToken)
     switch (receiveNToken) {
       case NATIVE_TOKEN:
         if (
