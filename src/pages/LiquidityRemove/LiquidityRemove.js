@@ -237,8 +237,8 @@ const LiquidityRemove = () => {
   };
 
   const removeLiquidity = async () => {
-    // console.log("removeLiquidity");
-    const contract = new ethers.Contract(
+    console.log("removeLiquidity");
+    const routerContract = new ethers.Contract(
       networks[chainIndex].DEX.Router,
       routerAbi,
       web3Provider.getSigner()
@@ -322,7 +322,7 @@ const LiquidityRemove = () => {
 
   useEffect(() => {
     updateLpInfo()
-    setReceiveNToken(NATIVE_TOKEN)
+    setReceiveNToken(GENERAL_TOKEN)
     setReady(true);
   }, [chainIndex, lpAddress, account])
 
@@ -384,6 +384,18 @@ const LiquidityRemove = () => {
         break;
       case GENERAL_TOKEN:
         // console.log("case GENERAL_TOKEN")
+        if (
+          tokenAAddrIsInList === "-" ||
+          tokenAAddrIsInList === "0x0000000000000000000000000000000000000000" ||
+          tokenAAddrIsInList.toLowerCase() === networks[chainIndex].Currency.Address.toLowerCase() ||
+          tokenBAddrIsInList === "-" ||
+          tokenBAddrIsInList === "0x0000000000000000000000000000000000000000" ||
+          tokenBAddrIsInList.toLowerCase() === networks[chainIndex].Currency.Address.toLowerCase()
+        ) {
+          setReceiveNToken(NATIVE_TOKEN)
+        } else {
+          // console.log("else routine GENERAL_TOKEN")
+        }
         break;
       default:
         // console.log("case default")
@@ -415,7 +427,7 @@ const LiquidityRemove = () => {
 
   const handleReceiveNativeToken = () => {
     // console.log("handleReceiveNativeToken")
-    receiveNToken === NATIVE_TOKEN ? setReceiveNToken(W_NATIVE_TOKEN) : setReceiveNToken(NATIVE_TOKEN)
+    receiveNToken !== NATIVE_TOKEN ? setReceiveNToken(NATIVE_TOKEN) : setReceiveNToken(W_NATIVE_TOKEN)
   }
 
   const ReceiveNativeToken = () => {
@@ -431,9 +443,9 @@ const LiquidityRemove = () => {
       return (
         <button className='letter-button' disabled={!ready}
           onClick={() => handleReceiveNativeToken()}>
-          Receive {receiveNToken !== NATIVE_TOKEN ?
-            networks[chainIndex].Currency.Name :
-            networks[chainIndex].Currency.WrappedName}
+          Receive {receiveNToken !== W_NATIVE_TOKEN ?
+            networks[chainIndex].Currency.WrappedName :
+            networks[chainIndex].Currency.Name}
         </button>
       )
     } else {
