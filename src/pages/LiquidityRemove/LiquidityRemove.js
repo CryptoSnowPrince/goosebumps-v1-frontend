@@ -269,8 +269,10 @@ const LiquidityRemove = () => {
     // Slippage Tolerance 5%
     const slippageTolerance = 5;
     try {
+      console.log("try catch : ", receiveNToken)
       var nowTimestamp = (await web3Provider.getBlock()).timestamp;
-      if (receiveNToken === GENERAL_TOKEN) {
+      if (receiveNToken === GENERAL_TOKEN || receiveNToken === W_NATIVE_TOKEN) {
+        console.log("if : ", receiveNToken)
         var tx = await routerContract.removeLiquidity(
           tokenAAddr,
           tokenBAddr,
@@ -280,43 +282,40 @@ const LiquidityRemove = () => {
           account,
           nowTimestamp + 1200, // deadline: 20 mins
         )
+      } else if (receiveNToken === NATIVE_TOKEN) {
+        console.log("else if : ", receiveNToken)
+        if (
+          tokenAAddr === "-" ||
+          tokenAAddr === "0x0000000000000000000000000000000000000000" ||
+          tokenAAddr.toLowerCase() === networks[chainIndex].Currency.Address.toLowerCase()) {
+
+          console.log("tokenAAddr is NATIVE_TOKEN: ", receiveNToken)
+          tx = await routerContract.removeLiquidityETH(
+            tokenBAddr,
+            ethers.utils.parseUnits((lpBalance * removeAmount / 100).toString(), lpDecimals),
+            ethers.utils.parseUnits((tokenBBalance * lpBalance / lpTotalSupply * removeAmount * (100 - slippageTolerance) / 10000).toString(), tokenBDecimals),
+            ethers.utils.parseUnits((tokenABalance * lpBalance / lpTotalSupply * removeAmount * (100 - slippageTolerance) / 10000).toString(), tokenADecimals),
+            account,
+            nowTimestamp + 1200, // deadline: 20 mins
+          )
+
+        } else if (
+          tokenBAddr === "-" ||
+          tokenBAddr === "0x0000000000000000000000000000000000000000" ||
+          tokenBAddr.toLowerCase() === networks[chainIndex].Currency.Address.toLowerCase()) {
+
+          console.log("tokenBAddr is NATIVE_TOKEN: ", receiveNToken)
+          tx = await routerContract.removeLiquidityETH(
+            tokenAAddr,
+            ethers.utils.parseUnits((lpBalance * removeAmount / 100).toString(), lpDecimals),
+            ethers.utils.parseUnits((tokenABalance * lpBalance / lpTotalSupply * removeAmount * (100 - slippageTolerance) / 10000).toString(), tokenADecimals),
+            ethers.utils.parseUnits((tokenBBalance * lpBalance / lpTotalSupply * removeAmount * (100 - slippageTolerance) / 10000).toString(), tokenBDecimals),
+            account,
+            nowTimestamp + 1200, // deadline: 20 mins
+          )
+
+        }
       }
-      // if (tokenAaddress === "-") {
-      //   var options = { value: ethers.utils.parseUnits(tokenA.amount.toString(), tokenA.decimals) };
-      //   var tx = await contract.addLiquidityETH(
-      //     tokenB.address,
-      //     ethers.utils.parseUnits(tokenB.amount.toString(), tokenB.decimals),
-      //     ethers.utils.parseUnits((parseFloat(tokenB.amount) * (100 - slippageTolerance) / 100).toString(), tokenB.decimals),
-      //     ethers.utils.parseUnits((parseFloat(tokenA.amount) * (100 - slippageTolerance) / 100).toString(), tokenA.decimals),
-      //     account,
-      //     nowTimestamp + 1200, // deadline: 20mins
-      //     options
-      //   )
-      // }
-      // else if (tokenB.address === "-") {
-      //   options = { value: ethers.utils.parseUnits(tokenB.amount.toString(), tokenB.decimals) };
-      //   tx = await contract.addLiquidityETH(
-      //     tokenA.address,
-      //     ethers.utils.parseUnits(tokenA.amount.toString(), tokenA.decimals),
-      //     ethers.utils.parseUnits((parseFloat(tokenA.amount) * (100 - slippageTolerance) / 100).toString(), tokenA.decimals),
-      //     ethers.utils.parseUnits((parseFloat(tokenB.amount) * (100 - slippageTolerance) / 100).toString(), tokenB.decimals),
-      //     account,
-      //     nowTimestamp + 1200, // deadline: 20mins
-      //     options
-      //   )
-      // }
-      // else {
-      //   tx = await contract.addLiquidity(
-      //     tokenA.address,
-      //     tokenB.address,
-      //     ethers.utils.parseUnits(tokenA.amount.toString(), tokenA.decimals),
-      //     ethers.utils.parseUnits(tokenB.amount.toString(), tokenB.decimals),
-      //     ethers.utils.parseUnits((parseFloat(tokenA.amount) * (100 - slippageTolerance) / 100).toString(), tokenA.decimals),
-      //     ethers.utils.parseUnits((parseFloat(tokenB.amount) * (100 - slippageTolerance) / 100).toString(), tokenB.decimals),
-      //     account,
-      //     nowTimestamp + 1200 // deadline: 20mins
-      //   );
-      // }
       const receipt = await tx.wait(tx);
       // console.log("receipt: ", receipt);
       await updateLpInfo();
