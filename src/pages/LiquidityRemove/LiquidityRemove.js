@@ -196,7 +196,7 @@ const LiquidityRemove = () => {
     setReady(false);
     try {
       var allowance = await contract.allowance(account, networks[chainIndex].DEX.Router);
-      if (BigNumber.from(ethers.utils.parseUnits((lpBalance * removeAmount).toString(), lpDecimals))
+      if (BigNumber.from(ethers.utils.parseUnits((lpBalance * removeAmount / 100).toString(), lpDecimals))
         .gt(allowance)) {
         setLpApproveState(NEED_APPROVE)
       }
