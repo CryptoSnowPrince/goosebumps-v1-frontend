@@ -190,7 +190,7 @@ const NavMenu = () => {
                                             pathname === '/dex' ||
                                             pathname === '/liquidity' ||
                                             pathname === '/liquidityAdd' ||
-                                            pathname === '/liquidityRemove' ||
+                                            pathname.indexOf('/liquidityRemove') !== -1 ||
                                             pathname === '/liquidityFindToken'
                                         ) ? "active" : ""}`} to="/dex">DEX</Link>
                             </NavItem>

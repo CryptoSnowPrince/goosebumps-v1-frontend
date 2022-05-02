@@ -19,7 +19,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 const App = () => {
   useEffect(() => {
-		const WrappedConnect = async () => {
+    const WrappedConnect = async () => {
       await Connect();
     }
     WrappedConnect();
@@ -32,7 +32,9 @@ const App = () => {
         <Route exact path='/stake' element={<Staking />} />
         <Route exact path='/liquidity' element={<Liquidity />} />
         <Route exact path='/liquidityAdd' element={<LiquidityAdd />} />
-        <Route exact path='/liquidityRemove' element={<LiquidityRemove />} />
+        <Route exact path='/liquidityRemove' element={<LiquidityRemove />}>
+          <Route path='/liquidityRemove/:lpAddress' element={<LiquidityRemove />} />
+        </Route>
         <Route exact path='/liquidityFindToken' element={<LiquidityFindToken />} />
         <Route exact path='/farms' element={<Farming />} />
         <Route exact path='/bridge' element={<Bridge />} />

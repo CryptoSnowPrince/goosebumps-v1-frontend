@@ -78,7 +78,6 @@ const LiquidityAddBody = (props) => {
     }
   };
 
-
   const updateBalance = async (forContract, forTarget, setForTarget, setAmount = false) => {
     // console.log("updateBalance")
     setReady(false)

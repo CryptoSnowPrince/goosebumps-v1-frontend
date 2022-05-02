@@ -91,13 +91,13 @@ const LiquidityBody = () => {
     fetchLpList(account, chainIndex)
   }, [account, chainIndex]);
 
-  useEffect(() => {
-    console.log("lpList: ", lpList)
-    // lpList.map((lpaddress, idx) => {
-    //   console.log("map: ", lpaddress)
-    //   console.log("map: ", idx)
-    // })
-  }, [lpList])
+  // useEffect(() => {
+  //   console.log("lpList: ", lpList)
+  //   lpList.map((lpaddress, idx) => {
+  //     console.log("map: ", lpaddress)
+  //     console.log("map: ", idx)
+  //   })
+  // }, [lpList])
 
   const MainBody = () => {
     if (!ready) {
