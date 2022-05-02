@@ -30,6 +30,7 @@ const APPROVED = 3;
 
 const NATIVE_TOKEN = 0;
 const W_NATIVE_TOKEN = 1;
+const GENERAL_TOKEN = 2;
 
 const lpDecimals = 18;
 
@@ -44,8 +45,8 @@ const LiquidityRemove = () => {
   const [ready, setReady] = useState(false)
   const [error, setError] = useState(false)
   const [reloadUserLp, setReloadUserLp] = useState(1);
-  const [receiveNTokenIsNeed, setReceiveNTokenIsNeed] = useState("");
-  const [receiveNToken, setReceiveNToken] = useState(W_NATIVE_TOKEN)
+  // const [receiveNTokenIsNeed, setReceiveNTokenIsNeed] = useState("");
+  const [receiveNToken, setReceiveNToken] = useState(NATIVE_TOKEN)
 
   /**
    * 0: don't need approve
@@ -86,7 +87,7 @@ const LiquidityRemove = () => {
     try {
       await ethcallProvider.init();
 
-      if (ethers.utils.isAddress(account) && ethers.utils.isAddress(lpAddress)) {
+      if (ethers.utils.isAddress(account) && ethers.utils.isAddress(lpAddress) && lpAddress !== "0x0000000000000000000000000000000000000000") {
         var lpBalance = null;
         var lpTotalSupply = 0;
         var lpDecimals = 0;
@@ -115,15 +116,20 @@ const LiquidityRemove = () => {
         const tokenBContract = new Contract(tokenBAddress, tokenAbi);
 
         const tokenList = require("../../tokens/" + networks[chainIndex].Name)
-        var sched = linq.from(tokenList).where(x => x.Address === tokenAAddress).toArray();
+        var sched = linq.from(tokenList).where(x => x.Address.toLowerCase() === tokenAAddress.toLowerCase()).toArray();
         if (sched.length === 0) {
           setTokenAAddrIsInList("");
+        } else if (tokenAAddress.toLowerCase() === networks[chainIndex].Currency.Address.toLowerCase()) {
+          setTokenAAddrIsInList("0x0000000000000000000000000000000000000000");
         } else {
           setTokenAAddrIsInList(tokenAAddress);
         }
-        sched = linq.from(tokenList).where(x => x.Address === tokenBAddress).toArray();
+        
+        sched = linq.from(tokenList).where(x => x.Address.toLowerCase() === tokenBAddress.toLowerCase()).toArray();
         if (sched.length === 0) {
           setTokenBAddrIsInList("");
+        } else if (tokenBAddress.toLowerCase() === networks[chainIndex].Currency.Address.toLowerCase()) {
+          setTokenBAddrIsInList("0x0000000000000000000000000000000000000000");
         } else {
           setTokenBAddrIsInList(tokenBAddress);
         }
@@ -147,10 +153,10 @@ const LiquidityRemove = () => {
         setTokenABalance(ethers.utils.formatUnits(tokenABalance, tokenADecimals));
         setTokenBBalance(ethers.utils.formatUnits(tokenBBalance, tokenBDecimals));
         setTokenASymbol(
-          tokenAAddress === networks[chainIndex].Currency.Address ? networks[chainIndex].Currency.Name : tokenASymbol
+          tokenAAddress.toLowerCase() === networks[chainIndex].Currency.Address.toLowerCase() ? networks[chainIndex].Currency.Name : tokenASymbol
         )
         setTokenBSymbol(
-          tokenBAddress === networks[chainIndex].Currency.Address ? networks[chainIndex].Currency.Name : tokenBSymbol
+          tokenBAddress.toLowerCase() === networks[chainIndex].Currency.Address.toLowerCase() ? networks[chainIndex].Currency.Name : tokenBSymbol
         )
       } else {
         setLpBalance(0);
@@ -297,24 +303,25 @@ const LiquidityRemove = () => {
     setReloadUserLp(2);
   }
 
-  const checkPair = () => {
-    if (
-      tokenAAddrIsInList === "-" ||
-      tokenAAddrIsInList.toLowerCase() === networks[chainIndex].Currency.Address.toLowerCase()
-    ) {
-      setReceiveNTokenIsNeed("tokenA")
-    } else if (
-      tokenBAddrIsInList === "-" ||
-      tokenBAddrIsInList.toLowerCase() === networks[chainIndex].Currency.Address.toLowerCase()
-    ) {
-      setReceiveNTokenIsNeed("tokenB")
-    } else {
-      setReceiveNTokenIsNeed("")
-    }
-  }
+  // const checkPair = () => {
+  //   if (
+  //     tokenAAddrIsInList === "-" ||
+  //     tokenAAddrIsInList.toLowerCase() === networks[chainIndex].Currency.Address.toLowerCase()
+  //   ) {
+  //     setReceiveNTokenIsNeed("tokenA")
+  //   } else if (
+  //     tokenBAddrIsInList === "-" ||
+  //     tokenBAddrIsInList.toLowerCase() === networks[chainIndex].Currency.Address.toLowerCase()
+  //   ) {
+  //     setReceiveNTokenIsNeed("tokenB")
+  //   } else {
+  //     setReceiveNTokenIsNeed("")
+  //   }
+  // }
 
   useEffect(() => {
     updateLpInfo()
+    setReceiveNToken(NATIVE_TOKEN)
     setReady(true);
   }, [chainIndex, lpAddress, account])
 
@@ -329,9 +336,59 @@ const LiquidityRemove = () => {
     isApproved();
   }, [removeAmount])
 
+  // useEffect(() => {
+  //   checkPair()
+  // }, [tokenAAddrIsInList, tokenBAddrIsInList])
+
   useEffect(() => {
-    checkPair()
-  }, [tokenAAddrIsInList, tokenBAddrIsInList])
+    console.log("useEffect receiveNToken")
+    switch (receiveNToken) {
+      case NATIVE_TOKEN:
+        if (
+          tokenAAddrIsInList === "-" ||
+          tokenAAddrIsInList === "0x0000000000000000000000000000000000000000" ||
+          tokenAAddrIsInList.toLowerCase() === networks[chainIndex].Currency.Address.toLowerCase()
+        ) {
+          setTokenAAddrIsInList("0x0000000000000000000000000000000000000000");
+          setTokenASymbol(networks[chainIndex].Currency.Name);
+        } else if (
+          tokenBAddrIsInList === "-" ||
+          tokenBAddrIsInList === "0x0000000000000000000000000000000000000000" ||
+          tokenBAddrIsInList.toLowerCase() === networks[chainIndex].Currency.Address.toLowerCase()
+        ) {
+          setTokenBAddrIsInList("0x0000000000000000000000000000000000000000");
+          setTokenBSymbol(networks[chainIndex].Currency.Name);
+        } else {
+          console.log("else routine NATIVE_TOKEN")
+        }
+        break;
+      case W_NATIVE_TOKEN:
+        if (
+          tokenAAddrIsInList === "-" ||
+          tokenAAddrIsInList === "0x0000000000000000000000000000000000000000" ||
+          tokenAAddrIsInList.toLowerCase() === networks[chainIndex].Currency.Address.toLowerCase()
+        ) {
+          setTokenAAddrIsInList(networks[chainIndex].Currency.Address);
+          setTokenASymbol(networks[chainIndex].Currency.WrappedName);
+        } else if (
+          tokenBAddrIsInList === "-" ||
+          tokenBAddrIsInList === "0x0000000000000000000000000000000000000000" ||
+          tokenBAddrIsInList.toLowerCase() === networks[chainIndex].Currency.Address.toLowerCase()
+        ) {
+          setTokenBAddrIsInList(networks[chainIndex].Currency.Address);
+          setTokenBSymbol(networks[chainIndex].Currency.WrappedName);
+        } else {
+          console.log("else routine W_NATIVE_TOKEN")
+        }
+        break;
+      case GENERAL_TOKEN:
+        console.log("case GENERAL_TOKEN")
+        break;
+      default:
+        console.log("case default")
+        break;
+    }
+  }, [receiveNToken])
 
   const SubmitButton = () => {
     // console.log("SubmitButton")
@@ -364,24 +421,16 @@ const LiquidityRemove = () => {
     // console.log("ReceiveNativeToken");
     if (
       tokenAAddrIsInList === "-" ||
-      tokenAAddrIsInList.toLowerCase() === networks[chainIndex].Currency.Address.toLowerCase()
-    ) {
-      return (
-        <button className='letter-button' disabled={!ready}
-          onClick={() => handleReceiveNativeToken()}>
-          Receive {receiveNToken === NATIVE_TOKEN ?
-            networks[chainIndex].Currency.Name :
-            networks[chainIndex].Currency.WrappedName}
-        </button>
-      )
-    } else if (
+      tokenAAddrIsInList === "0x0000000000000000000000000000000000000000" ||
+      tokenAAddrIsInList.toLowerCase() === networks[chainIndex].Currency.Address.toLowerCase() ||
       tokenBAddrIsInList === "-" ||
+      tokenBAddrIsInList === "0x0000000000000000000000000000000000000000" ||
       tokenBAddrIsInList.toLowerCase() === networks[chainIndex].Currency.Address.toLowerCase()
     ) {
       return (
         <button className='letter-button' disabled={!ready}
           onClick={() => handleReceiveNativeToken()}>
-          Receive {receiveNToken === NATIVE_TOKEN ?
+          Receive {receiveNToken !== NATIVE_TOKEN ?
             networks[chainIndex].Currency.Name :
             networks[chainIndex].Currency.WrappedName}
         </button>
