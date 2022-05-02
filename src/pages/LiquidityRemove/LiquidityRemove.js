@@ -27,6 +27,10 @@ const NOT_NEED_APPROVE = 0;
 const NEED_APPROVE = 1;
 const APPROVING = 2;
 const APPROVED = 3;
+
+const NATIVE_TOKEN = 0;
+const W_NATIVE_TOKEN = 1;
+
 const lpDecimals = 18;
 
 const LiquidityRemove = () => {
@@ -40,6 +44,8 @@ const LiquidityRemove = () => {
   const [ready, setReady] = useState(false)
   const [error, setError] = useState(false)
   const [reloadUserLp, setReloadUserLp] = useState(1);
+  const [receiveNTokenIsNeed, setReceiveNTokenIsNeed] = useState("");
+  const [receiveNToken, setReceiveNToken] = useState(W_NATIVE_TOKEN)
 
   /**
    * 0: don't need approve
@@ -291,6 +297,22 @@ const LiquidityRemove = () => {
     setReloadUserLp(2);
   }
 
+  const checkPair = () => {
+    if (
+      tokenAAddrIsInList === "-" ||
+      tokenAAddrIsInList.toLowerCase() === networks[chainIndex].Currency.Address.toLowerCase()
+    ) {
+      setReceiveNTokenIsNeed("tokenA")
+    } else if (
+      tokenBAddrIsInList === "-" ||
+      tokenBAddrIsInList.toLowerCase() === networks[chainIndex].Currency.Address.toLowerCase()
+    ) {
+      setReceiveNTokenIsNeed("tokenB")
+    } else {
+      setReceiveNTokenIsNeed("")
+    }
+  }
+
   useEffect(() => {
     updateLpInfo()
     setReady(true);
@@ -306,6 +328,10 @@ const LiquidityRemove = () => {
   useEffect(() => {
     isApproved();
   }, [removeAmount])
+
+  useEffect(() => {
+    checkPair()
+  }, [tokenAAddrIsInList, tokenBAddrIsInList])
 
   const SubmitButton = () => {
     // console.log("SubmitButton")
@@ -329,7 +355,41 @@ const LiquidityRemove = () => {
     }
   };
 
-  // const Rec
+  const handleReceiveNativeToken = () => {
+    console.log("handleReceiveNativeToken")
+    receiveNToken === NATIVE_TOKEN ? setReceiveNToken(W_NATIVE_TOKEN) : setReceiveNToken(NATIVE_TOKEN)
+  }
+
+  const ReceiveNativeToken = () => {
+    // console.log("ReceiveNativeToken");
+    if (
+      tokenAAddrIsInList === "-" ||
+      tokenAAddrIsInList.toLowerCase() === networks[chainIndex].Currency.Address.toLowerCase()
+    ) {
+      return (
+        <button className='letter-button' disabled={!ready}
+          onClick={() => handleReceiveNativeToken()}>
+          Receive {receiveNToken === NATIVE_TOKEN ?
+            networks[chainIndex].Currency.Name :
+            networks[chainIndex].Currency.WrappedName}
+        </button>
+      )
+    } else if (
+      tokenBAddrIsInList === "-" ||
+      tokenBAddrIsInList.toLowerCase() === networks[chainIndex].Currency.Address.toLowerCase()
+    ) {
+      return (
+        <button className='letter-button' disabled={!ready}
+          onClick={() => handleReceiveNativeToken()}>
+          Receive {receiveNToken === NATIVE_TOKEN ?
+            networks[chainIndex].Currency.Name :
+            networks[chainIndex].Currency.WrappedName}
+        </button>
+      )
+    } else {
+      return (<></>)
+    }
+  }
 
   return (
     <div className="dex">
@@ -413,6 +473,9 @@ const LiquidityRemove = () => {
                           0
                       }
                     </div>
+                  </div>
+                  <div className='mt-2 d-flex justify-content-end'>
+                    <ReceiveNativeToken />
                   </div>
                 </div>
               </div>
@@ -526,7 +589,7 @@ const LiquidityRemove = () => {
             title={`Remove liquidity`}
             content={`Please wait...`} />
           <div className='p-3 mt-4'>
-          <div>
+            <div>
               <div className='d-flex justify-content-between'>
                 <div>Amount</div>
                 {/* <div className='hand' onClick={() => setDetailed(!detailed)}>Detailed</div> */}
