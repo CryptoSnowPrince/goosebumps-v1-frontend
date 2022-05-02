@@ -457,7 +457,7 @@ const LiquidityRemove = () => {
               </div>
               {detailed &&
                 <>
-                  <div className='fs-4 mt-3 mb-3'>25%</div>
+                  <div className='fs-4 mt-3 mb-3'>{removeAmount}%</div>
                   <div>
                     <InputRange
                       step={1}
