@@ -76,7 +76,7 @@ const LiquidityRemove = () => {
   }
 
   const updateLpInfo = async () => {
-    console.log("LiquidityRemove updateLpInfo")
+    // console.log("LiquidityRemove updateLpInfo")
     const provider = new ethers.providers.JsonRpcProvider(networks[chainIndex].RPC);
     if (networks[chainIndex].chainId === 97) // When bsc testnet
     {
@@ -124,7 +124,7 @@ const LiquidityRemove = () => {
         } else {
           setTokenAAddrIsInList(tokenAAddress);
         }
-        
+
         sched = linq.from(tokenList).where(x => x.Address.toLowerCase() === tokenBAddress.toLowerCase()).toArray();
         if (sched.length === 0) {
           setTokenBAddrIsInList("");
@@ -236,7 +236,8 @@ const LiquidityRemove = () => {
     setReady(true);
   };
 
-  const remove = async () => {
+  const removeLiquidity = async () => {
+    // console.log("removeLiquidity");
     const contract = new ethers.Contract(
       networks[chainIndex].DEX.Router,
       routerAbi,
@@ -326,7 +327,7 @@ const LiquidityRemove = () => {
   }, [chainIndex, lpAddress, account])
 
   useEffect(() => {
-    console.log("LiquidityRemove params: ", params)
+    // console.log("LiquidityRemove params: ", params)
     if (ethers.utils.isAddress(params.lpAddress)) {
       setLpAddress(params.lpAddress);
     }
@@ -341,7 +342,7 @@ const LiquidityRemove = () => {
   // }, [tokenAAddrIsInList, tokenBAddrIsInList])
 
   useEffect(() => {
-    console.log("useEffect receiveNToken")
+    // console.log("useEffect receiveNToken")
     switch (receiveNToken) {
       case NATIVE_TOKEN:
         if (
@@ -359,7 +360,7 @@ const LiquidityRemove = () => {
           setTokenBAddrIsInList("0x0000000000000000000000000000000000000000");
           setTokenBSymbol(networks[chainIndex].Currency.Name);
         } else {
-          console.log("else routine NATIVE_TOKEN")
+          // console.log("else routine NATIVE_TOKEN")
         }
         break;
       case W_NATIVE_TOKEN:
@@ -378,14 +379,14 @@ const LiquidityRemove = () => {
           setTokenBAddrIsInList(networks[chainIndex].Currency.Address);
           setTokenBSymbol(networks[chainIndex].Currency.WrappedName);
         } else {
-          console.log("else routine W_NATIVE_TOKEN")
+          // console.log("else routine W_NATIVE_TOKEN")
         }
         break;
       case GENERAL_TOKEN:
-        console.log("case GENERAL_TOKEN")
+        // console.log("case GENERAL_TOKEN")
         break;
       default:
-        console.log("case default")
+        // console.log("case default")
         break;
     }
   }, [receiveNToken])
@@ -404,7 +405,7 @@ const LiquidityRemove = () => {
         return <button className="default-btn w-100" disabled="disabled">{error}</button>;
       }
       else {
-        return <button className="default-btn w-100" disabled={!ready} onClick={() => remove()}>Remove</button>;
+        return <button className="default-btn w-100" disabled={!ready} onClick={() => removeLiquidity()}>Remove</button>;
       }
     }
     else {
