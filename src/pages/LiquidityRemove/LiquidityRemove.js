@@ -329,10 +329,10 @@ const LiquidityRemove = () => {
   // }
 
   useEffect(() => {
-    console.log("useEffect chainIndex, lpAddress, account")
-    console.log(chainIndex)
-    console.log(lpAddress)
-    console.log(account)
+    // console.log("useEffect chainIndex, lpAddress, account")
+    // console.log(chainIndex)
+    // console.log(lpAddress)
+    // console.log(account)
 
     const reUpdateLpInfo = async () => {
       await updateLpInfo()
@@ -349,14 +349,14 @@ const LiquidityRemove = () => {
 
   useEffect(() => {
     isApproved();
-  }, [removeAmount])
+  }, [removeAmount, lpBalance])
 
   // useEffect(() => {
   //   checkPair()
   // }, [tokenAAddrIsInList, tokenBAddrIsInList])
 
   useEffect(() => {
-    console.log("useEffect receiveNToken: ", receiveNToken)
+    // console.log("useEffect receiveNToken: ", receiveNToken)
     switch (receiveNToken) {
       case NATIVE_TOKEN:
         if (
@@ -406,10 +406,10 @@ const LiquidityRemove = () => {
           tokenBAddrIsInList === "0x0000000000000000000000000000000000000000" ||
           tokenBAddrIsInList.toLowerCase() === networks[chainIndex].Currency.Address.toLowerCase()
         ) {
-          console.log("pass if")
+          // console.log("pass if")
           setReceiveNToken(NATIVE_TOKEN)
         } else {
-          console.log("pass else")
+          // console.log("pass else")
           // console.log("else routine GENERAL_TOKEN")
         }
         break;
@@ -447,7 +447,7 @@ const LiquidityRemove = () => {
   }
 
   const ReceiveNativeToken = () => {
-    console.log("ReceiveNativeToken receiveNToken: ", receiveNToken);
+    // console.log("ReceiveNativeToken receiveNToken: ", receiveNToken);
     if (
       tokenAAddrIsInList === "-" ||
       tokenAAddrIsInList === "0x0000000000000000000000000000000000000000" ||
