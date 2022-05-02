@@ -356,7 +356,7 @@ const LiquidityRemove = () => {
   };
 
   const handleReceiveNativeToken = () => {
-    console.log("handleReceiveNativeToken")
+    // console.log("handleReceiveNativeToken")
     receiveNToken === NATIVE_TOKEN ? setReceiveNToken(W_NATIVE_TOKEN) : setReceiveNToken(NATIVE_TOKEN)
   }
 
@@ -557,7 +557,7 @@ const LiquidityRemove = () => {
                   <div style={{ color: "#40FF97" }}>
                     {
                       parseFloat(tokenABalance) > 0 ?
-                        formatNumberWithoutComma(Number(tokenBBalance / tokenABalance), 1, 5) :
+                        `${formatNumberWithoutComma(Number(tokenBBalance / tokenABalance), 1, 5)} ${tokenBSymbol}` :
                         0
                     }
                   </div>
@@ -569,7 +569,7 @@ const LiquidityRemove = () => {
                   <div style={{ color: "#40FF97" }}>
                     {
                       parseFloat(tokenBBalance) > 0 ?
-                        formatNumberWithoutComma(Number(tokenABalance / tokenBBalance), 1, 5) :
+                        `${formatNumberWithoutComma(Number(tokenABalance / tokenBBalance), 1, 5)} ${tokenASymbol}` :
                         0
                     }
                   </div>
@@ -579,8 +579,6 @@ const LiquidityRemove = () => {
             <hr />
             <div className='mt-5 d-flex justify-content-around gap-2'>
               <SubmitButton />
-              {/* <button className='default-btn w-50'>Enable</button>
-              <button className='default-btn w-50'>Remove</button> */}
             </div>
           </div>
         </div> :
@@ -592,7 +590,6 @@ const LiquidityRemove = () => {
             <div>
               <div className='d-flex justify-content-between'>
                 <div>Amount</div>
-                {/* <div className='hand' onClick={() => setDetailed(!detailed)}>Detailed</div> */}
               </div>
               {detailed &&
                 <>
