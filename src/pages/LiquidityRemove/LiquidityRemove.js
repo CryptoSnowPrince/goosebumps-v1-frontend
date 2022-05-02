@@ -31,6 +31,7 @@ const APPROVED = 3;
 const NATIVE_TOKEN = 0;
 const W_NATIVE_TOKEN = 1;
 const GENERAL_TOKEN = 2;
+const INITIAL_TOKEN = 3;
 
 const lpDecimals = 18;
 
@@ -46,7 +47,7 @@ const LiquidityRemove = () => {
   const [error, setError] = useState(false)
   const [reloadUserLp, setReloadUserLp] = useState(1);
   // const [receiveNTokenIsNeed, setReceiveNTokenIsNeed] = useState("");
-  const [receiveNToken, setReceiveNToken] = useState(NATIVE_TOKEN)
+  const [receiveNToken, setReceiveNToken] = useState(INITIAL_TOKEN)
 
   /**
    * 0: don't need approve
@@ -179,6 +180,13 @@ const LiquidityRemove = () => {
       setTokenBAddrIsInList("");
       console.log("LiquidityRemove updateLpInfo err: ", error)
     }
+    if (ethers.utils.isAddress(account) &&
+      ethers.utils.isAddress(lpAddress) &&
+      lpAddress !== "0x0000000000000000000000000000000000000000" &&
+      chainIndex >= 0) {
+      setReceiveNToken(GENERAL_TOKEN)
+      setReady(true);
+    };
   };
 
   const isApproved = async () => {
@@ -321,9 +329,15 @@ const LiquidityRemove = () => {
   // }
 
   useEffect(() => {
-    updateLpInfo()
-    setReceiveNToken(GENERAL_TOKEN)
-    setReady(true);
+    console.log("useEffect chainIndex, lpAddress, account")
+    console.log(chainIndex)
+    console.log(lpAddress)
+    console.log(account)
+
+    const reUpdateLpInfo = async () => {
+      await updateLpInfo()
+    }
+    reUpdateLpInfo()
   }, [chainIndex, lpAddress, account])
 
   useEffect(() => {
@@ -342,7 +356,7 @@ const LiquidityRemove = () => {
   // }, [tokenAAddrIsInList, tokenBAddrIsInList])
 
   useEffect(() => {
-    // console.log("useEffect receiveNToken")
+    console.log("useEffect receiveNToken: ", receiveNToken)
     switch (receiveNToken) {
       case NATIVE_TOKEN:
         if (
@@ -392,8 +406,10 @@ const LiquidityRemove = () => {
           tokenBAddrIsInList === "0x0000000000000000000000000000000000000000" ||
           tokenBAddrIsInList.toLowerCase() === networks[chainIndex].Currency.Address.toLowerCase()
         ) {
+          console.log("pass if")
           setReceiveNToken(NATIVE_TOKEN)
         } else {
+          console.log("pass else")
           // console.log("else routine GENERAL_TOKEN")
         }
         break;
@@ -431,7 +447,7 @@ const LiquidityRemove = () => {
   }
 
   const ReceiveNativeToken = () => {
-    // console.log("ReceiveNativeToken");
+    console.log("ReceiveNativeToken receiveNToken: ", receiveNToken);
     if (
       tokenAAddrIsInList === "-" ||
       tokenAAddrIsInList === "0x0000000000000000000000000000000000000000" ||
@@ -655,7 +671,7 @@ const LiquidityRemove = () => {
               </div>
               {detailed &&
                 <>
-                  <div className='fs-4 mt-3 mb-3'>25%</div>
+                  <div className='fs-4 mt-3 mb-3'>{removeAmount}%</div>
                   <div>
                     <InputRange
                       step={1}
