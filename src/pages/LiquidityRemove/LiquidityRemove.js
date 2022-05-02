@@ -44,6 +44,7 @@ const LiquidityRemove = () => {
   const [detailed, setDetailed] = useState(true);
 
   const [ready, setReady] = useState(false)
+  const [pendingTx, setPendingTx] = useState(false);
   const [error, setError] = useState(false)
   const [reloadUserLp, setReloadUserLp] = useState(1);
   // const [receiveNTokenIsNeed, setReceiveNTokenIsNeed] = useState("");
@@ -241,6 +242,7 @@ const LiquidityRemove = () => {
     setReady(false);
 
     setLpApproveState(APPROVING);
+    setPendingTx(true);
     try {
       const tx = await contract.approve(
         networks[chainIndex].DEX.Router,
@@ -253,6 +255,7 @@ const LiquidityRemove = () => {
       setLpApproveState(NEED_APPROVE)
       console.log("approve err: ", err, "\napprove err lpAddress: ", lpAddress);
     }
+    setPendingTx(false);
 
     setReady(true);
   };
@@ -266,6 +269,8 @@ const LiquidityRemove = () => {
     );
 
     setReloadUserLp(1);
+    setPendingTx(true);
+
     // Slippage Tolerance 5%
     const slippageTolerance = 5;
     try {
@@ -329,6 +334,7 @@ const LiquidityRemove = () => {
       }
     }
     setReloadUserLp(2);
+    setPendingTx(false);
   }
 
   // const checkPair = () => {
@@ -496,246 +502,262 @@ const LiquidityRemove = () => {
   }
 
   return (
-    <div className="dex">
-      <DEXSubmenu />
-      {(parseFloat(lpBalance) > 0 && tokenASymbol !== "" && tokenBSymbol !== "") ?
-        <div id='liquidity' >
-          <LiquidityHeader
-            title={`Remove ${tokenASymbol}-${tokenBSymbol} liquidity`}
-            content={`To receive ${tokenASymbol} and ${tokenBSymbol}`} />
-          <div className='p-3 mt-4'>
-            <div>
-              <div className='d-flex justify-content-between'>
-                <div>Amount</div>
-                {/* <div className='hand' onClick={() => setDetailed(!detailed)}>Detailed</div> */}
+    <>
+      <div className="dex">
+        <DEXSubmenu />
+        {(parseFloat(lpBalance) > 0 && tokenASymbol !== "" && tokenBSymbol !== "") ?
+          <div id='liquidity' className={`${pendingTx ? "loading-state" : ""}`} >
+            <LiquidityHeader
+              title={`Remove ${tokenASymbol}-${tokenBSymbol} liquidity`}
+              content={`To receive ${tokenASymbol} and ${tokenBSymbol}`} />
+            <div className='p-3 mt-4'>
+              <div>
+                <div className='d-flex justify-content-between'>
+                  <div>Amount</div>
+                  {/* <div className='hand' onClick={() => setDetailed(!detailed)}>Detailed</div> */}
+                </div>
+                {detailed &&
+                  <>
+                    <div className='fs-4 mt-3 mb-3'>{removeAmount}%</div>
+                    <div>
+                      <InputRange
+                        step={1}
+                        maxValue={100}
+                        minValue={0}
+                        value={removeAmount}
+                        onChange={(value) => {
+                          setRemoveAmount(value);
+                        }}
+                      />
+                    </div>
+                    <div className='mt-3 mb-3 d-flex justify-content-around gap-2'>
+                      <button className='default-btn' onClick={() => { setRemoveAmount(25) }}>25%</button>
+                      <button className='default-btn' onClick={() => { setRemoveAmount(50) }}>50%</button>
+                      <button className='default-btn' onClick={() => { setRemoveAmount(75) }}>75%</button>
+                      <button className='default-btn' onClick={() => { setRemoveAmount(100) }}>Max</button>
+                    </div>
+                  </>
+                }
               </div>
               {detailed &&
-                <>
-                  <div className='fs-4 mt-3 mb-3'>{removeAmount}%</div>
-                  <div>
-                    <InputRange
-                      step={1}
-                      maxValue={100}
-                      minValue={0}
-                      value={removeAmount}
-                      onChange={(value) => {
-                        setRemoveAmount(value);
-                      }}
-                    />
+                <div className='mt-4'>
+                  <div>YOU WILL RECEIVE</div>
+                  <div className='flex justify-content-between'>
+                    <div className='mt-2 d-flex justify-content-between'>
+                      <div className='d-flex fs-5 align-items-center'>
+                        <div>
+                          <img className='col-auto' style={{ height: 32, paddingLeft: 10, paddingRight: 15 }}
+                            src={
+                              (tokenAAddrIsInList !== "" && networks[chainIndex]) ?
+                                `/assets/tokens/${networks[chainIndex].chainId}/${tokenAAddrIsInList}.png` :
+                                "/assets/tokens/empty.png"
+                            }
+                            alt={tokenASymbol} />
+                        </div>
+                        <div>{tokenASymbol}</div>
+                      </div>
+                      <div style={{ color: "#40FF97" }}>
+                        {
+                          parseFloat(lpTotalSupply) > 0 ?
+                            formatNumberWithoutComma(Number(tokenABalance * lpBalance / lpTotalSupply * removeAmount / 100), 1, 5) :
+                            0
+                        }
+                      </div>
+                    </div>
+                    <div className='mt-2 d-flex justify-content-between'>
+                      <div className='d-flex fs-5 align-items-center'>
+                        <div>
+                          <img className='col-auto' style={{ height: 32, paddingLeft: 10, paddingRight: 15 }}
+                            src={
+                              (tokenBAddrIsInList !== "" && networks[chainIndex]) ?
+                                `/assets/tokens/${networks[chainIndex].chainId}/${tokenBAddrIsInList}.png` :
+                                "/assets/tokens/empty.png"
+                            }
+                            alt={tokenBSymbol} />
+                        </div>
+                        <div>{tokenBSymbol}</div>
+                      </div>
+                      <div style={{ color: "#40FF97" }}>
+                        {
+                          parseFloat(lpTotalSupply) > 0 ?
+                            formatNumberWithoutComma(Number(tokenBBalance * lpBalance / lpTotalSupply * removeAmount / 100), 1, 5) :
+                            0
+                        }
+                      </div>
+                    </div>
+                    <div className='mt-2 d-flex justify-content-end'>
+                      <ReceiveNativeToken />
+                    </div>
                   </div>
-                  <div className='mt-3 mb-3 d-flex justify-content-around gap-2'>
-                    <button className='default-btn' onClick={() => { setRemoveAmount(25) }}>25%</button>
-                    <button className='default-btn' onClick={() => { setRemoveAmount(50) }}>50%</button>
-                    <button className='default-btn' onClick={() => { setRemoveAmount(75) }}>75%</button>
-                    <button className='default-btn' onClick={() => { setRemoveAmount(100) }}>Max</button>
+                </div>
+              }
+              {!detailed && <>
+                <div className='wallet-tabs mt-3'>
+                  <div className='tab_content p-0'>
+                    <div className="form-group">
+                      <div className="row justify-content-between">
+                        <div className="col">
+                          <label htmlFor="from" className="w-100">From</label>
+                        </div>
+                        <div className="col text-end">
+                          <button type="button" className="w-100 text-end badge btn text-white">Balance: 0.0</button>
+                        </div>
+                      </div>
+                      <div className="input-group">
+                        <input id="from" type="text" className="form-control me-2" placeholder="0" autoComplete="off" min="0" value={0} />
+                        <div className="input-group-addon">
+                          <button type="button" className="default-btn" onClick={() => setShowTokenSelectModal("from")}>BNB</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <>
+                  <div className='wallet-tabs mt-4'>
+                    <div className='tab_content p-0'>
+                      <div className="form-group">
+                        <div className="row justify-content-between">
+                          <div className="col">
+                            <label htmlFor="from" className="w-100">From</label>
+                          </div>
+                          <div className="col text-end">
+                            <button type="button" className="w-100 text-end badge btn text-white">Balance: 0.0</button>
+                          </div>
+                        </div>
+                        <div className="input-group">
+                          <input id="from" type="text" className="form-control me-2" placeholder="0" autoComplete="off" min="0" value={0} />
+                          <div className="input-group-addon">
+                            <button type="button" className="default-btn" onClick={() => setShowTokenSelectModal("from")}>BNB</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </>
-              }
-            </div>
-            {detailed &&
-              <div className='mt-4'>
-                <div>YOU WILL RECEIVE</div>
+                <>
+                  <div className='wallet-tabs mt-4'>
+                    <div className='tab_content p-0'>
+                      <div className="form-group">
+                        <div className="row justify-content-between">
+                          <div className="col">
+                            <label htmlFor="from" className="w-100">From</label>
+                          </div>
+                          <div className="col text-end">
+                            <button type="button" className="w-100 text-end badge btn text-white">Balance: 0.0</button>
+                          </div>
+                        </div>
+                        <div className="input-group">
+                          <input id="from" type="text" className="form-control me-2" placeholder="0" autoComplete="off" min="0" value={0} />
+                          <div className="input-group-addon">
+                            <button type="button" className="default-btn" onClick={() => setShowTokenSelectModal("from")}>BNB</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </>
+              </>}
+              <hr />
+              <div>
+                <div>PRICE</div>
                 <div className='flex justify-content-between'>
                   <div className='mt-2 d-flex justify-content-between'>
                     <div className='d-flex fs-5 align-items-center'>
-                      <div>
-                        <img className='col-auto' style={{ height: 32, paddingLeft: 10, paddingRight: 15 }}
-                          src={
-                            (tokenAAddrIsInList !== "" && networks[chainIndex]) ?
-                              `/assets/tokens/${networks[chainIndex].chainId}/${tokenAAddrIsInList}.png` :
-                              "/assets/tokens/empty.png"
-                          }
-                          alt={tokenASymbol} />
-                      </div>
-                      <div>{tokenASymbol}</div>
+                      {`1 ${tokenASymbol}`} =
                     </div>
                     <div style={{ color: "#40FF97" }}>
                       {
-                        parseFloat(lpTotalSupply) > 0 ?
-                          formatNumberWithoutComma(Number(tokenABalance * lpBalance / lpTotalSupply * removeAmount / 100), 1, 5) :
+                        parseFloat(tokenABalance) > 0 ?
+                          `${formatNumberWithoutComma(Number(tokenBBalance / tokenABalance), 1, 5)} ${tokenBSymbol}` :
                           0
                       }
                     </div>
                   </div>
                   <div className='mt-2 d-flex justify-content-between'>
                     <div className='d-flex fs-5 align-items-center'>
-                      <div>
-                        <img className='col-auto' style={{ height: 32, paddingLeft: 10, paddingRight: 15 }}
-                          src={
-                            (tokenBAddrIsInList !== "" && networks[chainIndex]) ?
-                              `/assets/tokens/${networks[chainIndex].chainId}/${tokenBAddrIsInList}.png` :
-                              "/assets/tokens/empty.png"
-                          }
-                          alt={tokenBSymbol} />
-                      </div>
-                      <div>{tokenBSymbol}</div>
+                      {`1 ${tokenBSymbol}`} =
                     </div>
                     <div style={{ color: "#40FF97" }}>
                       {
-                        parseFloat(lpTotalSupply) > 0 ?
-                          formatNumberWithoutComma(Number(tokenBBalance * lpBalance / lpTotalSupply * removeAmount / 100), 1, 5) :
+                        parseFloat(tokenBBalance) > 0 ?
+                          `${formatNumberWithoutComma(Number(tokenABalance / tokenBBalance), 1, 5)} ${tokenASymbol}` :
                           0
                       }
                     </div>
                   </div>
-                  <div className='mt-2 d-flex justify-content-end'>
-                    <ReceiveNativeToken />
-                  </div>
                 </div>
               </div>
-            }
-            {!detailed && <>
-              <div className='wallet-tabs mt-3'>
-                <div className='tab_content p-0'>
-                  <div className="form-group">
-                    <div className="row justify-content-between">
-                      <div className="col">
-                        <label htmlFor="from" className="w-100">From</label>
-                      </div>
-                      <div className="col text-end">
-                        <button type="button" className="w-100 text-end badge btn text-white">Balance: 0.0</button>
-                      </div>
-                    </div>
-                    <div className="input-group">
-                      <input id="from" type="text" className="form-control me-2" placeholder="0" autoComplete="off" min="0" value={0} />
-                      <div className="input-group-addon">
-                        <button type="button" className="default-btn" onClick={() => setShowTokenSelectModal("from")}>BNB</button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <>
-                <div className='wallet-tabs mt-4'>
-                  <div className='tab_content p-0'>
-                    <div className="form-group">
-                      <div className="row justify-content-between">
-                        <div className="col">
-                          <label htmlFor="from" className="w-100">From</label>
-                        </div>
-                        <div className="col text-end">
-                          <button type="button" className="w-100 text-end badge btn text-white">Balance: 0.0</button>
-                        </div>
-                      </div>
-                      <div className="input-group">
-                        <input id="from" type="text" className="form-control me-2" placeholder="0" autoComplete="off" min="0" value={0} />
-                        <div className="input-group-addon">
-                          <button type="button" className="default-btn" onClick={() => setShowTokenSelectModal("from")}>BNB</button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </>
-              <>
-                <div className='wallet-tabs mt-4'>
-                  <div className='tab_content p-0'>
-                    <div className="form-group">
-                      <div className="row justify-content-between">
-                        <div className="col">
-                          <label htmlFor="from" className="w-100">From</label>
-                        </div>
-                        <div className="col text-end">
-                          <button type="button" className="w-100 text-end badge btn text-white">Balance: 0.0</button>
-                        </div>
-                      </div>
-                      <div className="input-group">
-                        <input id="from" type="text" className="form-control me-2" placeholder="0" autoComplete="off" min="0" value={0} />
-                        <div className="input-group-addon">
-                          <button type="button" className="default-btn" onClick={() => setShowTokenSelectModal("from")}>BNB</button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </>
-            </>}
-            <hr />
-            <div>
-              <div>PRICE</div>
-              <div className='flex justify-content-between'>
-                <div className='mt-2 d-flex justify-content-between'>
-                  <div className='d-flex fs-5 align-items-center'>
-                    {`1 ${tokenASymbol}`} =
-                  </div>
-                  <div style={{ color: "#40FF97" }}>
-                    {
-                      parseFloat(tokenABalance) > 0 ?
-                        `${formatNumberWithoutComma(Number(tokenBBalance / tokenABalance), 1, 5)} ${tokenBSymbol}` :
-                        0
-                    }
-                  </div>
-                </div>
-                <div className='mt-2 d-flex justify-content-between'>
-                  <div className='d-flex fs-5 align-items-center'>
-                    {`1 ${tokenBSymbol}`} =
-                  </div>
-                  <div style={{ color: "#40FF97" }}>
-                    {
-                      parseFloat(tokenBBalance) > 0 ?
-                        `${formatNumberWithoutComma(Number(tokenABalance / tokenBBalance), 1, 5)} ${tokenASymbol}` :
-                        0
-                    }
-                  </div>
-                </div>
+              <hr />
+              <div className='mt-5 d-flex justify-content-around gap-2'>
+                <SubmitButton />
               </div>
             </div>
-            <hr />
-            <div className='mt-5 d-flex justify-content-around gap-2'>
-              <SubmitButton />
+          </div> :
+          <div id='liquidity' >
+            <LiquidityHeader
+              title={`Remove liquidity`}
+              content={`Please wait...`} />
+            <div className='p-3 mt-4'>
+              <div>
+                <div className='d-flex justify-content-between'>
+                  <div>Amount</div>
+                </div>
+                {detailed &&
+                  <>
+                    <div className='fs-4 mt-3 mb-3'>{removeAmount}%</div>
+                    <div>
+                      <InputRange
+                        step={1}
+                        maxValue={100}
+                        minValue={0}
+                        value={removeAmount}
+                        onChange={(value) => {
+                          setRemoveAmount(value);
+                        }}
+                      />
+                    </div>
+                    <div className='mt-3 mb-3 d-flex justify-content-around gap-2'>
+                      <button className='default-btn' onClick={() => { setRemoveAmount(25) }}>25%</button>
+                      <button className='default-btn' onClick={() => { setRemoveAmount(50) }}>50%</button>
+                      <button className='default-btn' onClick={() => { setRemoveAmount(75) }}>75%</button>
+                      <button className='default-btn' onClick={() => { setRemoveAmount(100) }}>Max</button>
+                    </div>
+                  </>
+                }
+              </div>
             </div>
           </div>
-        </div> :
-        <div id='liquidity' >
-          <LiquidityHeader
-            title={`Remove liquidity`}
-            content={`Please wait...`} />
-          <div className='p-3 mt-4'>
-            <div>
-              <div className='d-flex justify-content-between'>
-                <div>Amount</div>
-              </div>
-              {detailed &&
-                <>
-                  <div className='fs-4 mt-3 mb-3'>{removeAmount}%</div>
-                  <div>
-                    <InputRange
-                      step={1}
-                      maxValue={100}
-                      minValue={0}
-                      value={removeAmount}
-                      onChange={(value) => {
-                        setRemoveAmount(value);
-                      }}
-                    />
-                  </div>
-                  <div className='mt-3 mb-3 d-flex justify-content-around gap-2'>
-                    <button className='default-btn' onClick={() => { setRemoveAmount(25) }}>25%</button>
-                    <button className='default-btn' onClick={() => { setRemoveAmount(50) }}>50%</button>
-                    <button className='default-btn' onClick={() => { setRemoveAmount(75) }}>75%</button>
-                    <button className='default-btn' onClick={() => { setRemoveAmount(100) }}>Max</button>
-                  </div>
-                </>
-              }
-            </div>
-          </div>
-        </div>
-      }
-      <UserLpToken
-        network={networks[chainIndex]}
-        lpAddress={
-          (lpAddress && lpAddress !== "0x0000000000000000000000000000000000000000") ?
-            lpAddress :
-            ""
         }
-        account={account}
-        reload={reloadUserLp} />
-      <TokenSelectModal
-        showFor={showTokenSelectModal}
-        hide={() => setShowTokenSelectModal()}
-        onSelect={onSelectToken}
-        network={networks[chainIndex]} />
-    </div>
+        <UserLpToken
+          network={networks[chainIndex]}
+          lpAddress={
+            (lpAddress && lpAddress !== "0x0000000000000000000000000000000000000000") ?
+              lpAddress :
+              ""
+          }
+          account={account}
+          reload={reloadUserLp} />
+        <TokenSelectModal
+          showFor={showTokenSelectModal}
+          hide={() => setShowTokenSelectModal()}
+          onSelect={onSelectToken}
+          network={networks[chainIndex]} />
+      </div>
+      {pendingTx ?
+        <div style={{
+          position: "fixed",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          top: "0px", left: "0px",
+          height: "100%", width: "100%",
+          zIndex: 100000, opacity: 0.8
+        }}>
+          <span className="spinner-border" role="status"></span>
+        </div>
+        : ""
+      }
+    </>
   );
 }
 
