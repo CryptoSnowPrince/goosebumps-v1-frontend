@@ -424,57 +424,79 @@ const Exchange = (props) => {
 
     console.log("pass of fill: isPath=", isPath)
 
+    newOther.amount = "";
+
     if (isPath === PATH_WRAP_UNWRAP) {
       console.log("pass if of fill")
       newOther.amount = value;
       setOther(newOther);
       setReady(true);
       return;
-    } else if (isPath === PATH_IS_IN_DEX) {
+    } else if (isPath === PATH_IS_IN_DEX && value > 0) {
       setConfirmed(true);
 
-      if (side === "from") {
-        const contract = new ethers.Contract(
-          props.network.DEX.DEXManage,
-          dexManageAbi,
-          web3Provider
-        )
+      const contract = new ethers.Contract(
+        props.network.DEX.DEXManage,
+        dexManageAbi,
+        web3Provider
+      )
 
+      var sellAmount = ethers.utils.parseUnits(value.toString(), from.decimals);;
+      if (side === "from") {
         try {
-          const amountOut = contract.getAmountOut(from.address, to.address,)
+          const amountOut = await contract.getAmountOut(
+            from.address === "-" ? props.network.Currency.Address : from.address,
+            to.address === "-" ? props.network.Currency.Address : to.address,
+            ethers.utils.parseUnits(value.toString(), from.decimals))
+          newOther.amount = ethers.utils.formatUnits(amountOut, to.decimals);
         } catch (error) {
-          
+          setError("Unknown error");
+          console.log("fill amountOut error: ", error)
+        }
+      } else {
+        try {
+          const amountIn = await contract.getAmountIn(
+            from.address === "-" ? props.network.Currency.Address : from.address,
+            to.address === "-" ? props.network.Currency.Address : to.address,
+            ethers.utils.parseUnits(value.toString(), from.decimals))
+          sellAmount = amountIn;
+          newOther.amount = ethers.utils.formatUnits(amountIn, from.decimals);
+        } catch (error) {
+          setError("Unknown error");
+          console.log("fill amountIn error: ", error)
         }
       }
+      setOther(newOther);
 
-      // if (from.address !== "-") {
-      //   const contract = new ethers.Contract(
-      //     from.address,
-      //     tokenAbi,
-      //     web3Provider
-      //   );
+      if (from.address !== "-") {
+        const contract = new ethers.Contract(
+          from.address,
+          tokenAbi,
+          web3Provider
+        );
 
-      //   try {
-      //     var allowance = await contract.allowance(account, props.network.DEX.DEXManage);
-      //     // console.log("allowance: ", allowance)
-      //   } catch { }
-      //   const sellAmount = ethers.utils.parseUnits(from.amount.toString(), from.decimals);
-      //   if (BigNumber.from(sellAmount).gt(allowance)) {
-      //     setNeedApprove({ target: props.network.DEX.DEXManage, amount: sellAmount });
-      //   }
-      //   else {
-      //     setNeedApprove();
-      //   }
+        try {
+          var allowance = await contract.allowance(account, props.network.DEX.DEXManage);
+          // console.log("allowance: ", allowance)
+        } catch (error) {
+          console.log("fill allowance error: ", error);
+        }
 
-      // } else {
-      //   setNeedApprove();
-      // }
-      
+        if (BigNumber.from(sellAmount).gt(allowance)) {
+          setNeedApprove({ target: props.network.DEX.DEXManage, amount: sellAmount });
+        }
+        else {
+          setNeedApprove();
+        }
+
+      } else {
+        setNeedApprove();
+      }
+
       setReady(true);
       return;
     }
 
-    newOther.amount = "";
     setOther(newOther);
     setQuote();
 
