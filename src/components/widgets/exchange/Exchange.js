@@ -320,6 +320,7 @@ const Exchange = (props) => {
   }
 
   const trade = async () => {
+    
     const params = {
       sellToken: (from.address === "-" ? from.symbol : from.address),
       buyToken: (to.address === "-" ? to.symbol : to.address),
@@ -327,6 +328,7 @@ const Exchange = (props) => {
       takerAddress: account,
     }
 
+    setLoading(true);
     try {
       // Fetch the swap quote.
       const response = await fetch(
@@ -343,7 +345,6 @@ const Exchange = (props) => {
       }
     }
 
-    setLoading(true);
     updateBalance(from.address, from, setFrom, true).then(() => {
       updateBalance(to.address, to, setTo, true).then(() => {
         setLoading();
