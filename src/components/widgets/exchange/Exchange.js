@@ -402,6 +402,7 @@ const Exchange = (props) => {
   const fill = async (side, value) => {
     // console.log("fill")
     setReady();
+    setError();
     if (side === "from") {
       var target = from;
       var setTarget = setFrom;
