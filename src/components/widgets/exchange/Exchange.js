@@ -278,7 +278,7 @@ const Exchange = (props) => {
     setTo(Object.assign({}, to));
   };
 
-  const approve = async (from) => {
+  const approve = async (fromAddr) => {
     console.log("approve");
     setReady();
 
@@ -700,7 +700,7 @@ const Exchange = (props) => {
         return <button className="default-btn w-100" disabled={!ready} onClick={() => approve(from.address)}>Approve</button>;
       }
       else if (error) {
-        return <button className="disable-btn w-100" disabled>{error}</button>;
+        return <button className="default-btn w-100" disabled>{error}</button>;
       }
       else if (isPath === PATH_WRAP_UNWRAP) {
         return <button className="default-btn w-100" disabled={!ready} onClick={() => wrapping()}>
