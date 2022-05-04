@@ -279,6 +279,35 @@
             },
             {
                 "internalType": "uint256",
+                "name": "_amountOut",
+                "type": "uint256"
+            }
+        ],
+        "name": "getAmountIn",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "tokenA",
+                "type": "address"
+            },
+            {
+                "internalType": "address",
+                "name": "tokenB",
+                "type": "address"
+            },
+            {
+                "internalType": "uint256",
                 "name": "_amountIn",
                 "type": "uint256"
             }
