@@ -67,13 +67,20 @@ const LiquidityAddBody = (props) => {
 
         setTokenABalOfPool(ethers.utils.formatUnits(tokenABalOfPool, tokenA.decimals));
         setTokenBBalOfPool(ethers.utils.formatUnits(tokenBBalOfPool, tokenB.decimals));
+        if (tokenABalOfPool._hex > 0) {
+          setReloadUserLp(1);
+        } else {
+          setReloadUserLp(0);
+        }
       } else {
         setTokenABalOfPool(0);
         setTokenBBalOfPool(0);
+        setReloadUserLp(0);
       }
     } catch (error) {
       setTokenABalOfPool(0);
       setTokenBBalOfPool(0);
+      setReloadUserLp(0);
       console.log("getTokenBalOfPool err: ", error)
     }
   };

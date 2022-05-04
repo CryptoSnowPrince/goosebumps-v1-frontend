@@ -269,12 +269,12 @@
         "inputs": [
             {
                 "internalType": "address",
-                "name": "tokenA",
+                "name": "tokenIn",
                 "type": "address"
             },
             {
                 "internalType": "address",
-                "name": "tokenB",
+                "name": "tokenOut",
                 "type": "address"
             },
             {
@@ -298,12 +298,12 @@
         "inputs": [
             {
                 "internalType": "address",
-                "name": "tokenA",
+                "name": "tokenIn",
                 "type": "address"
             },
             {
                 "internalType": "address",
-                "name": "tokenB",
+                "name": "tokenOut",
                 "type": "address"
             },
             {

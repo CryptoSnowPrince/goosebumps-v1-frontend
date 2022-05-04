@@ -109,7 +109,7 @@
     "DEX": {
       "Factory": "0x75C821CCD003CC9E9Ea06008fAf9Ab8189B1EC56",
       "Router": "0x31cB34991756FD1564b0DEBF2BFF3E522085EC02",
-      "DEXManage": "0x298b0897E345Ed79229cbcbb54a64ee336fF08bB" 
+      "DEXManage": "0xfc82b7ACE078DC83ea809F5dCD28a2Ae78d090cF" 
     },
     "Currency": {
       "Name": "BNB",

@@ -433,6 +433,20 @@ const Exchange = (props) => {
     } else if (isPath === PATH_IS_IN_DEX) {
       setConfirmed(true);
 
+      if (side === "from") {
+        const contract = new ethers.Contract(
+          props.network.DEX.DEXManage,
+          dexManageAbi,
+          web3Provider
+        )
+
+        try {
+          const amountOut = contract.getAmountOut(from.address, to.address,)
+        } catch (error) {
+          
+        }
+      }
+
       // if (from.address !== "-") {
       //   const contract = new ethers.Contract(
       //     from.address,
@@ -455,6 +469,9 @@ const Exchange = (props) => {
       // } else {
       //   setNeedApprove();
       // }
+      
+      setReady(true);
+      return;
     }
 
     newOther.amount = "";
