@@ -277,7 +277,7 @@ const Exchange = (props) => {
     setTo(Object.assign({}, to));
   };
 
-  const approve = async () => {
+  const approve = async (from) => {
     // console.log("approve");
     setReady();
 
