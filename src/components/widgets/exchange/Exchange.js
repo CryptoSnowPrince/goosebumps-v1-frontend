@@ -696,11 +696,11 @@ const Exchange = (props) => {
       else if (!(from.amount > 0 || to.amount > 0)) {
         return <button className="default-btn w-100" disabled="disabled">Enter an amount</button>;
       }
-      else if (needApprove) {
-        return <button className="default-btn w-100" disabled={!ready} onClick={() => approve(from.address)}>Approve</button>;
-      }
       else if (error) {
         return <button className="default-btn w-100" disabled>{error}</button>;
+      }
+      else if (needApprove) {
+        return <button className="default-btn w-100" disabled={!ready} onClick={() => approve(from.address)}>Approve</button>;
       }
       else if (isPath === PATH_WRAP_UNWRAP) {
         return <button className="default-btn w-100" disabled={!ready} onClick={() => wrapping()}>
