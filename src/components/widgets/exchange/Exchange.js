@@ -165,8 +165,9 @@ const Exchange = (props) => {
                 web3Provider
               );
 
+              allowance = 0;
               try {
-                var allowance = await contract.allowance(account, response.allowanceTarget);
+                allowance = await contract.allowance(account, response.allowanceTarget);
                 // console.log("allowance: ", allowance)
               } catch { }
 
@@ -278,7 +279,7 @@ const Exchange = (props) => {
   };
 
   const approve = async (from) => {
-    // console.log("approve");
+    console.log("approve");
     setReady();
 
     // const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
@@ -288,9 +289,11 @@ const Exchange = (props) => {
       web3Provider.getSigner()
       // provider.getSigner()
     );
+    console.log("approve pass 1");
 
     try {
-      const tx = await contract.approve(needApprove.target, quote.sellAmount);
+      // const tx = await contract.approve(needApprove.target, quote.sellAmount);
+      const tx = await contract.approve(needApprove.target, needApprove.amount);
       const receipt = await tx.wait(tx);
       if (receipt.status === 1) {
         setNeedApprove();
@@ -298,11 +301,7 @@ const Exchange = (props) => {
     } catch (err) {
       console.log("approve err: ", err);
     }
-
-    updateBalance(from.address, from, setFrom).then(() => {
-      updateBalance(to.address, to, setTo).then(() => {
-      });
-    });
+    console.log("approve pass 2");
 
     setReady(true);
   };
@@ -425,13 +424,14 @@ const Exchange = (props) => {
     console.log("pass of fill: isPath=", isPath)
 
     newOther.amount = "";
+    // console.log("newOther.amount = ", parseFloat(newOther.amount))
+    // console.log("NAN > 1: ", parseFloat(newOther.amount) > 1)
 
     if (isPath === PATH_WRAP_UNWRAP) {
       console.log("pass if of fill")
       newOther.amount = value;
       setOther(newOther);
       setReady(true);
-      return;
     } else if (isPath === PATH_IS_IN_DEX && value > 0) {
       setConfirmed(true);
 
@@ -494,34 +494,43 @@ const Exchange = (props) => {
       }
 
       setReady(true);
-      return;
+    } else {
+      setOther(newOther);
+      setQuote();
+
+      if (pendingQuote) {
+        clearTimeout(pendingQuote);
+      }
+      // console.log("L292")
+      if (value > 0) {
+        setPendingQuote(setTimeout(() => {
+          // console.log("L295")
+          updateQuote(from.address, from.decimals, to.address, to.decimals, value, slippage, side).then(quote => {
+            if (quote?.price > 0) {
+              const buyAmount = ethers.utils.formatUnits(quote.buyAmount, to.decimals);
+              const sellAmount = ethers.utils.formatUnits(quote.sellAmount, from.decimals);
+
+              newOther.amount = side === "from" ? buyAmount : sellAmount;
+              setOther(newOther);
+            }
+            setReady(true);
+          });
+          setPendingQuote();
+        }, 1500));
+      }
+      else {
+        setReady(true);
+      }
     }
 
-    setOther(newOther);
-    setQuote();
-
-    if (pendingQuote) {
-      clearTimeout(pendingQuote);
-    }
-    // console.log("L292")
-    if (value > 0) {
-      setPendingQuote(setTimeout(() => {
-        // console.log("L295")
-        updateQuote(from.address, from.decimals, to.address, to.decimals, value, slippage, side).then(quote => {
-          if (quote?.price > 0) {
-            const buyAmount = ethers.utils.formatUnits(quote.buyAmount, to.decimals);
-            const sellAmount = ethers.utils.formatUnits(quote.sellAmount, from.decimals);
-
-            newOther.amount = side === "from" ? buyAmount : sellAmount;
-            setOther(newOther);
-          }
-          setReady(true);
-        });
-        setPendingQuote();
-      }, 1500));
-    }
-    else {
-      setReady(true);
+    if (side === "from") {
+      if (parseFloat(value) > parseFloat(from.balance)) {
+        setError(`Insufficient ${from.symbol} balance`)
+      }
+    } else {
+      if (parseFloat(newOther.amount) > parseFloat(from.balance)) {
+        setError(`Insufficient ${from.symbol} balance`)
+      }
     }
   }
 
