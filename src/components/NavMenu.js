@@ -148,10 +148,11 @@ const NavMenu = () => {
                                 className="form-select"
                                 onChange={handleSelectChain}
                                 defaultValue={networkIndex}>
-                                {networks.map(
+                                {/* {networks.map(
                                     (network, index) =>
                                         <option key={index} value={index}>{network.Display}</option>
-                                )}
+                                )} */}
+                                <option key={3} value={3}>BSC Testnet</option>
                             </select>
                         </div>
                         <input onSubmit={handleSearch} ref={searchInput} type="text" className="form-control" placeholder={inPortfolio ? "Enter another wallet to track together" : "Enter token or wallet address..."} />
