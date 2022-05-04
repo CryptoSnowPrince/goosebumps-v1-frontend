@@ -700,7 +700,7 @@ const Exchange = (props) => {
         return <button className="default-btn w-100" disabled={!ready} onClick={() => approve(from.address)}>Approve</button>;
       }
       else if (error) {
-        return <button className="default-btn w-100" disabled="disabled">{error}</button>;
+        return <button className="disable-btn w-100" disabled>{error}</button>;
       }
       else if (isPath === PATH_WRAP_UNWRAP) {
         return <button className="default-btn w-100" disabled={!ready} onClick={() => wrapping()}>
