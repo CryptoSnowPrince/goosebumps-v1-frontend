@@ -140,7 +140,8 @@
     "DEX": {
       "Factory": "0xa2A6A700452e4590c175C69C84c09655AbBC942F",
       "Router": "0x8E49F3b03D2F482af5c564d933f44De7FDD9C746",
-      "DEXManage": "0x1264a6f883EBb63Fdc83e45aB947dE134113a1E7"
+      "DEXManage": "0x1264a6f883EBb63Fdc83e45aB947dE134113a1E7",
+      "SimpleTokenSwap": "0xB2eDFC0e4668385f36F66Fa465603aE4D63Dd9C5"
     },
     "Currency": {
       "Name": "MATIC",

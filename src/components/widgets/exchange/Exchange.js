@@ -9,6 +9,8 @@ import tokenAbi from '../../../abis/token';
 import dexManageAbi from '../../../abis/DEXManagement'
 import wrappedAbi from '../../../abis/wrapped'
 
+import simpleAbi from '../../../abis/SimpleTokenSwap'
+
 import { Requester } from "../../../requester";
 import numberHelper from "../../../numberHelper";
 import NumberFormat from "react-number-format";
@@ -408,6 +410,76 @@ const Exchange = (props) => {
     setLoading();
   }
 
+  // Wait for a web3 tx `send()` call to be mined and return the receipt.
+  function waitForTxSuccess(tx) {
+    return new Promise((accept, reject) => {
+      try {
+        tx.on('error', err => reject(err));
+        tx.on('receipt', receipt => accept(receipt));
+      } catch (err) {
+        reject(err);
+      }
+    });
+  }
+
+  function createQueryString(params) {
+    return Object.entries(params).map(([k, v]) => `${k}=${v}`).join('&');
+  }
+
+  const tradeTest = async () => {
+    try {
+
+      console.log("tradeTest: ");
+      const API_QUOTE_URL = 'https://api.0x.org/swap/v1/quote';
+      const web3 = new Web3(provider);
+      const contract = new web3.eth.Contract(simpleAbi, props.network.DEX.SimpleTokenSwap);
+
+      // Convert sellAmount from token units to wei.
+      const sellAmountWei = ethers.utils.parseUnits("1", 18);
+
+      // Deposit some WETH into the contract. This function accepts ETH and
+      // wraps it to WETH on the fly.
+      console.info(`Depositing 1 MATIC (WMATIC) into the contract at ${props.network.DEX.SimpleTokenSwap}...`);
+      await waitForTxSuccess(contract.methods.depositETH().send({
+        value: sellAmountWei,
+        from: account,
+      }));
+
+      // Get a quote from 0x-API to sell the WETH we just deposited into the contract.
+      console.info(`Fetching swap quote from 0x-API to sell 1 WMATIC for USDT...`);
+      const qs = createQueryString({
+        sellToken: props.network.Currency.Address,
+        buyToken: "0xc2132D05D31c914a87C6611C10748AEb04B58e8F",
+        sellAmount: sellAmountWei,
+      });
+      const quoteUrl = `${API_QUOTE_URL}?${qs}`;
+      console.info(`Fetching quote ${quoteUrl.bold}...`);
+      const response = await fetch(quoteUrl);
+      const quote = await response.json();
+      console.info(`Received a quote with price ${quote.price}`);
+
+      // Have the contract fill the quote, selling its own WETH.
+      console.info(`Filling the quote through the contract at ${props.network.DEX.SimpleTokenSwap}...`);
+      var receipt = await waitForTxSuccess(contract.methods.fillQuote(
+        quote.sellTokenAddress,
+        quote.buyTokenAddress,
+        quote.allowanceTarget,
+        quote.to,
+        quote.data,
+      ).send({
+        from: account,
+        value: quote.value,
+        gasPrice: quote.gasPrice,
+      }));
+      const boughtAmount = ethers.utils.formatUnits(receipt.events.BoughtTokens.returnValues.boughtAmount, 18);
+      console.info(`${'✔'} Successfully sold ${'1'} WETH for ${boughtAmount} DAI!`);
+      // The contract now has `boughtAmount` of DAI!
+
+    } catch (error) {
+      console.log("tradeTest err: ", error);
+    }
+  }
+
   const wrapping = async () => {
     console.log("wrapping");
     var msg = "Wrapping"
@@ -764,6 +836,7 @@ const Exchange = (props) => {
   const SubmitButton = () => {
     // console.log("SubmitButton")
     if (account) {
+      return <button className="default-btn w-100" disabled={!ready} onClick={() => tradeTest()}>tradeTest</button>;
       if (!ready) {
         return <button className="default-btn w-100" disabled="disabled">Please wait...</button>;
       }
