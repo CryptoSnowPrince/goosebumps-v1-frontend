@@ -532,7 +532,9 @@ const LiquidityAddBody = (props) => {
                 <div className="form-group">
                   <div className="row justify-content-between">
                     <div className="col">
-                      <label htmlFor="from" className="w-100">Token 1</label>
+                      <label htmlFor="from" className="w-100">
+                        {tokenA.symbol ? tokenA.symbol : "Select a currency"}
+                      </label>
                     </div>
                     <div className="col text-end">
                       <button
@@ -566,7 +568,9 @@ const LiquidityAddBody = (props) => {
                 <div className="form-group">
                   <div className="row justify-content-between">
                     <div className="col">
-                      <label htmlFor="from" className="w-100">Token 2</label>
+                      <label htmlFor="from" className="w-100">
+                        {tokenB.symbol ? tokenB.symbol : "Select a currency"}
+                      </label>
                     </div>
                     <div className="col text-end">
                       <button
