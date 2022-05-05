@@ -319,83 +319,86 @@ const Exchange = (props) => {
 
   const trade = async () => {
     setLoading(true);
-    if (isPath === PATH_IS_IN_DEX) {
-      try {
-        var nowTimestamp = (await web3Provider.getBlock()).timestamp;
+    var tx;
+    var receipt;
+    try {
+      if (isPath === PATH_IS_IN_DEX) {
+        try {
+          var nowTimestamp = (await web3Provider.getBlock()).timestamp;
 
-        const contract = new ethers.Contract(
-          props.network.DEX.DEXManage,
-          dexManageAbi,
-          web3Provider.getSigner()
-        )
-
-        var tx;
-        if (from.address === "-") {
-          var options = { value: ethers.utils.parseUnits(from.amount.toString(), from.decimals) };
-          tx = await contract.swapExactETHForTokens(
-            to.address,
-            parseInt(slippage * 100),
-            nowTimestamp + 1200,
-            options
-          );
-        } else if (to.address === "-") {
-          tx = await contract.swapExactTokenForETH(
-            from.address,
-            ethers.utils.parseUnits(from.amount.toString(), from.decimals),
-            parseInt(slippage * 100),
-            nowTimestamp + 1200
+          const contract = new ethers.Contract(
+            props.network.DEX.DEXManage,
+            dexManageAbi,
+            web3Provider.getSigner()
           )
-        } else {
-          tx = await contract.swap(
-            from.address, 
-            to.address,
-            ethers.utils.parseUnits(from.amount.toString(), from.decimals),
-            parseInt(slippage * 100),
-            nowTimestamp + 1200
+
+          if (from.address === "-") {
+            var options = { value: ethers.utils.parseUnits(from.amount.toString(), from.decimals) };
+            tx = await contract.swapExactETHForTokens(
+              to.address,
+              parseInt(slippage * 100),
+              nowTimestamp + 1200,
+              options
+            );
+          } else if (to.address === "-") {
+            tx = await contract.swapExactTokenForETH(
+              from.address,
+              ethers.utils.parseUnits(from.amount.toString(), from.decimals),
+              parseInt(slippage * 100),
+              nowTimestamp + 1200
             )
+          } else {
+            tx = await contract.swap(
+              from.address,
+              to.address,
+              ethers.utils.parseUnits(from.amount.toString(), from.decimals),
+              parseInt(slippage * 100),
+              nowTimestamp + 1200
+            )
+          }
+        } catch (error) {
+          console.log("trade on DEX error: ", error)
+          if (error.code === 4001) {
+            alert(`User denied transaction signature.`)
+          }
         }
-        const receipt = await tx.wait(tx);
-        if (receipt.status === 1) {
-          alert("trade sucess");
+      } else {
+        const params = {
+          sellToken: (from.address === "-" ? from.symbol : from.address),
+          buyToken: (to.address === "-" ? to.symbol : to.address),
+          sellAmount: quote.sellAmount, // 1 ETH = 10^18 wei
+          takerAddress: account,
         }
-      } catch (error) {
-        console.log("trade on DEX error: ", error)
-        if (error.code === 4001) {
-          alert(`User denied transaction signature.`)
+
+        try {
+          // Fetch the swap quote.
+          const response = await fetch(
+            `${props.network.SwapApi}swap/v1/quote?${qs.stringify(params)}`
+          );
+
+          const web3 = new Web3(provider);
+          const ret = await response.json();
+          tx = await web3.eth.sendTransaction(ret);
+        } catch (error) {
+          console.log("trade on 0x API error: ", error)
+          if (error.code === 4001) {
+            alert(`User denied transaction signature.`)
+          }
         }
       }
-    } else {
-      const params = {
-        sellToken: (from.address === "-" ? from.symbol : from.address),
-        buyToken: (to.address === "-" ? to.symbol : to.address),
-        sellAmount: quote.sellAmount, // 1 ETH = 10^18 wei
-        takerAddress: account,
+      receipt = await tx.wait(tx);
+      if (receipt.status === 1) {
+        alert("trade sucess");
+        updateBalance(from.address, from, setFrom, true).then(() => {
+          updateBalance(to.address, to, setTo, true).then(() => {
+            setLoading();
+            resetQuote();
+          });
+        });
       }
-
-      try {
-        // Fetch the swap quote.
-        const response = await fetch(
-          `${props.network.SwapApi}swap/v1/quote?${qs.stringify(params)}`
-        );
-
-        const web3 = new Web3(provider);
-        const ret = await response.json();
-        await web3.eth.sendTransaction(ret);
-      } catch (error) {
-        console.log("trade error: ", error)
-        if (error.code === 4001) {
-          alert(`User denied transaction signature.`)
-        }
-      }
-
+    } catch (error) {
+      console.log("trade error: ", error)
     }
-
-    updateBalance(from.address, from, setFrom, true).then(() => {
-      updateBalance(to.address, to, setTo, true).then(() => {
-        setLoading();
-        resetQuote();
-      });
-    });
   }
 
   const wrapping = async () => {
@@ -613,7 +616,7 @@ const Exchange = (props) => {
       invert();
     }
     else {
-      // setLoading(true);
+      setLoading(true);
       if (forTarget === "from") {
         var tokenA = token.Address;
         var tokenB = to.address;
@@ -623,7 +626,7 @@ const Exchange = (props) => {
         newFrom.decimals = token.Decimals;
         updateBalance(token.Address, newFrom, setFrom, true).then(() => {
           updateBalance(to.address, to, setTo, true).then(() => {
-            // setLoading();
+            setLoading();
             resetQuote();
           });
         });
@@ -638,7 +641,7 @@ const Exchange = (props) => {
         newTo.decimals = token.Decimals;
         updateBalance(token.Address, newTo, setTo, true).then(() => {
           updateBalance(from.address, from, setFrom, true).then(() => {
-            // setLoading();
+            setLoading();
             resetQuote();
           });
         });
