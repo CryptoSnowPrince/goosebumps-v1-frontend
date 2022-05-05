@@ -40,7 +40,7 @@ const NavMenu = () => {
     // }
 
     // const [show, setShow] = useState();
-    const [networkIndex, setNetworkIndex] = useState(localStorage.getItem("networkIndex") || 1);
+    const [networkIndex, setNetworkIndex] = useState(localStorage.getItem("networkIndex") || 4);
     const [networkName, setNetworkName] = useState(networks[networkIndex].Name);
     const navigate = useNavigate();
     const searchInput = useRef();
@@ -152,7 +152,7 @@ const NavMenu = () => {
                                     (network, index) =>
                                         <option key={index} value={index}>{network.Display}</option>
                                 )} */}
-                                <option key={1} value={1}>Ropsten</option>
+                                <option key={4} value={4}>Polygon</option>
                             </select>
                         </div>
                         <input onSubmit={handleSearch} ref={searchInput} type="text" className="form-control" placeholder={inPortfolio ? "Enter another wallet to track together" : "Enter token or wallet address..."} />
