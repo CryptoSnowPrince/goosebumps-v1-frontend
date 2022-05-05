@@ -26,5 +26,26 @@
     "Address": "0xaD6D458402F60fD3Bd25163575031ACDce07538D",
     "Decimals": 18,
     "Logo": "/assets/tokens/3/0xaD6D458402F60fD3Bd25163575031ACDce07538D.png"
+  },
+  {
+    "Name": "BSC Token0",
+    "Symbol": "Token0",
+    "Address": "0x88fc3DcA85faBCa6Df62dDa115c3e529E19c369b",
+    "Decimals": 18,
+    "Logo": "/assets/tokens/3/0x88fc3DcA85faBCa6Df62dDa115c3e529E19c369b.png"
+  },
+  {
+    "Name": "BSC Token1",
+    "Symbol": "Token1",
+    "Address": "0x94595bFF70614B0308C390225bB2Cc622F6b6721",
+    "Decimals": 18,
+    "Logo": "/assets/tokens/3/0x94595bFF70614B0308C390225bB2Cc622F6b6721.png"
+  },
+  {
+    "Name": "BSC Token2",
+    "Symbol": "Token2",
+    "Address": "0x13B1D5B3F93382c0AcF8026b12555b427DA2Eb7e",
+    "Decimals": 18,
+    "Logo": "/assets/tokens/3/0x13B1D5B3F93382c0AcF8026b12555b427DA2Eb7e.png"
   }
 ]

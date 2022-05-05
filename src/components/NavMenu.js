@@ -40,7 +40,7 @@ const NavMenu = () => {
     // }
 
     // const [show, setShow] = useState();
-    const [networkIndex, setNetworkIndex] = useState(localStorage.getItem("networkIndex") || 3);
+    const [networkIndex, setNetworkIndex] = useState(localStorage.getItem("networkIndex") || 1);
     const [networkName, setNetworkName] = useState(networks[networkIndex].Name);
     const navigate = useNavigate();
     const searchInput = useRef();

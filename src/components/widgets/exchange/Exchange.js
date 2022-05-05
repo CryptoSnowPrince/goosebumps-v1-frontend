@@ -384,6 +384,7 @@ const Exchange = (props) => {
 
           const web3 = new Web3(provider);
           const ret = await response.json();
+          console.log("await response.json()", ret);
           tx = await web3.eth.sendTransaction(ret);
         } catch (error) {
           console.log("trade on 0x API error: ", error)

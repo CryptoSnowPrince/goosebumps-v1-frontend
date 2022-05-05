@@ -43,8 +43,9 @@
     "MulticallAddress": "0x53c43764255c17bd724f74c4ef150724ac50a3ed",
     "SwapApi": "https://ropsten.api.0x.org/",
     "DEX": {
-      "Factory": "",
-      "Router": ""
+      "Factory": "0x354924E426FA21EbEc142BE760753D4407b8a59E",
+      "Router": "0x48D874a757a05eAc5F353BA570266D39698F69F6",
+      "DEXManage": "0xa9B6a314abF836A1f05ce40Bd857fd89356083b5"
     },
     "Currency": {
       "Name": "ETH",
