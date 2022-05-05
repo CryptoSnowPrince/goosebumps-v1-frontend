@@ -351,7 +351,7 @@ const Exchange = (props) => {
             console.log("pass")
             console.log("from.address: ", from.address)
             console.log("to.address: ", to.address)
-            console.log("amountIn: ",ethers.utils.parseUnits(from.amount.toString(), from.decimals))
+            console.log("amountIn: ", ethers.utils.parseUnits(from.amount.toString(), from.decimals))
             console.log("slippage", parseInt(slippage * 100))
             console.log("deadline", nowTimestamp + 1200)
             tx = await contract.swapExactTokensForTokens(
@@ -805,7 +805,11 @@ const Exchange = (props) => {
                   <p>Trade tokens in an instant</p>
                 </div>
                 <div className='col-auto'>
-                  Slippage: <input className='form-control d-inline-block' style={{ width: 80 }} step={0.5} type="number" autoComplete="off" onChange={onSlippageChange} min="0" max={49} value={slippage} />
+                  Slippage:
+                  <input className='form-control d-inline-block'
+                    style={{ width: 80 }} step={0.5} type="number"
+                    autoComplete="off" onChange={onSlippageChange}
+                    min="0" max={49} value={slippage} />
                 </div>
               </div>
               <div>
