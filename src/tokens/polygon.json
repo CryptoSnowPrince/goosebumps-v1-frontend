@@ -26,5 +26,26 @@
     "Address": "0x0DAEFbe39309BE637f01d6465164561DE3E0492F",
     "Decimals": 9,
     "Logo": "/assets/tokens/137/0x0DAEFbe39309BE637f01d6465164561DE3E0492F.png"
+  },
+  {
+    "Name": "Polygon Token0",
+    "Symbol": "Token0",
+    "Address": "0x5FbF55B17e7799935ae499FB9aeadB677CA88566",
+    "Decimals": 18,
+    "Logo": "/assets/tokens/137/0x5FbF55B17e7799935ae499FB9aeadB677CA88566.png"
+  },
+  {
+    "Name": "Polygon Token1",
+    "Symbol": "Token1",
+    "Address": "0x4eda999a84Af9303D3298f0e34D1d509F6999DDF",
+    "Decimals": 18,
+    "Logo": "/assets/tokens/137/0x4eda999a84Af9303D3298f0e34D1d509F6999DDF.png"
+  },
+  {
+    "Name": "Polygon Token2",
+    "Symbol": "Token2",
+    "Address": "0x0e5c05643215a50CA58e4774Ba3C27CEfe7310EF",
+    "Decimals": 18,
+    "Logo": "/assets/tokens/137/0x0e5c05643215a50CA58e4774Ba3C27CEfe7310EF.png"
   }
 ]
