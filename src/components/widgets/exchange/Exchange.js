@@ -279,7 +279,7 @@ const Exchange = (props) => {
   };
 
   const approve = async (fromAddr) => {
-    console.log("approve");
+    // console.log("approve");
     setReady();
 
     // const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
@@ -289,7 +289,6 @@ const Exchange = (props) => {
       web3Provider.getSigner()
       // provider.getSigner()
     );
-    console.log("approve pass 1");
 
     try {
       // const tx = await contract.approve(needApprove.target, quote.sellAmount);
@@ -301,7 +300,6 @@ const Exchange = (props) => {
     } catch (err) {
       console.log("approve err: ", err);
     }
-    console.log("approve pass 2");
 
     setReady(true);
   };
@@ -320,29 +318,69 @@ const Exchange = (props) => {
   }
 
   const trade = async () => {
-    
-    const params = {
-      sellToken: (from.address === "-" ? from.symbol : from.address),
-      buyToken: (to.address === "-" ? to.symbol : to.address),
-      sellAmount: quote.sellAmount, // 1 ETH = 10^18 wei
-      takerAddress: account,
-    }
-
     setLoading(true);
-    try {
-      // Fetch the swap quote.
-      const response = await fetch(
-        `${props.network.SwapApi}swap/v1/quote?${qs.stringify(params)}`
-      );
+    if (isPath === PATH_IS_IN_DEX) {
+      try {
+        var nowTimestamp = (await web3Provider.getBlock()).timestamp;
 
-      const web3 = new Web3(provider);
-      const ret = await response.json();
-      await web3.eth.sendTransaction(ret);
-    } catch (error) {
-      console.log("trade error: ", error)
-      if (error.code === 4001) {
-        alert(`User denied transaction signature.`)
+        const contract = new ethers.Contract(
+          props.network.DEX.DEXManage,
+          dexManageAbi,
+          web3Provider.getSigner()
+        )
+
+        if (from.address === "-") {
+          var options = { value: ethers.utils.parseUnits(from.amount.toString(), from.decimals) };
+          const tx = await contract.swapExactETHForTokens(
+            to.address,
+            slippage,
+            nowTimestamp + 1200,
+            options
+          );
+          const receipt = await tx.wait(tx);
+          if (receipt.status === 1) {
+            alert("trade sucess");
+          }
+        } else if (to.address === "-") {
+          const tx = await contract.swapExactTokenForETH(
+            from.address,
+            ethers.utils.parseUnits(from.amount.toString(), from.decimals),
+            slippage,
+            
+          )
+        } else {
+
+        }
+      } catch (error) {
+        console.log("trade on DEX error: ", error)
+        if (error.code === 4001) {
+          alert(`User denied transaction signature.`)
+        }
       }
+    } else {
+      const params = {
+        sellToken: (from.address === "-" ? from.symbol : from.address),
+        buyToken: (to.address === "-" ? to.symbol : to.address),
+        sellAmount: quote.sellAmount, // 1 ETH = 10^18 wei
+        takerAddress: account,
+      }
+
+      try {
+        // Fetch the swap quote.
+        const response = await fetch(
+          `${props.network.SwapApi}swap/v1/quote?${qs.stringify(params)}`
+        );
+
+        const web3 = new Web3(provider);
+        const ret = await response.json();
+        await web3.eth.sendTransaction(ret);
+      } catch (error) {
+        console.log("trade error: ", error)
+        if (error.code === 4001) {
+          alert(`User denied transaction signature.`)
+        }
+      }
+
     }
 
     updateBalance(from.address, from, setFrom, true).then(() => {
@@ -549,7 +587,16 @@ const Exchange = (props) => {
   const onSlippageChange = (e) => {
     // console.log("onSlippageChange")
     const value = e.target.value.replace(/[^0-9.]/g, "");
-    setSlippage(value);
+    if (value > 49) {
+      alert(`Slippage is too high.`)
+      setSlippage(49);
+    } else if (value < 0) {
+      alert(`Slip must be greater than or equal to 0.`)
+      setSlippage(0);
+    } else {
+      setSlippage(value);
+    }
+    console.log("slipage value: ", value);
     resetQuote(null, null, value);
   };
 
