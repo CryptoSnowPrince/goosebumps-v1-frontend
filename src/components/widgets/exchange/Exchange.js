@@ -348,6 +348,12 @@ const Exchange = (props) => {
               nowTimestamp + 1200
             )
           } else {
+            console.log("pass")
+            console.log("from.address: ", from.address)
+            console.log("to.address: ", to.address)
+            console.log("amountIn: ",ethers.utils.parseUnits(from.amount.toString(), from.decimals))
+            console.log("slippage", parseInt(slippage * 100))
+            console.log("deadline", nowTimestamp + 1200)
             tx = await contract.swap(
               from.address,
               to.address,
