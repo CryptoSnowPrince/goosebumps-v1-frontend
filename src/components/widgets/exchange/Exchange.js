@@ -410,6 +410,7 @@ const Exchange = (props) => {
 
   const wrapping = async () => {
     console.log("wrapping");
+    var msg = "Wrapping"
     const contract = new ethers.Contract(
       props.network.Currency.Address,
       wrappedAbi,
@@ -421,6 +422,7 @@ const Exchange = (props) => {
         var options = { value: ethers.utils.parseUnits(from.amount.toString(), from.decimals) };
         var tx = await contract.deposit(options);
       } else if (from.address === props.network.Currency.Address) {
+        msg = "Unwrapping";
         tx = await contract.withdraw(ethers.utils.parseUnits(from.amount.toString(), from.decimals))
       } else {
         return;
@@ -433,7 +435,7 @@ const Exchange = (props) => {
       });
       setLoading(false);
       if (receipt.status === 1) {
-        alert(`wrapped success`);
+        alert(`${msg} success`);
       }
     } catch (error) {
       setLoading(false);
