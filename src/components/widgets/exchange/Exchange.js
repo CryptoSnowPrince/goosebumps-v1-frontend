@@ -354,7 +354,7 @@ const Exchange = (props) => {
             console.log("amountIn: ",ethers.utils.parseUnits(from.amount.toString(), from.decimals))
             console.log("slippage", parseInt(slippage * 100))
             console.log("deadline", nowTimestamp + 1200)
-            tx = await contract.swap(
+            tx = await contract.swapExactTokensForTokens(
               from.address,
               to.address,
               ethers.utils.parseUnits(from.amount.toString(), from.decimals),
