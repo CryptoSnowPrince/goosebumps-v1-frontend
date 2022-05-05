@@ -329,27 +329,34 @@ const Exchange = (props) => {
           web3Provider.getSigner()
         )
 
+        var tx;
         if (from.address === "-") {
           var options = { value: ethers.utils.parseUnits(from.amount.toString(), from.decimals) };
-          const tx = await contract.swapExactETHForTokens(
+          tx = await contract.swapExactETHForTokens(
             to.address,
-            slippage,
+            parseInt(slippage * 100),
             nowTimestamp + 1200,
             options
           );
-          const receipt = await tx.wait(tx);
-          if (receipt.status === 1) {
-            alert("trade sucess");
-          }
         } else if (to.address === "-") {
-          const tx = await contract.swapExactTokenForETH(
+          tx = await contract.swapExactTokenForETH(
             from.address,
             ethers.utils.parseUnits(from.amount.toString(), from.decimals),
-            slippage,
-            
+            parseInt(slippage * 100),
+            nowTimestamp + 1200
           )
         } else {
-
+          tx = await contract.swap(
+            from.address, 
+            to.address,
+            ethers.utils.parseUnits(from.amount.toString(), from.decimals),
+            parseInt(slippage * 100),
+            nowTimestamp + 1200
+            )
+        }
+        const receipt = await tx.wait(tx);
+        if (receipt.status === 1) {
+          alert("trade sucess");
         }
       } catch (error) {
         console.log("trade on DEX error: ", error)
