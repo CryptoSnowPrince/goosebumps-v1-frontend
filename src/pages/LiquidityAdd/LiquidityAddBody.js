@@ -456,7 +456,7 @@ const LiquidityAddBody = (props) => {
     if (ethers.utils.isAddress(lpAddress) && !newPool && !isInvalidPair()) {
       getTokenBalOfPool();
     }
-  }, [lpAddress])
+  }, [lpAddress, newPool])
 
   useEffect(() => {
     setTokenA({ symbol: "", address: "", decimals: 0, amount: 0, balance: 0 })
