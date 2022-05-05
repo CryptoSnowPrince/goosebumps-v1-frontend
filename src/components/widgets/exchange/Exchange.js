@@ -391,7 +391,6 @@ const Exchange = (props) => {
         alert("trade sucess");
         updateBalance(from.address, from, setFrom, true).then(() => {
           updateBalance(to.address, to, setTo, true).then(() => {
-            setLoading();
             resetQuote();
           });
         });
@@ -399,6 +398,7 @@ const Exchange = (props) => {
     } catch (error) {
       console.log("trade error: ", error)
     }
+    setLoading();
   }
 
   const wrapping = async () => {
