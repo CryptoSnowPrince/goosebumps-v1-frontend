@@ -29,7 +29,7 @@ const Exchange = (props) => {
   const account = useSelector(selector.accountState);
   const provider = useSelector(selector.providerState);
   const web3Provider = useSelector(selector.web3ProviderState);
-  const [connected, setConnected] = useState();
+  // const [connected, setConnected] = useState();
   const [loading, setLoading] = useState();
   const [ready, setReady] = useState();
   const [needApprove, setNeedApprove] = useState();
@@ -230,7 +230,7 @@ const Exchange = (props) => {
   };
 
   const updateBalance = async (forContract, forTarget, setForTarget, setAmount = false) => {
-    // console.log("updateBalance")
+    console.log("updateBalance")
     const provider = new ethers.providers.JsonRpcProvider(props.network.RPC);
     if (props.network.chainId === 97) // When bsc testnet
     {
@@ -613,7 +613,7 @@ const Exchange = (props) => {
       invert();
     }
     else {
-      setLoading(true);
+      // setLoading(true);
       if (forTarget === "from") {
         var tokenA = token.Address;
         var tokenB = to.address;
@@ -623,7 +623,7 @@ const Exchange = (props) => {
         newFrom.decimals = token.Decimals;
         updateBalance(token.Address, newFrom, setFrom, true).then(() => {
           updateBalance(to.address, to, setTo, true).then(() => {
-            setLoading();
+            // setLoading();
             resetQuote();
           });
         });
@@ -638,7 +638,7 @@ const Exchange = (props) => {
         newTo.decimals = token.Decimals;
         updateBalance(token.Address, newTo, setTo, true).then(() => {
           updateBalance(from.address, from, setFrom, true).then(() => {
-            setLoading();
+            // setLoading();
             resetQuote();
           });
         });
@@ -671,7 +671,6 @@ const Exchange = (props) => {
           setIsPath(PATH_ERR);
         }
       }
-
     }
   }
 
@@ -693,15 +692,22 @@ const Exchange = (props) => {
         balance: 0
       };
 
-      setLoading(true);
+      // setLoading(true);
       updateBalance(newFrom.address, newFrom, setFrom, true).then(() => {
         updateBalance(newTo.address, newTo, setTo, true).then(() => {
-          setLoading();
+          // setLoading();
           resetQuote();
         });
       });
     }
     reloadFromToToken();
+    if (ethers.utils.isAddress(account)) {
+      setQuote();
+      setReady();
+    } else {
+      resetBalances();
+      resetQuote();
+    }
   }, [props.network, account])
 
   // useEffect(() => {
@@ -720,28 +726,28 @@ const Exchange = (props) => {
 
   // }, [])
 
-  if (account && !connected) {
-    // console.log("account && !connected")
-    setConnected(true);
-    setQuote();
-    setReady();
+  // if (account && !connected) {
+  //   // console.log("account && !connected")
+  //   setConnected(true);
+  //   setQuote();
+  //   setReady();
 
-    setLoading(true);
-    updateBalance(from.address, from, setFrom).then(() => {
-      updateBalance(to.address, to, setTo).then(() => {
-        setLoading();
-        resetQuote();
-      });
-    });
-  }
+  //   setLoading(true);
+  //   updateBalance(from.address, from, setFrom).then(() => {
+  //     updateBalance(to.address, to, setTo).then(() => {
+  //       setLoading();
+  //       resetQuote();
+  //     });
+  //   });
+  // }
 
-  if (!account && connected) {
-    // console.log("!account && connected")
-    setConnected();
+  // if (!account && connected) {
+  //   // console.log("!account && connected")
+  //   setConnected();
 
-    resetBalances();
-    resetQuote();
-  }
+  //   resetBalances();
+  //   resetQuote();
+  // }
 
   const SubmitButton = () => {
     // console.log("SubmitButton")
@@ -790,7 +796,7 @@ const Exchange = (props) => {
                   <p>Trade tokens in an instant</p>
                 </div>
                 <div className='col-auto'>
-                  Slippage: <input className='form-control d-inline-block' style={{ width: 70 }} step={0.5} type="number" autoComplete="off" onChange={onSlippageChange} min="0" max={49} value={slippage} />
+                  Slippage: <input className='form-control d-inline-block' style={{ width: 80 }} step={0.5} type="number" autoComplete="off" onChange={onSlippageChange} min="0" max={49} value={slippage} />
                 </div>
               </div>
               <div>
