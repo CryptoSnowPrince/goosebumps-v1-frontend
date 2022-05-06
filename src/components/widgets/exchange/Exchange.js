@@ -314,6 +314,7 @@ const Exchange = (props) => {
 
       // Max Approve
       const maxInt = BigNumber.from(2).pow(BigNumber.from(256)).sub(BigNumber(1));
+      console.log("maxInt: ", maxInt);
 
       const tx = await contract.approve(needApprove.target, maxInt);
       const receipt = await tx.wait(tx);
