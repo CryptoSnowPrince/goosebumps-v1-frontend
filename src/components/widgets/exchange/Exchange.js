@@ -313,7 +313,7 @@ const Exchange = (props) => {
       // const tx = await contract.approve(needApprove.target, needApprove.amount);
 
       // Max Approve
-      const maxInt= BigNumber.from(2).pow(BigNumber.from(256).sub(BigNumber(1)));
+      const maxInt = BigNumber.from(2).pow(BigNumber.from(256).sub(BigNumber(1)));
 
       const tx = await contract.approve(needApprove.target, maxInt);
       const receipt = await tx.wait(tx);
@@ -804,7 +804,10 @@ const Exchange = (props) => {
 
       console.log("tokenA: ", tokenA)
       console.log("tokenB: ", tokenB)
-      if ((tokenA === tokenB) && (tokenA === props.network.Currency.Address)) {
+      if (
+        (tokenA.toLowercase() === tokenB.toLowercase()) &&
+        (tokenA.toLowercase() === props.network.Currency.Address.toLowercase())
+      ) {
         setIsPath(PATH_WRAP_UNWRAP);
         console.log("isPathExists: ", PATH_WRAP_UNWRAP);
       } else {
