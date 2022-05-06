@@ -11,6 +11,8 @@ import wrappedAbi from '../../../abis/wrapped'
 
 import simpleAbi from '../../../abis/SimpleTokenSwap'
 
+import config from '../../../constants/config'
+
 import { Requester } from "../../../requester";
 import numberHelper from "../../../numberHelper";
 import NumberFormat from "react-number-format";
@@ -56,9 +58,10 @@ const Exchange = (props) => {
       response = await Requester.getAsync(props.network.SwapApi + "swap/v1/quote", {
         sellToken: from.address === "-" ? props.network.Currency.Name : from.address,
         buyToken: to.address === "-" ? props.network.Currency.Name : to.address,
-        sellAmount: ethers.utils.parseUnits(from.amount.toString(), from.decimals),
-        slippagePercentage: slippage / 100,
-        takerAddress: account
+        // take swapFee0x
+        sellAmount: ethers.utils.parseUnits((parseFloat(from.amount) * (10000 - config.SWAP_FEE_0X) / 10000).toString(), from.decimals),
+        slippagePercentage: slippage / 100
+        // takerAddress: props.network.DEX1.DEXManage
       });
     } catch (error) {
 
@@ -101,6 +104,8 @@ const Exchange = (props) => {
         setConfirmed(true);
         return;
       } else if (isPath === PATH_IS_IN_DEX) {
+        // can't come from "fill" here
+        // can come here othercase, but in these case, side is "from", so, amount == sellAmount
         setConfirmed(true);
 
         if (sellTokenAddress !== "-") {
@@ -132,16 +137,20 @@ const Exchange = (props) => {
             response = await Requester.getAsync(props.network.SwapApi + "swap/v1/quote", {
               sellToken: sellTokenAddress === "-" ? props.network.Currency.Name : sellTokenAddress,
               buyToken: buyTokenAddress === "-" ? props.network.Currency.Name : buyTokenAddress,
-              sellAmount: ethers.utils.parseUnits(amount.toString(), sellTokenDecimals),
-              slippagePercentage: slippage / 100
+              // take swapFee0x
+              sellAmount: ethers.utils.parseUnits((parseFloat(amount) * (10000 - config.SWAP_FEE_0X) / 10000).toString(), sellTokenDecimals),
+              slippagePercentage: slippage / 100,
+              takerAddress: props.network.DEX.DEXManage
             });
           }
           else {
+            // can come from "fill" here
             response = await Requester.getAsync(props.network.SwapApi + "swap/v1/quote", {
               sellToken: sellTokenAddress === "-" ? props.network.Currency.Name : sellTokenAddress,
               buyToken: buyTokenAddress === "-" ? props.network.Currency.Name : buyTokenAddress,
               buyAmount: ethers.utils.parseUnits(amount.toString(), buyTokenDecimals),
-              slippagePercentage: slippage / 100
+              slippagePercentage: slippage / 100,
+              takerAddress: props.network.DEX.DEXManage
             });
           }
         } catch (error) {
@@ -150,7 +159,12 @@ const Exchange = (props) => {
 
         if (response) {
           if (response.price) {
+            // console.log("response before: ", response);
             response.side = side;
+            if (side === "to") {
+              // add swapFee0x
+              response.sellAmount = BigNumber.from(response.sellAmount).mul(10000).div(10000 - config.SWAP_FEE_0X);
+            }
             // console.log("response: ", response);
             setQuote(response);
 
@@ -174,7 +188,7 @@ const Exchange = (props) => {
               } catch { }
 
               if (BigNumber.from(response.sellAmount).gt(allowance)) {
-                setNeedApprove({ target: response.allowanceTarget, amount: response.sellAmount });
+                setNeedApprove({ target: props.network.DEX.DEXManage, amount: response.sellAmount });
               }
               else {
                 setNeedApprove();
@@ -210,7 +224,7 @@ const Exchange = (props) => {
       clearTimeout(pendingQuote);
     }
 
-    if (_from.amount > 0) {
+    if (parseFloat(_from.amount) > 0) {
       setPendingQuote(setTimeout(() => {
         updateQuote(_from.address, _from.decimals, _to.address, _to.decimals, _from.amount, overrideSlippage ? overrideSlippage : slippage, "from").then(quote => {
           setReady(true);
@@ -218,14 +232,14 @@ const Exchange = (props) => {
         setPendingQuote();
       }, 1500));
     }
-    else if (_to.amount > 0) {
-      setPendingQuote(setTimeout(() => {
-        updateQuote(_from.address, _from.decimals, _to.address, _to.decimals, _to.amount, overrideSlippage ? overrideSlippage : slippage, "to").then(quote => {
-          setReady(true);
-        });
-        setPendingQuote();
-      }, 1500));
-    }
+    // else if (parseFloat(_to.amount) > 0) {
+    //   setPendingQuote(setTimeout(() => {
+    //     updateQuote(_from.address, _from.decimals, _to.address, _to.decimals, _to.amount, overrideSlippage ? overrideSlippage : slippage, "to").then(quote => {
+    //       setReady(true);
+    //     });
+    //     setPendingQuote();
+    //   }, 1500));
+    // }
     else {
       setReady(true);
     }
@@ -313,10 +327,11 @@ const Exchange = (props) => {
     if (isPath === PATH_IS_IN_DEX || isPath === PATH_WRAP_UNWRAP) {
       setReady(true);
       return;
+    } else {
+      validateQuote().then(() => {
+        setReady(true);
+      });
     }
-    validateQuote().then(() => {
-      setReady(true);
-    });
   }
 
   const trade = async () => {
@@ -324,23 +339,23 @@ const Exchange = (props) => {
     var tx;
     var receipt;
     try {
+      const contract = new ethers.Contract(
+        props.network.DEX.DEXManage,
+        dexManageAbi,
+        web3Provider.getSigner()
+      )
+
+      var nowTimestamp = (await web3Provider.getBlock()).timestamp;
+
       if (isPath === PATH_IS_IN_DEX) {
         try {
-          var nowTimestamp = (await web3Provider.getBlock()).timestamp;
-
-          const contract = new ethers.Contract(
-            props.network.DEX.DEXManage,
-            dexManageAbi,
-            web3Provider.getSigner()
-          )
-
           if (from.address === "-") {
             var options = { value: ethers.utils.parseUnits(from.amount.toString(), from.decimals) };
             tx = await contract.swapExactETHForTokens(
               to.address,
               ethers.utils.parseUnits((parseFloat(to.amount) * (100 - slippage) / 100).toString(), to.decimals),
               account,
-              nowTimestamp + 1200,
+              nowTimestamp + config.SWAP_DEADLINE,
               options
             );
           } else if (to.address === "-") {
@@ -349,7 +364,7 @@ const Exchange = (props) => {
               ethers.utils.parseUnits(from.amount.toString(), from.decimals),
               ethers.utils.parseUnits((parseFloat(to.amount) * (100 - slippage) / 100).toString(), to.decimals),
               account,
-              nowTimestamp + 1200
+              nowTimestamp + config.SWAP_DEADLINE
             )
           } else {
             tx = await contract.swapExactTokensForTokens(
@@ -358,7 +373,7 @@ const Exchange = (props) => {
               ethers.utils.parseUnits(from.amount.toString(), from.decimals),
               ethers.utils.parseUnits((parseFloat(to.amount) * (100 - slippage) / 100).toString(), to.decimals),
               account,
-              nowTimestamp + 1200
+              nowTimestamp + config.SWAP_DEADLINE
             )
           }
         } catch (error) {
@@ -368,23 +383,58 @@ const Exchange = (props) => {
           }
         }
       } else {
-        const params = {
-          sellToken: (from.address === "-" ? from.symbol : from.address),
-          buyToken: (to.address === "-" ? to.symbol : to.address),
-          sellAmount: quote.sellAmount, // 1 ETH = 10^18 wei
-          takerAddress: account,
-        }
-
+        // trade on 0x protocol
         try {
-          // Fetch the swap quote.
-          const response = await fetch(
-            `${props.network.SwapApi}swap/v1/quote?${qs.stringify(params)}`
-          );
+          if (quote.data) {
+            if (from.address === "-") {
+              tx = await contract.swapExactETHForTokensOn0x(
+                quote.buyTokenAddress,
+                quote.to,
+                quote.data,
+                account,
+                nowTimestamp + config.SWAP_DEADLINE,
+                { value: quote.sellAmount }
+              )
+            } else if (to.address === "-") {
+              tx = await contract.swapExactTokenForETHOn0x(
+                quote.sellTokenAddress,
+                quote.sellAmount,
+                quote.allowanceTarget,
+                quote.to,
+                quote.data,
+                account,
+                nowTimestamp + config.SWAP_DEADLINE
+              )
+            } else {
+              tx = await contract.swapExactTokensForTokensOn0x(
+                quote.sellTokenAddress,
+                quote.buyTokenAddress,
+                quote.sellAmount,
+                quote.allowanceTarget,
+                quote.to,
+                quote.data,
+                account,
+                nowTimestamp + config.SWAP_DEADLINE
+              )
+            }
+          }
+          // const params = {
+          //   sellToken: (from.address === "-" ? from.symbol : from.address),
+          //   buyToken: (to.address === "-" ? to.symbol : to.address),
+          //   sellAmount: quote.sellAmount, // 1 ETH = 10^18 wei
+          //   takerAddress: account,
+          // }
 
-          const web3 = new Web3(provider);
-          const ret = await response.json();
-          console.log("await response.json()", ret);
-          tx = await web3.eth.sendTransaction(ret);
+          // Fetch the swap quote.
+          // const response = await fetch(
+          //   `${props.network.SwapApi}swap/v1/quote?${qs.stringify(params)}`
+          // );
+
+          // const web3 = new Web3(provider);
+          // const ret = await response.json();
+          // console.log("await response.json()", ret);
+          // tx = await web3.eth.sendTransaction(ret);
+          // tx = await web3.eth.sendTransaction(ret);
         } catch (error) {
           console.log("trade on 0x API error: ", error)
           if (error.code === 4001) {
@@ -520,6 +570,8 @@ const Exchange = (props) => {
     // console.log("invert")
     const newFrom = Object.assign({}, to);
     const newTo = Object.assign({}, from);
+    newFrom.amount = "";
+    newTo.amount = "";
     setFrom(newFrom);
     setTo(newTo);
     resetQuote(newFrom, newTo);

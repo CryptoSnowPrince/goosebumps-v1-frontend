@@ -23,6 +23,8 @@ import * as selector from '../../store/selectors';
 import networks from '../../networks.json'
 import { formatNumberWithoutComma } from '../../utils/number';
 
+import config from '../../constants/config'
+
 const NOT_NEED_APPROVE = 0;
 const NEED_APPROVE = 1;
 const APPROVING = 2;
@@ -285,7 +287,7 @@ const LiquidityRemove = () => {
           ethers.utils.parseUnits((tokenABalance * lpBalance / lpTotalSupply * removeAmount * (100 - slippageTolerance) / 10000).toString(), tokenADecimals),
           ethers.utils.parseUnits((tokenBBalance * lpBalance / lpTotalSupply * removeAmount * (100 - slippageTolerance) / 10000).toString(), tokenBDecimals),
           account,
-          nowTimestamp + 1200, // deadline: 20 mins
+          nowTimestamp + config.SWAP_DEADLINE, // deadline: 20 mins
         )
       } else if (receiveNToken === NATIVE_TOKEN) {
         console.log("else if : ", receiveNToken)
@@ -301,7 +303,7 @@ const LiquidityRemove = () => {
             ethers.utils.parseUnits((tokenBBalance * lpBalance / lpTotalSupply * removeAmount * (100 - slippageTolerance) / 10000).toString(), tokenBDecimals),
             ethers.utils.parseUnits((tokenABalance * lpBalance / lpTotalSupply * removeAmount * (100 - slippageTolerance) / 10000).toString(), tokenADecimals),
             account,
-            nowTimestamp + 1200, // deadline: 20 mins
+            nowTimestamp + config.SWAP_DEADLINE, // deadline: 20 mins
           )
 
         } else if (
@@ -316,7 +318,7 @@ const LiquidityRemove = () => {
             ethers.utils.parseUnits((tokenABalance * lpBalance / lpTotalSupply * removeAmount * (100 - slippageTolerance) / 10000).toString(), tokenADecimals),
             ethers.utils.parseUnits((tokenBBalance * lpBalance / lpTotalSupply * removeAmount * (100 - slippageTolerance) / 10000).toString(), tokenBDecimals),
             account,
-            nowTimestamp + 1200, // deadline: 20 mins
+            nowTimestamp + config.SWAP_DEADLINE, // deadline: 20 mins
           )
 
         }

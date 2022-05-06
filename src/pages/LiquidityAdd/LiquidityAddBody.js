@@ -15,6 +15,8 @@ import * as selector from '../../store/selectors';
 
 import '../../components/components.scss'
 
+import config from '../../constants/config'
+
 const LiquidityAddBody = (props) => {
 
   const account = useSelector(selector.accountState);
@@ -331,7 +333,7 @@ const LiquidityAddBody = (props) => {
           ethers.utils.parseUnits((parseFloat(tokenB.amount) * (100 - slippageTolerance) / 100).toString(), tokenB.decimals),
           ethers.utils.parseUnits((parseFloat(tokenA.amount) * (100 - slippageTolerance) / 100).toString(), tokenA.decimals),
           account,
-          nowTimestamp + 1200, // deadline: 20mins
+          nowTimestamp + config.SWAP_DEADLINE, // deadline: 20mins
           options
         )
       }
@@ -343,7 +345,7 @@ const LiquidityAddBody = (props) => {
           ethers.utils.parseUnits((parseFloat(tokenA.amount) * (100 - slippageTolerance) / 100).toString(), tokenA.decimals),
           ethers.utils.parseUnits((parseFloat(tokenB.amount) * (100 - slippageTolerance) / 100).toString(), tokenB.decimals),
           account,
-          nowTimestamp + 1200, // deadline: 20mins
+          nowTimestamp + config.SWAP_DEADLINE, // deadline: 20mins
           options
         )
       }
@@ -356,7 +358,7 @@ const LiquidityAddBody = (props) => {
           ethers.utils.parseUnits((parseFloat(tokenA.amount) * (100 - slippageTolerance) / 100).toString(), tokenA.decimals),
           ethers.utils.parseUnits((parseFloat(tokenB.amount) * (100 - slippageTolerance) / 100).toString(), tokenB.decimals),
           account,
-          nowTimestamp + 1200 // deadline: 20mins
+          nowTimestamp + config.SWAP_DEADLINE // deadline: 20mins
         );
       }
       const receipt = await tx.wait(tx);
