@@ -143,7 +143,6 @@ const Exchange = (props) => {
               // take swapFee0x
               sellAmount: ethers.utils.parseUnits((parseFloat(amount) * (10000 - config.SWAP_FEE_0X) / 10000).toString(), sellTokenDecimals),
               slippagePercentage: slippage / 100,
-              takerAddress: props.network.DEX.DEXManage
             });
           }
           else {
@@ -153,7 +152,6 @@ const Exchange = (props) => {
               buyToken: buyTokenAddress === "-" ? props.network.Currency.Name : buyTokenAddress,
               buyAmount: ethers.utils.parseUnits(amount.toString(), buyTokenDecimals),
               slippagePercentage: slippage / 100,
-              takerAddress: props.network.DEX.DEXManage
             });
           }
         } catch (error) {
@@ -313,7 +311,7 @@ const Exchange = (props) => {
       // const tx = await contract.approve(needApprove.target, quote.sellAmount);
 
       // const tx = await contract.approve(needApprove.target, needApprove.amount);
-      
+
       // Max Approve
       const maxInt= BigNumber.from(2).pow(BigNumber.from(256).sub(BigNumber(1)));
 
