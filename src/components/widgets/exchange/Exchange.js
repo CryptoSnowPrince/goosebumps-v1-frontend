@@ -806,8 +806,8 @@ const Exchange = (props) => {
       console.log("tokenA: ", tokenA)
       console.log("tokenB: ", tokenB)
       if (
-        (tokenA.toLowercase() === tokenB.toLowercase()) &&
-        (tokenA.toLowercase() === props.network.Currency.Address.toLowercase())
+        (tokenA.toLowerCase() === tokenB.toLowerCase()) &&
+        (tokenA.toLowerCase() === props.network.Currency.Address.toLowerCase())
       ) {
         setIsPath(PATH_WRAP_UNWRAP);
         console.log("isPathExists: ", PATH_WRAP_UNWRAP);
