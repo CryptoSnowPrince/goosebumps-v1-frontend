@@ -1,5 +1,5 @@
 import React, { useEffect, useState/*, useCallback*/ } from 'react';
-import Web3 from 'web3';
+// import Web3 from 'web3';
 // import { multicall, useEthers } from '@usedapp/core';
 import { /*singer, */ethers, BigNumber } from 'ethers';
 import { Contract, Provider, setMulticallAddress } from 'ethers-multicall';
@@ -9,7 +9,7 @@ import tokenAbi from '../../../abis/token';
 import dexManageAbi from '../../../abis/DEXManagement'
 import wrappedAbi from '../../../abis/wrapped'
 
-import simpleAbi from '../../../abis/SimpleTokenSwap'
+// import simpleAbi from '../../../abis/SimpleTokenSwap'
 
 import config from '../../../constants/config'
 
@@ -20,7 +20,7 @@ import { TokenSelectModal } from './TokenSelectModal';
 import { useSelector } from 'react-redux';
 import * as selector from '../../../store/selectors';
 import { /*getFullDisplayBalance, */formatNumberWithoutComma } from '../../../utils/number';
-import qs from 'qs';
+// import qs from 'qs';
 
 import '../../components.scss'
 
@@ -31,7 +31,7 @@ const PATH_ERR = 3;
 
 const Exchange = (props) => {
   const account = useSelector(selector.accountState);
-  const provider = useSelector(selector.providerState);
+  // const provider = useSelector(selector.providerState);
   const web3Provider = useSelector(selector.web3ProviderState);
   // const [connected, setConnected] = useState();
   const [loading, setLoading] = useState();
@@ -101,9 +101,11 @@ const Exchange = (props) => {
     if (amount > 0) {
       var response = null;
       if (isPath === PATH_WRAP_UNWRAP) {
+        console.log("updateQuote PATH_WRAP_UNWRAP")
         setConfirmed(true);
         return;
       } else if (isPath === PATH_IS_IN_DEX) {
+        console.log("updateQuote PATH_IS_IN_DEX")
         // can't come from "fill" here
         // can come here othercase, but in these case, side is "from", so, amount == sellAmount
         setConfirmed(true);
@@ -132,6 +134,7 @@ const Exchange = (props) => {
         }
       } else {
         // Swap API
+        console.log("updateQuote Swap API")
         try {
           if (side === "from") {
             response = await Requester.getAsync(props.network.SwapApi + "swap/v1/quote", {
@@ -457,7 +460,9 @@ const Exchange = (props) => {
     setLoading();
   }
 
+  /*
   // Wait for a web3 tx `send()` call to be mined and return the receipt.
+  
   function waitForTxSuccess(tx) {
     return new Promise((accept, reject) => {
       try {
@@ -525,6 +530,7 @@ const Exchange = (props) => {
       console.log("tradeTest err: ", error);
     }
   }
+  */
 
   const wrapping = async () => {
     console.log("wrapping");
@@ -579,6 +585,9 @@ const Exchange = (props) => {
 
   const fill = async (side, value) => {
     // console.log("fill")
+    // const test = "";
+    // console.log("parseFloat(test)=", parseFloat(test));
+    // console.log("isNaN(parseFloat(test))=", isNaN(parseFloat(test)));
     setReady();
     setError();
     if (side === "from") {
@@ -620,7 +629,7 @@ const Exchange = (props) => {
         web3Provider
       )
 
-      var sellAmount = ethers.utils.parseUnits(value.toString(), from.decimals);;
+      var sellAmount = ethers.utils.parseUnits(value.toString(), from.decimals);
       if (side === "from") {
         try {
           const amountOut = await contract.getAmountOut(
@@ -645,6 +654,11 @@ const Exchange = (props) => {
           console.log("fill amountIn error: ", error)
         }
       }
+
+      if (isNaN(parseFloat(newOther.amount)) || parseFloat(newOther.amount) <= 0) {
+        setError("Unknown error");
+      }
+
       setOther(newOther);
 
       if (from.address !== "-") {
