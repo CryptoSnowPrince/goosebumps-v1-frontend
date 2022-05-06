@@ -1,5 +1,5 @@
 import React, { useEffect, useState/*, useCallback*/ } from 'react';
-// import Web3 from 'web3';
+import Web3 from 'web3';
 // import { multicall, useEthers } from '@usedapp/core';
 import { /*singer, */ethers, BigNumber } from 'ethers';
 import { Contract, Provider, setMulticallAddress } from 'ethers-multicall';
@@ -9,7 +9,7 @@ import tokenAbi from '../../../abis/token';
 import dexManageAbi from '../../../abis/DEXManagement'
 import wrappedAbi from '../../../abis/wrapped'
 
-// import simpleAbi from '../../../abis/SimpleTokenSwap'
+import simpleAbi from '../../../abis/SimpleTokenSwap'
 
 import config from '../../../constants/config'
 
@@ -20,7 +20,7 @@ import { TokenSelectModal } from './TokenSelectModal';
 import { useSelector } from 'react-redux';
 import * as selector from '../../../store/selectors';
 import { /*getFullDisplayBalance, */formatNumberWithoutComma } from '../../../utils/number';
-// import qs from 'qs';
+import qs from 'qs';
 
 import '../../components.scss'
 
@@ -31,7 +31,7 @@ const PATH_ERR = 3;
 
 const Exchange = (props) => {
   const account = useSelector(selector.accountState);
-  // const provider = useSelector(selector.providerState);
+  const provider = useSelector(selector.providerState);
   const web3Provider = useSelector(selector.web3ProviderState);
   // const [connected, setConnected] = useState();
   const [loading, setLoading] = useState();
@@ -66,6 +66,8 @@ const Exchange = (props) => {
     } catch (error) {
 
     }
+
+    console.log("validateQuote response: ", response)
 
     if (response) {
       if (!response.price) {
@@ -184,7 +186,8 @@ const Exchange = (props) => {
 
               allowance = 0;
               try {
-                allowance = await contract.allowance(account, response.allowanceTarget);
+                // allowance = await contract.allowance(account, response.allowanceTarget);
+                allowance = await contract.allowance(account, props.network.DEX.DEXManage);
                 // console.log("allowance: ", allowance)
               } catch { }
 
@@ -392,35 +395,46 @@ const Exchange = (props) => {
         }
       } else {
         // trade on 0x protocol
+        // console.log("quote: ", quote);
         try {
           if (quote.data) {
+            // console.log(quote.data);
+            const reQuote = await Requester.getAsync(props.network.SwapApi + "swap/v1/quote", {
+              sellToken: from.address === "-" ? props.network.Currency.Name : from.address,
+              buyToken: to.address === "-" ? props.network.Currency.Name : to.address,
+              // take swapFee0x
+              sellAmount: ethers.utils.parseUnits((parseFloat(from.amount) * (10000 - config.SWAP_FEE_0X) / 10000).toString(), from.decimals),
+              slippagePercentage: slippage / 100
+            });
+            console.log("reQuote: ", reQuote);
+
             if (from.address === "-") {
               tx = await contract.swapExactETHForTokensOn0x(
-                quote.buyTokenAddress,
-                quote.to,
-                quote.data,
+                reQuote.buyTokenAddress,
+                reQuote.to,
+                reQuote.data,
                 account,
                 nowTimestamp + config.SWAP_DEADLINE,
-                { value: quote.sellAmount }
+                { value: ethers.utils.parseUnits((from.amount).toString(), from.decimals) }
               )
             } else if (to.address === "-") {
               tx = await contract.swapExactTokenForETHOn0x(
-                quote.sellTokenAddress,
-                quote.sellAmount,
-                quote.allowanceTarget,
-                quote.to,
-                quote.data,
+                reQuote.sellTokenAddress,
+                ethers.utils.parseUnits((from.amount).toString(), from.decimals),
+                reQuote.allowanceTarget,
+                reQuote.to,
+                reQuote.data,
                 account,
                 nowTimestamp + config.SWAP_DEADLINE
               )
             } else {
               tx = await contract.swapExactTokensForTokensOn0x(
-                quote.sellTokenAddress,
-                quote.buyTokenAddress,
-                quote.sellAmount,
-                quote.allowanceTarget,
-                quote.to,
-                quote.data,
+                reQuote.sellTokenAddress,
+                reQuote.buyTokenAddress,
+                ethers.utils.parseUnits((from.amount).toString(), from.decimals),
+                reQuote.allowanceTarget,
+                reQuote.to,
+                reQuote.data,
                 account,
                 nowTimestamp + config.SWAP_DEADLINE
               )
@@ -433,7 +447,7 @@ const Exchange = (props) => {
           //   takerAddress: account,
           // }
 
-          // Fetch the swap quote.
+          // // Fetch the swap quote.
           // const response = await fetch(
           //   `${props.network.SwapApi}swap/v1/quote?${qs.stringify(params)}`
           // );
@@ -465,9 +479,9 @@ const Exchange = (props) => {
     setLoading();
   }
 
-  /*
+
   // Wait for a web3 tx `send()` call to be mined and return the receipt.
-  
+
   function waitForTxSuccess(tx) {
     return new Promise((accept, reject) => {
       try {
@@ -487,25 +501,63 @@ const Exchange = (props) => {
     try {
 
       console.log("tradeTest: ");
-      const web3 = new Web3(provider);
-      const contract = new web3.eth.Contract(simpleAbi, props.network.DEX.SimpleTokenSwap);
+      const contract = new ethers.Contract(props.network.DEX.SimpleTokenSwap, simpleAbi, web3Provider.getSigner());
+      const sellAmount = ethers.utils.parseUnits("1", 6);
+      var nowTimestamp = (await web3Provider.getBlock()).timestamp;
+      const quote = await Requester.getAsync(props.network.SwapApi + "swap/v1/quote", {
+        sellToken: "0xc2132D05D31c914a87C6611C10748AEb04B58e8F",
+        buyToken: "0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270",
+        sellAmount: sellAmount, // 1 ETH = 10^18 wei
+        slippagePercentage: slippage / 100
+      });
+
+      var receipt = await contract.swapExactTokensForTokensOn0x(
+        quote.sellTokenAddress,
+        quote.buyTokenAddress,
+        ethers.utils.parseUnits("1.05", 6),
+        // quote.sellAmount,
+        quote.allowanceTarget,
+        quote.to,
+        quote.data,
+        account,
+        nowTimestamp + config.SWAP_DEADLINE,
+        {
+          from: account,
+          // value: quote.value,
+          // gasPrice: quote.gasPrice,
+        });
+      receipt = await receipt.wait(receipt);
+
+      const boughtAmount = ethers.utils.formatUnits(receipt.events.BoughtTokens.returnValues.boughtAmount, 6);
+      console.info(`${'✔'} Successfully sold ${'1'} WETH for ${boughtAmount} USDT!`);
+
+
+
+
+
+      /*
+      // const web3 = new Web3(provider);
+      // const contract = new web3.eth.Contract(simpleAbi, props.network.DEX.SimpleTokenSwap);
+
+      const contract = new ethers.Contract(props.network.DEX.SimpleTokenSwap, simpleAbi, web3Provider.getSigner());
 
       // Convert sellAmount from token units to wei.
-      const sellAmountWei = ethers.utils.parseUnits("1", 18);
+      const sellAmountWei = ethers.utils.parseUnits("1", 6);
+      var nowTimestamp = (await web3Provider.getBlock()).timestamp;
 
       // Deposit some WETH into the contract. This function accepts ETH and
       // wraps it to WETH on the fly.
-      console.info(`Depositing 1 MATIC (WMATIC) into the contract at ${props.network.DEX.SimpleTokenSwap}...`);
+      // console.info(`Depositing 1 MATIC (WMATIC) into the contract at ${props.network.DEX.SimpleTokenSwap}...`);
       // await waitForTxSuccess(contract.methods.depositETH().send({
       //   value: sellAmountWei,
       //   from: account,
       // }));
 
       // Get a quote from 0x-API to sell the WETH we just deposited into the contract.
-      console.info(`Fetching swap quote from 0x-API to sell 1 WMATIC for USDT...`);
+      console.info(`custom...`);
       const qs = createQueryString({
-        sellToken: "MATIC",
-        buyToken: "0xc2132D05D31c914a87C6611C10748AEb04B58e8F",
+        sellToken: "0xc2132D05D31c914a87C6611C10748AEb04B58e8F",
+        buyToken: "0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270",
         sellAmount: sellAmountWei,
       });
       const quoteUrl = `${props.network.SwapApi}swap/v1/quote?${qs}`;
@@ -515,27 +567,45 @@ const Exchange = (props) => {
       console.info(`Received a quote with price ${quote.price}`);
 
       // Have the contract fill the quote, selling its own WETH.
-      console.info(`Filling the quote through the contract at ${props.network.DEX.SimpleTokenSwap}...`);
-      var receipt = await waitForTxSuccess(contract.methods.fillQuote(
+      console.info(`Custom...`);
+      // var receipt = await contract.methods.swapExactTokensForTokensOn0x(
+      var receipt = await contract.swapExactTokensForTokensOn0x(
         quote.sellTokenAddress,
         quote.buyTokenAddress,
+        quote.sellAmount,
         quote.allowanceTarget,
         quote.to,
         quote.data,
-      ).send({
-        from: account,
-        value: quote.value,
-        // gasPrice: quote.gasPrice,
-      }));
+        account,
+        nowTimestamp + config.SWAP_DEADLINE,
+        {
+          from: account,
+          // value: quote.value,
+          // gasPrice: quote.gasPrice,
+        });
+        receipt = await receipt.wait(receipt);
+
+      // var receipt = await waitForTxSuccess(contract.methods.fillQuote(
+      //   quote.sellTokenAddress,
+      //   quote.buyTokenAddress,
+      //   quote.allowanceTarget,
+      //   quote.to,
+      //   quote.data,
+      // ).send({
+      //   from: account,
+      //   value: quote.value,
+      //   // gasPrice: quote.gasPrice,
+      // }));
+
       const boughtAmount = ethers.utils.formatUnits(receipt.events.BoughtTokens.returnValues.boughtAmount, 6);
       console.info(`${'✔'} Successfully sold ${'1'} WETH for ${boughtAmount} USDT!`);
       // The contract now has `boughtAmount` of USDT!
-
+*/
     } catch (error) {
       console.log("tradeTest err: ", error);
     }
   }
-  */
+
 
   const wrapping = async () => {
     console.log("wrapping");
@@ -1066,7 +1136,7 @@ const Exchange = (props) => {
                               </>
                           }
                           <div className="col-6">
-                            <label className="w-100">Minimum Recieve</label>
+                            <label className="w-100">Minimum Receive</label>
                           </div>
                           <div className="col-6 text-end pe-4 py-2">
                             <NumberFormat
