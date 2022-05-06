@@ -313,7 +313,7 @@ const Exchange = (props) => {
       // const tx = await contract.approve(needApprove.target, needApprove.amount);
 
       // Max Approve
-      const maxInt = BigNumber.from(2).pow(BigNumber.from(256)).sub(BigNumber(1));
+      const maxInt = BigNumber.from(2).pow(256).sub(1);
       console.log("maxInt: ", maxInt);
 
       const tx = await contract.approve(needApprove.target, maxInt);
