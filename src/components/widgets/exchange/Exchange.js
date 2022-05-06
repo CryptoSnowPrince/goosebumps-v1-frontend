@@ -338,7 +338,8 @@ const Exchange = (props) => {
             var options = { value: ethers.utils.parseUnits(from.amount.toString(), from.decimals) };
             tx = await contract.swapExactETHForTokens(
               to.address,
-              parseInt(slippage * 100),
+              ethers.utils.parseUnits((parseFloat(to.amount) * (100 - slippage) / 100).toString(), to.decimals),
+              account,
               nowTimestamp + 1200,
               options
             );
@@ -346,21 +347,17 @@ const Exchange = (props) => {
             tx = await contract.swapExactTokenForETH(
               from.address,
               ethers.utils.parseUnits(from.amount.toString(), from.decimals),
-              parseInt(slippage * 100),
+              ethers.utils.parseUnits((parseFloat(to.amount) * (100 - slippage) / 100).toString(), to.decimals),
+              account,
               nowTimestamp + 1200
             )
           } else {
-            console.log("pass")
-            console.log("from.address: ", from.address)
-            console.log("to.address: ", to.address)
-            console.log("amountIn: ", ethers.utils.parseUnits(from.amount.toString(), from.decimals))
-            console.log("slippage", parseInt(slippage * 100))
-            console.log("deadline", nowTimestamp + 1200)
             tx = await contract.swapExactTokensForTokens(
               from.address,
               to.address,
               ethers.utils.parseUnits(from.amount.toString(), from.decimals),
-              parseInt(slippage * 100),
+              ethers.utils.parseUnits((parseFloat(to.amount) * (100 - slippage) / 100).toString(), to.decimals),
+              account,
               nowTimestamp + 1200
             )
           }
@@ -430,7 +427,6 @@ const Exchange = (props) => {
     try {
 
       console.log("tradeTest: ");
-      const API_QUOTE_URL = 'https://api.0x.org/swap/v1/quote';
       const web3 = new Web3(provider);
       const contract = new web3.eth.Contract(simpleAbi, props.network.DEX.SimpleTokenSwap);
 
@@ -440,20 +436,20 @@ const Exchange = (props) => {
       // Deposit some WETH into the contract. This function accepts ETH and
       // wraps it to WETH on the fly.
       console.info(`Depositing 1 MATIC (WMATIC) into the contract at ${props.network.DEX.SimpleTokenSwap}...`);
-      await waitForTxSuccess(contract.methods.depositETH().send({
-        value: sellAmountWei,
-        from: account,
-      }));
+      // await waitForTxSuccess(contract.methods.depositETH().send({
+      //   value: sellAmountWei,
+      //   from: account,
+      // }));
 
       // Get a quote from 0x-API to sell the WETH we just deposited into the contract.
       console.info(`Fetching swap quote from 0x-API to sell 1 WMATIC for USDT...`);
       const qs = createQueryString({
-        sellToken: props.network.Currency.Address,
+        sellToken: "MATIC",
         buyToken: "0xc2132D05D31c914a87C6611C10748AEb04B58e8F",
         sellAmount: sellAmountWei,
       });
-      const quoteUrl = `${API_QUOTE_URL}?${qs}`;
-      console.info(`Fetching quote ${quoteUrl.bold}...`);
+      const quoteUrl = `${props.network.SwapApi}swap/v1/quote?${qs}`;
+      console.info(`Fetching quote ${quoteUrl}...`);
       const response = await fetch(quoteUrl);
       const quote = await response.json();
       console.info(`Received a quote with price ${quote.price}`);
@@ -469,11 +465,11 @@ const Exchange = (props) => {
       ).send({
         from: account,
         value: quote.value,
-        gasPrice: quote.gasPrice,
+        // gasPrice: quote.gasPrice,
       }));
-      const boughtAmount = ethers.utils.formatUnits(receipt.events.BoughtTokens.returnValues.boughtAmount, 18);
-      console.info(`${'✔'} Successfully sold ${'1'} WETH for ${boughtAmount} DAI!`);
-      // The contract now has `boughtAmount` of DAI!
+      const boughtAmount = ethers.utils.formatUnits(receipt.events.BoughtTokens.returnValues.boughtAmount, 6);
+      console.info(`${'✔'} Successfully sold ${'1'} WETH for ${boughtAmount} USDT!`);
+      // The contract now has `boughtAmount` of USDT!
 
     } catch (error) {
       console.log("tradeTest err: ", error);
@@ -687,7 +683,7 @@ const Exchange = (props) => {
     } else {
       setSlippage(value);
     }
-    console.log("slipage value: ", value);
+    console.log("slippage value: ", value);
     resetQuote(null, null, value);
   };
 
@@ -836,7 +832,7 @@ const Exchange = (props) => {
   const SubmitButton = () => {
     // console.log("SubmitButton")
     if (account) {
-      return <button className="default-btn w-100" disabled={!ready} onClick={() => tradeTest()}>tradeTest</button>;
+      // return <button className="default-btn w-100" disabled={!ready} onClick={() => tradeTest()}>tradeTest</button>;
       if (!ready) {
         return <button className="default-btn w-100" disabled="disabled">Please wait...</button>;
       }
