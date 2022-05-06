@@ -311,7 +311,13 @@ const Exchange = (props) => {
 
     try {
       // const tx = await contract.approve(needApprove.target, quote.sellAmount);
-      const tx = await contract.approve(needApprove.target, needApprove.amount);
+
+      // const tx = await contract.approve(needApprove.target, needApprove.amount);
+      
+      // Max Approve
+      const maxInt= BigNumber.from(2).pow(BigNumber.from(256).sub(BigNumber(1)));
+
+      const tx = await contract.approve(needApprove.target, maxInt);
       const receipt = await tx.wait(tx);
       if (receipt.status === 1) {
         setNeedApprove();
