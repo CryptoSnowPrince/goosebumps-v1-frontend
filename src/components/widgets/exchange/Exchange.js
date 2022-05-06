@@ -574,6 +574,7 @@ const Exchange = (props) => {
         alert(`Something went wrong!`)
       }
     }
+    setLoading(false);
   }
 
   const invert = () => {
