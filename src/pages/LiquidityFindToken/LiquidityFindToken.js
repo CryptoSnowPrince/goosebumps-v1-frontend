@@ -16,6 +16,7 @@ import networks from '../../networks.json'
 
 import "react-input-range/lib/css/index.css";
 import '../Liquidity/Liquidity.scss'
+import { logMessage } from '../../utils/helpers';
 
 const LiquidityFindToken = () => {
   const chainIndex = useSelector(selector.chainIndex);
@@ -35,8 +36,7 @@ const LiquidityFindToken = () => {
   const [showTokenSelectModal, setShowTokenSelectModal] = useState();
 
   const onSelectToken = (token, forTarget) => {
-    // console.log("LiquidityFindToken onSelectToken")
-    // console.log(token, forTarget)
+    // logMessage("LiquidityFindToken onSelectToken")
     if ((token.Address === tokenB.address && forTarget === "tokenA") || (token.Address === tokenA.address && forTarget === "tokenB")) {
       invert();
     }
@@ -59,7 +59,7 @@ const LiquidityFindToken = () => {
   }
 
   const tokenIsInList = (tokenAaddress, tokenBaddress) => {
-    // console.log("tokenIsInList: \n    tokenAaddress: ", tokenAaddress, "\n    tokenBaddress: ", tokenBaddress)
+    // logMessage("tokenIsInList: \n    tokenAaddress: ", tokenAaddress, "\n    tokenBaddress: ", tokenBaddress)
     const tokenList = require("../../tokens/" + networks[chainIndex].Name)
     if (tokenAaddress === "-") {
       setTokenAAddrIsInList("0x0000000000000000000000000000000000000000");
@@ -84,7 +84,7 @@ const LiquidityFindToken = () => {
   }
 
   const invert = () => {
-    // console.log("invert")
+    // logMessage("invert")
     const newTokenA = Object.assign({}, tokenB);
     const newTokenB = Object.assign({}, tokenA);
     setTokenA(newTokenA);
@@ -151,15 +151,12 @@ const LiquidityFindToken = () => {
       setNewPool(false)
       setLpAddress("");
       setLpBalance(0);
-      console.log("get Pair Address err: ", error)
+      logMessage("get Pair Address err: ", error)
     }
     setReady(true)
   }
 
   useEffect(() => {
-    // console.log("tokenA: ", tokenA)
-    // console.log("tokenB: ", tokenB)
-
     tokenIsInList(tokenA.address, tokenB.address);
     if (!isInvalidPair()) {
       isNewPair(tokenA.address, tokenB.address);
@@ -172,8 +169,6 @@ const LiquidityFindToken = () => {
   useEffect(() => {
     setTokenA({ symbol: "", address: "", decimals: 0, amount: 0, balance: 0 })
     setTokenB({ symbol: "", address: "", decimals: 0, amount: 0, balance: 0 })
-    // console.log("networks[chainIndex]: ", networks[chainIndex]);
-    // console.log("account: ", account);
   }, [chainIndex, account])
 
   useEffect(() => {

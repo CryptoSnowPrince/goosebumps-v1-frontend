@@ -1,5 +1,6 @@
 import React from 'react';
 import { GoogleLogout } from 'react-google-login';
+import { logMessage } from '../../utils/helpers';
 
 const GoogleProfile = ({ userData, setAuthenticated }) => {
     return (
@@ -9,7 +10,7 @@ const GoogleProfile = ({ userData, setAuthenticated }) => {
                 clientId="384033754919-mc7jfvmrl4jh6jahmnrtf273nh83uk10.apps.googleusercontent.com"
                 buttonText="Logout"
                 onLogoutSuccess={() => setAuthenticated(false)}
-                onLogoutFailure={(res) => console.log(res)}
+                onLogoutFailure={(res) => logMessage(res)}
             />
         </div>
     );

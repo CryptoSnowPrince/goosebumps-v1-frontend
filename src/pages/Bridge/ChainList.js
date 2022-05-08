@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
+import { logMessage } from '../../utils/helpers';
 
 const ChainList = ({ title, chainListData, defaultID }) => {
   const [selectedChain, setSelectedChain] = useState(defaultID);
-  console.log(chainListData);
+  logMessage(chainListData);
   return (
     <div className='chainList d-flex flex-column justify-content-between p-3'>
       <div className='title'>{title}</div>

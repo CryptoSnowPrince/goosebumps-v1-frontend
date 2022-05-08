@@ -6,9 +6,10 @@ import linq from "linq";
 import pairAbi from '../../abis/pair.json';
 import tokenAbi from '../../abis/token.json';
 import { formatNumberWithoutComma } from '../../utils/number';
+import { logMessage } from '../../utils/helpers';
 
 const UserTokenPair = (props) => {
-  // console.log("props: ", props)
+  // logMessage("props: ", props)
   const [detailShow, setDetailShow] = useState(false);
   const [lpBalance, setLpBalance] = useState(0);
   const [lpTotalSupply, setLpTotalSupply] = useState(0);
@@ -20,7 +21,7 @@ const UserTokenPair = (props) => {
   const [tokenBAddrIsInList, setTokenBAddrIsInList] = useState("");
 
   const updateLpInfo = async () => {
-    // console.log("UserLpToken updateBalance")
+    // logMessage("UserLpToken updateBalance")
     const provider = new ethers.providers.JsonRpcProvider(props.network.RPC);
     if (props.network.chainId === 97) // When bsc testnet
     {
@@ -116,7 +117,7 @@ const UserTokenPair = (props) => {
       setTokenBSymbol("");
       setTokenAAddrIsInList("");
       setTokenBAddrIsInList("");
-      console.log("updateLpInfo err: ", error)
+      logMessage("updateLpInfo err: ", error)
     }
   };
 

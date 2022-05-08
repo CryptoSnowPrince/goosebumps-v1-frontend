@@ -7,6 +7,7 @@ import * as selector from '../../store/selectors'
 import config from '../../constants/config'
 import networks from '../../networks'
 import { ethers } from 'ethers';
+import { logMessage } from '../../utils/helpers';
 
 const LiquidityBody = () => {
   const account = useSelector(selector.accountState);
@@ -35,7 +36,7 @@ const LiquidityBody = () => {
       default:
         break;
     }
-    // console.log("chainName: ", chainName);
+    // logMessage("chainName: ", chainName);
     try {
       if (ethers.utils.isAddress(address)) {
         if (chainName !== "") {
@@ -82,7 +83,7 @@ const LiquidityBody = () => {
       }
     } catch (error) {
       setLpList([])
-      console.log("fetchLpList err: ", error)
+      logMessage("fetchLpList err: ", error)
     }
     setReady(true)
   }
@@ -90,14 +91,6 @@ const LiquidityBody = () => {
   useEffect(() => {
     fetchLpList(account, chainIndex)
   }, [account, chainIndex]);
-
-  // useEffect(() => {
-  //   console.log("lpList: ", lpList)
-  //   lpList.map((lpaddress, idx) => {
-  //     console.log("map: ", lpaddress)
-  //     console.log("map: ", idx)
-  //   })
-  // }, [lpList])
 
   const MainBody = () => {
     if (!ready) {

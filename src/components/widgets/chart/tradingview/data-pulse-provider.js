@@ -1,4 +1,5 @@
-import { getErrorMessage, logMessage } from './helpers';
+import { getErrorMessage, logMessage } from '../../../../utils/helpers';
+
 export class DataPulseProvider {
     constructor(historyProvider, updateFrequency) {
         this._subscribers = {};

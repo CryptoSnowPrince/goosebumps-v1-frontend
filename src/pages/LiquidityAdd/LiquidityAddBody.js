@@ -16,6 +16,7 @@ import * as selector from '../../store/selectors';
 import '../../components/components.scss'
 
 import config from '../../constants/config'
+import { logMessage } from '../../utils/helpers';
 
 const LiquidityAddBody = (props) => {
 
@@ -41,7 +42,7 @@ const LiquidityAddBody = (props) => {
   const [tokenBBalOfPool, setTokenBBalOfPool] = useState(0);
 
   const getTokenBalOfPool = async () => {
-    // console.log("getTokenBalOfPool")
+    // logMessage("getTokenBalOfPool")
     const provider = new ethers.providers.JsonRpcProvider(props.network.RPC);
     if (props.network.chainId === 97) // When bsc testnet
     {
@@ -83,12 +84,12 @@ const LiquidityAddBody = (props) => {
       setTokenABalOfPool(0);
       setTokenBBalOfPool(0);
       setReloadUserLp(0);
-      console.log("getTokenBalOfPool err: ", error)
+      logMessage("getTokenBalOfPool err: ", error)
     }
   };
 
   const updateBalance = async (forContract, forTarget, setForTarget, setAmount = false) => {
-    // console.log("updateBalance")
+    // logMessage("updateBalance")
     setReady(false)
     const provider = new ethers.providers.JsonRpcProvider(props.network.RPC);
     if (props.network.chainId === 97) // When bsc testnet
@@ -127,13 +128,13 @@ const LiquidityAddBody = (props) => {
       }
     } catch (error) {
       setForTarget(forTarget);
-      console.log("update balance err: ", error, "\nupdate balance forTarget err: ", forTarget)
+      logMessage("update balance err: ", error, "\nupdate balance forTarget err: ", forTarget)
     }
     setReady(true)
   };
 
   const invert = () => {
-    // console.log("invert")
+    // logMessage("invert")
     const newTokenA = Object.assign({}, tokenB);
     const newTokenB = Object.assign({}, tokenA);
     setTokenA(newTokenA);
@@ -143,8 +144,7 @@ const LiquidityAddBody = (props) => {
   }
 
   const onSelectToken = (token, forTarget) => {
-    // console.log("onSelectToken")
-    // console.log(token, forTarget)
+    // logMessage("onSelectToken")
     if ((token.Address === tokenB.address && forTarget === "tokenA") || (token.Address === tokenA.address && forTarget === "tokenB")) {
       invert();
     }
@@ -176,9 +176,7 @@ const LiquidityAddBody = (props) => {
   }
 
   const fill = (side, value) => {
-    // console.log("fill")
-    // console.log("tokenABalOfPool: ", tokenABalOfPool);
-    // console.log("tokenBBalOfPool: ", tokenBBalOfPool);
+    // logMessage("fill")
     setReady(false);
     if (side === "tokenA") {
       var target = tokenA;
@@ -221,17 +219,17 @@ const LiquidityAddBody = (props) => {
   }
 
   const onAmountChange = (e, side) => {
-    // console.log("onAmountChange")
+    // logMessage("onAmountChange")
     fill(side, e.target.value.replace(/[^0-9.]/g, ""));
   };
 
   const fillMaxAmount = (e, side) => {
-    // console.log("fillMaxAmount")
+    // logMessage("fillMaxAmount")
     fill(side, e.target.dataset.balance);
   };
 
   const approve = async (side) => {
-    // console.log("approve");
+    // logMessage("approve");
     var setTargetApproved = null;
     var targetToken = null;
     if (side === "tokenA") {
@@ -243,7 +241,7 @@ const LiquidityAddBody = (props) => {
     }
 
     if (targetToken.address === "-") {
-      // console.log("Native coin: Don't need approve");
+      // logMessage("Native coin: Don't need approve");
       return;
     }
 
@@ -265,7 +263,7 @@ const LiquidityAddBody = (props) => {
         setTargetApproved(true);
       }
     } catch (err) {
-      console.log("approve err: ", err, "\napprove err targetToken: ", targetToken);
+      logMessage("approve err: ", err, "\napprove err targetToken: ", targetToken);
     }
 
     setReady(true);
@@ -307,7 +305,7 @@ const LiquidityAddBody = (props) => {
         targetTokenApproved(true);
       }
     } catch (error) {
-      console.log("isApproved err: ", error, "\nisApproved targetToken: ", targetToken)
+      logMessage("isApproved err: ", error, "\nisApproved targetToken: ", targetToken)
     }
     setReady(true);
   }
@@ -362,7 +360,7 @@ const LiquidityAddBody = (props) => {
         );
       }
       const receipt = await tx.wait(tx);
-      // console.log("receipt: ", receipt);
+
       updateBalance(tokenA.address, tokenA, setTokenA, true).then(() => {
         updateBalance(tokenB.address, tokenB, setTokenB, true).then(() => {
         });
@@ -372,7 +370,7 @@ const LiquidityAddBody = (props) => {
         isNewPair(tokenA.address, tokenB.address);
       }
     } catch (err) {
-      console.log("add liquidity err: ", err);
+      logMessage("add liquidity err: ", err);
       if (err.code === 4001) {
         alert(`User denied transaction signature.`)
       }
@@ -394,16 +392,13 @@ const LiquidityAddBody = (props) => {
     try {
       const pairAddress = await contract.getPair(tokenAAddress, tokenBAddress)
       setLpAddress(pairAddress);
-      // console.log("pairAddress: ", pairAddress);
+
       if (pairAddress === "0x0000000000000000000000000000000000000000") {
-        // console.log("pair is not exist");
         setNewPool(true)
       } else {
         const tokenAContract = new ethers.Contract(tokenAAddress, tokenAbi, provider);
         const tokenABalance = await tokenAContract.balanceOf(pairAddress);
-        // console.log("tokenABalance._hex: ", tokenABalance._hex);
-        // console.log("typeof tokenABalance._hex: ", typeof tokenABalance._hex);
-        // console.log("tokenABalance.decimals: ", parseInt(tokenABalance._hex));
+
         if (parseInt(tokenABalance._hex) > 0) {
           setNewPool(false)
         } else {
@@ -413,7 +408,7 @@ const LiquidityAddBody = (props) => {
     } catch (error) {
       setNewPool(false)
       setLpAddress("");
-      console.log("get Pair Address err: ", error)
+      logMessage("get Pair Address err: ", error)
     }
     setReady(true)
   }
@@ -424,27 +419,8 @@ const LiquidityAddBody = (props) => {
       (tokenB.address === "-" && tokenA.address === props.network.Currency.Address)
   }
 
-  // const test = async () => {
-  //   console.log("===============test================")
-  //   const aaprovider = new ethers.providers.JsonRpcProvider(props.network.RPC);
-  //   console.log("aaprovider lastblock: ", (await aaprovider.getBlock()).timestamp)
-  //   console.log("web3Provider lastblock: ", (await web3Provider.getBlock()).timestamp)
-  // }
-
-  // useEffect(() => {
-  //   console.log("tokenABalOfPool: ", tokenABalOfPool)
-  //   console.log("tokenBBalOfPool: ", tokenBBalOfPool)
-  // }, [tokenABalOfPool, tokenBBalOfPool])
 
   useEffect(() => {
-    // test()
-    // console.log("tokenA: ", tokenA)
-    // console.log("tokenB: ", tokenB)
-    // try {
-    //   console.log("approve amount: ", ethers.utils.parseUnits(tokenA.amount.toString(), tokenA.decimals))
-    // } catch (error) {
-    //   console.log();
-    // }
     if (!isInvalidPair()) {
       isNewPair(tokenA.address, tokenB.address);
       isApproved("tokenA");
@@ -463,12 +439,10 @@ const LiquidityAddBody = (props) => {
   useEffect(() => {
     setTokenA({ symbol: "", address: "", decimals: 0, amount: 0, balance: 0 })
     setTokenB({ symbol: "", address: "", decimals: 0, amount: 0, balance: 0 })
-    // console.log("props.network: ", props.network);
-    // console.log("account: ", account);
   }, [props.network, account])
 
   const SubmitButton = () => {
-    // console.log("SubmitButton")
+    // logMessage("SubmitButton")
     if (isInvalidPair()) {
       return <button className="disable-btn w-100" disabled>Invalid pair</button>;
     }

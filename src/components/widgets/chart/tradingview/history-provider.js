@@ -1,4 +1,4 @@
-import { getErrorMessage } from './helpers';
+import { getErrorMessage } from '../../../../utils/helpers';
 import { Requester } from './../../../../requester';
 
 export class HistoryProvider {

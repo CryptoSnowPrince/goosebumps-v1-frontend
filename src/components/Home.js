@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import HomePageText from '../constants/home.json';
-// console.log(HomePageText);
 
 export class Home extends Component {
   static displayName = Home.name;

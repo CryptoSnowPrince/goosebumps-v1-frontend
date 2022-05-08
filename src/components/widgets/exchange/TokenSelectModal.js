@@ -1,9 +1,10 @@
 import { Modal } from "react-bootstrap";
 import React, { useEffect, useState } from "react";
-import { ethers, /*singer, BigNumber*/ } from 'ethers';
+import { ethers } from 'ethers';
 import { Contract, Provider, setMulticallAddress } from 'ethers-multicall';
 import tokenAbi from '../../../abis/token';
 import linq from "linq";
+import { logMessage } from '../../../utils/helpers';
 
 const TokenSelectModal = (props) => {
     const [init, setInit] = useState(true);
@@ -56,12 +57,12 @@ const TokenSelectModal = (props) => {
                 }
             ])
         } catch (error) {
-            console.log("getTokenInfo err: ", error)
+            logMessage("getTokenInfo err: ", error)
         }
     }
 
     useEffect(() => {
-        // console.log("props.network.Name: ", props.network.Name);
+        // logMessage("props.network.Name: ", props.network.Name);
         if (init) {
             setInit(false);
             setTokens(
@@ -100,7 +101,7 @@ const TokenSelectModal = (props) => {
                     getTokenInfo(tokenSchKey);
                 }
             } catch (error) {
-                console.log("Token Search with address Err: ", error);
+                logMessage("Token Search with address Err: ", error);
             }
         }
         else if (tokenSchKey !== "") {
@@ -113,7 +114,7 @@ const TokenSelectModal = (props) => {
                     ).toArray();
                 setSchedTokens(sched);
             } catch (error) {
-                console.log("Token Search with name or symbol Err: ", error);
+                logMessage("Token Search with name or symbol Err: ", error);
             }
         }
     }, [tokenSchKey])

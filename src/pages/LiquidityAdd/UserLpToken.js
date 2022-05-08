@@ -8,6 +8,7 @@ import "./userLpToken.scss"
 import pairAbi from '../../abis/pair.json';
 import tokenAbi from '../../abis/token.json';
 import { formatNumberWithoutComma } from '../../utils/number';
+import { logMessage } from '../../utils/helpers';
 
 /**
  * props.reload
@@ -16,7 +17,7 @@ import { formatNumberWithoutComma } from '../../utils/number';
  */
 
 const UserLpToken = (props) => {
-  // console.log("UserLpToken props", props)
+  // logMessage("UserLpToken props", props)
   const [lpBalance, setLpBalance] = useState(0);
   const [lpTotalSupply, setLpTotalSupply] = useState(0);
   const [tokenABalance, setTokenABalance] = useState(0);
@@ -27,7 +28,7 @@ const UserLpToken = (props) => {
   const [tokenBAddrIsInList, setTokenBAddrIsInList] = useState("");
 
   const updateLpInfo = async () => {
-    // console.log("UserLpToken updateBalance")
+    // logMessage("UserLpToken updateBalance")
     const provider = new ethers.providers.JsonRpcProvider(props.network.RPC);
     if (props.network.chainId === 97) // When bsc testnet
     {
@@ -123,7 +124,7 @@ const UserLpToken = (props) => {
       setTokenBSymbol("");
       setTokenAAddrIsInList("");
       setTokenBAddrIsInList("");
-      console.log("updateLpInfo err: ", error)
+      logMessage("updateLpInfo err: ", error)
     }
   };
 

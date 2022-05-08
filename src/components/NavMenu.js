@@ -2,64 +2,23 @@ import React, { useRef, useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { Navbar, Container, Nav, NavItem } from "react-bootstrap";
-import { providers/*, ethers*/ } from "ethers";
 import { ConnectButtonModal } from './widgets/ConnectButtonModal';
-import { Reconnect, Connect, Disconnect } from '../components/widgets/connectWallet'
+import { Reconnect, Connect } from '../components/widgets/connectWallet'
 import networks from '../networks.json';
 import { Requester } from "./../requester";
 import * as action from '../store/actions';
 import * as selector from '../store/selectors'
-// import { ComingSoonModal } from './widgets/ComingSoonModal';
-// import { GoogleLogin } from 'react-google-login';
-// import GoogleProfile from './widgets/GoogleProfile';
+import { logMessage } from '../utils/helpers';
 
 const NavMenu = () => {
     const { pathname } = useLocation();
     const dispatch = useDispatch();
     const provider = useSelector(selector.providerState);
 
-    // const [authenticated, setAuthenticated] = useState(false);
-    // const [user, setUser] = useState({
-    //     email: '',
-    //     name: '',
-    //     imageUrl: ''
-    // });
-
-    // const loginSuccess = (response) => {
-    //     console.log(response);
-    //     setUser({
-    //         email: response?.profileObj.email,
-    //         name: response?.profileObj.name,
-    //         imageUrl: response?.profileObj.imageUrl
-    //     });
-    //     setAuthenticated(true);
-    // }
-
-    // const loginFail = (response) => {
-    //     console.log(response);
-    // }
-
-    // const [show, setShow] = useState();
     const [networkIndex, setNetworkIndex] = useState(localStorage.getItem("networkIndex") || 2);
     const [networkName, setNetworkName] = useState(networks[networkIndex].Name);
     const navigate = useNavigate();
     const searchInput = useRef();
-
-    // const getChainId = async () => {
-    //     const chainId = (await new providers.Web3Provider(provider).getNetwork()).chainId;
-    //     return chainId;
-    // }
-
-    const switchChainRequest = async () => {
-        try {
-            await window.ethereum.request({
-                method: "wallet_switchEthereumChain",
-                params: [{ chainId: networks[networkIndex].chainHexId }], // chainId must be in hexadecimal numbers
-            });
-        } catch (error) {
-            console.log("network switching error: ", error);
-        }
-    }
 
     useEffect(() => {
         localStorage.setItem("networkIndex", networkIndex);
@@ -68,26 +27,18 @@ const NavMenu = () => {
     }, [dispatch, networkIndex]);
 
     useEffect(() => {
-        // console.log("provider useEffect")
+        // logMessage("provider useEffect")
         try {
             if (provider) {
                 const handleAccountsChanged = (accounts) => {
-                    // console.log("handleAccountsChanged");
+                    // logMessage("handleAccountsChanged");
                     Connect();
                     dispatch(action.setAccount(accounts[0]));
                 };
 
                 // https://docs.ethers.io/v5/concepts/best-practices/#best-practices--network-changes
                 const handleChainChanged = (_hexChainId) => {
-                    // console.log("handleChainChanged ")
-                    // console.log("_hexChainId: ", _hexChainId);
-                    // console.log("networkIndex: ", networks[networkIndex].chainHexId);
-                    // window.location.reload();
-                    // if (parseInt(_hexChainId, 16) !== networks[networkIndex].chainId) {
-                        // console.log("handleChainChanged if ")
-                        // alert(`Switch network to ${networks[networkIndex].Display} on your wallet!`);
-                        // Disconnect();
-                    // }
+                    // logMessage("handleChainChanged ")
                 };
 
                 provider.on("accountsChanged", handleAccountsChanged);
@@ -102,7 +53,7 @@ const NavMenu = () => {
                 };
             }
         } catch (error) {
-            console.log("auto connect with provider change err: ", error)
+            logMessage("auto connect with provider change err: ", error)
         }
     }, [provider, networkIndex, dispatch]);
 
@@ -181,8 +132,6 @@ const NavMenu = () => {
                                 <Link
                                     className={`nav-link mx-lg-2 mx-xl-3 
                                     ${(pathname === '/stake' || pathname === '/farms') ? "active" : ""}`} to="/stake">Stake</Link>
-                                {/* <span className="nav-link mx-lg-2 mx-xl-4" onClick={() => setShow(true)}>Stake</span>
-                                <ComingSoonModal show={show} hide={() => setShow()} /> */}
                             </NavItem>
                             <NavItem>
                                 <Link
@@ -202,19 +151,6 @@ const NavMenu = () => {
                             </NavItem>
                         </Nav>
                         <Navbar.Text className='ms-lg-2 ms-xl-4'>
-                            {
-                                //authenticated ?
-                                //    <GoogleProfile userData={user} setAuthenticated={setAuthenticated} />
-                                //    :
-                                //    <GoogleLogin
-                                //        clientId="384033754919-mc7jfvmrl4jh6jahmnrtf273nh83uk10.apps.googleusercontent.com"
-                                //        buttonText="Login with Google"
-                                //        onSuccess={loginSuccess}
-                                //        onFailure={loginFail}
-                                //        cookiePolicy={'single_host_origin'}
-                                //        isSignedIn={true}
-                                //    />
-                            }
                             <ConnectButtonModal />
                         </Navbar.Text>
                     </Navbar.Collapse>

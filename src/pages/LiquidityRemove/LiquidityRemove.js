@@ -24,6 +24,7 @@ import networks from '../../networks.json'
 import { formatNumberWithoutComma } from '../../utils/number';
 
 import config from '../../constants/config'
+import { logMessage } from '../../utils/helpers';
 
 const NOT_NEED_APPROVE = 0;
 const NEED_APPROVE = 1;
@@ -49,7 +50,7 @@ const LiquidityRemove = () => {
   const [pendingTx, setPendingTx] = useState(false);
   const [error, setError] = useState(false)
   const [reloadUserLp, setReloadUserLp] = useState(1);
-  // const [receiveNTokenIsNeed, setReceiveNTokenIsNeed] = useState("");
+
   const [receiveNToken, setReceiveNToken] = useState(INITIAL_TOKEN)
 
   /**
@@ -81,11 +82,11 @@ const LiquidityRemove = () => {
   const params = useParams();
 
   const onSelectToken = (token, forTarget) => {
-    console.log(token, forTarget)
+    // logMessage(token, forTarget)
   }
 
   const updateLpInfo = async () => {
-    // console.log("LiquidityRemove updateLpInfo")
+    // logMessage("LiquidityRemove updateLpInfo")
     const provider = new ethers.providers.JsonRpcProvider(networks[chainIndex].RPC);
     if (networks[chainIndex].chainId === 97) // When bsc testnet
     {
@@ -201,7 +202,7 @@ const LiquidityRemove = () => {
       setTokenBDecimals(0);
       setTokenAAddrIsInList("");
       setTokenBAddrIsInList("");
-      console.log("LiquidityRemove updateLpInfo err: ", error)
+      logMessage("LiquidityRemove updateLpInfo err: ", error)
     }
   };
 
@@ -228,13 +229,13 @@ const LiquidityRemove = () => {
         setLpApproveState(APPROVED)
       }
     } catch (error) {
-      console.log("isApproved err: ", error, "\nisApproved lpAddress: ", lpAddress)
+      logMessage("isApproved err: ", error, "\nisApproved lpAddress: ", lpAddress)
     }
     setReady(true);
   }
 
   const approve = async () => {
-    // console.log("approve");
+    // logMessage("approve");
     const contract = new ethers.Contract(
       lpAddress,
       tokenAbi,
@@ -255,7 +256,7 @@ const LiquidityRemove = () => {
       }
     } catch (err) {
       setLpApproveState(NEED_APPROVE)
-      console.log("approve err: ", err, "\napprove err lpAddress: ", lpAddress);
+      logMessage("approve err: ", err, "\napprove err lpAddress: ", lpAddress);
     }
     setPendingTx(false);
 
@@ -263,7 +264,7 @@ const LiquidityRemove = () => {
   };
 
   const removeLiquidity = async () => {
-    console.log("removeLiquidity");
+    logMessage("removeLiquidity");
     const routerContract = new ethers.Contract(
       networks[chainIndex].DEX.Router,
       routerAbi,
@@ -276,10 +277,8 @@ const LiquidityRemove = () => {
     // Slippage Tolerance 5%
     const slippageTolerance = 5;
     try {
-      console.log("try catch : ", receiveNToken)
       var nowTimestamp = (await web3Provider.getBlock()).timestamp;
       if (receiveNToken === GENERAL_TOKEN || receiveNToken === W_NATIVE_TOKEN) {
-        console.log("if : ", receiveNToken)
         var tx = await routerContract.removeLiquidity(
           tokenAAddr,
           tokenBAddr,
@@ -290,13 +289,11 @@ const LiquidityRemove = () => {
           nowTimestamp + config.SWAP_DEADLINE, // deadline: 20 mins
         )
       } else if (receiveNToken === NATIVE_TOKEN) {
-        console.log("else if : ", receiveNToken)
         if (
           tokenAAddr === "-" ||
           tokenAAddr === "0x0000000000000000000000000000000000000000" ||
           tokenAAddr.toLowerCase() === networks[chainIndex].Currency.Address.toLowerCase()) {
 
-          console.log("tokenAAddr is NATIVE_TOKEN: ", receiveNToken)
           tx = await routerContract.removeLiquidityETH(
             tokenBAddr,
             ethers.utils.parseUnits((lpBalance * removeAmount / 100).toString(), lpDecimals),
@@ -311,7 +308,6 @@ const LiquidityRemove = () => {
           tokenBAddr === "0x0000000000000000000000000000000000000000" ||
           tokenBAddr.toLowerCase() === networks[chainIndex].Currency.Address.toLowerCase()) {
 
-          console.log("tokenBAddr is NATIVE_TOKEN: ", receiveNToken)
           tx = await routerContract.removeLiquidityETH(
             tokenAAddr,
             ethers.utils.parseUnits((lpBalance * removeAmount / 100).toString(), lpDecimals),
@@ -324,13 +320,12 @@ const LiquidityRemove = () => {
         }
       }
       const receipt = await tx.wait(tx);
-      // console.log("receipt: ", receipt);
       await updateLpInfo();
       if (receipt.status === 1) {
         alert(`remove liquidity success`);
       }
     } catch (err) {
-      console.log("remove liquidity err: ", err);
+      logMessage("remove liquidity err: ", err);
       if (err.code === 4001) {
         alert(`User denied transaction signature.`)
       }
@@ -339,28 +334,7 @@ const LiquidityRemove = () => {
     setPendingTx(false);
   }
 
-  // const checkPair = () => {
-  //   if (
-  //     tokenAAddrIsInList === "-" ||
-  //     tokenAAddrIsInList.toLowerCase() === networks[chainIndex].Currency.Address.toLowerCase()
-  //   ) {
-  //     setReceiveNTokenIsNeed("tokenA")
-  //   } else if (
-  //     tokenBAddrIsInList === "-" ||
-  //     tokenBAddrIsInList.toLowerCase() === networks[chainIndex].Currency.Address.toLowerCase()
-  //   ) {
-  //     setReceiveNTokenIsNeed("tokenB")
-  //   } else {
-  //     setReceiveNTokenIsNeed("")
-  //   }
-  // }
-
   useEffect(() => {
-    // console.log("useEffect chainIndex, lpAddress, account")
-    // console.log(chainIndex)
-    // console.log(lpAddress)
-    // console.log(account)
-
     const reUpdateLpInfo = async () => {
       await updateLpInfo()
       if (ethers.utils.isAddress(account) &&
@@ -375,7 +349,6 @@ const LiquidityRemove = () => {
   }, [chainIndex, lpAddress, account])
 
   useEffect(() => {
-    // console.log("LiquidityRemove params: ", params)
     if (ethers.utils.isAddress(params.lpAddress)) {
       setLpAddress(params.lpAddress);
     }
@@ -385,12 +358,7 @@ const LiquidityRemove = () => {
     isApproved();
   }, [removeAmount, lpBalance])
 
-  // useEffect(() => {
-  //   checkPair()
-  // }, [tokenAAddrIsInList, tokenBAddrIsInList])
-
   useEffect(() => {
-    console.log("useEffect receiveNToken: ", receiveNToken)
     switch (receiveNToken) {
       case NATIVE_TOKEN:
         if (
@@ -408,7 +376,7 @@ const LiquidityRemove = () => {
           setTokenBAddrIsInList("0x0000000000000000000000000000000000000000");
           setTokenBSymbol(networks[chainIndex].Currency.Name);
         } else {
-          // console.log("else routine NATIVE_TOKEN")
+          // logMessage("else routine NATIVE_TOKEN")
         }
         break;
       case W_NATIVE_TOKEN:
@@ -427,11 +395,10 @@ const LiquidityRemove = () => {
           setTokenBAddrIsInList(networks[chainIndex].Currency.Address);
           setTokenBSymbol(networks[chainIndex].Currency.WrappedName);
         } else {
-          // console.log("else routine W_NATIVE_TOKEN")
+          // logMessage("else routine W_NATIVE_TOKEN")
         }
         break;
       case GENERAL_TOKEN:
-        // console.log("case GENERAL_TOKEN")
         if (
           tokenAAddrIsInList === "-" ||
           tokenAAddrIsInList === "0x0000000000000000000000000000000000000000" ||
@@ -440,21 +407,18 @@ const LiquidityRemove = () => {
           tokenBAddrIsInList === "0x0000000000000000000000000000000000000000" ||
           tokenBAddrIsInList.toLowerCase() === networks[chainIndex].Currency.Address.toLowerCase()
         ) {
-          // console.log("pass if")
           setReceiveNToken(NATIVE_TOKEN)
         } else {
-          // console.log("pass else")
-          // console.log("else routine GENERAL_TOKEN")
+          // logMessage("else routine GENERAL_TOKEN")
         }
         break;
       default:
-        // console.log("case default")
         break;
     }
   }, [receiveNToken])
 
   const SubmitButton = () => {
-    // console.log("SubmitButton")
+    // logMessage("SubmitButton")
     if (account) {
       if (!ready) {
         return <button className='default-btn w-100' disabled="disabled">Please wait...</button>
@@ -476,12 +440,11 @@ const LiquidityRemove = () => {
   };
 
   const handleReceiveNativeToken = () => {
-    // console.log("handleReceiveNativeToken")
+    // logMessage("handleReceiveNativeToken")
     receiveNToken !== NATIVE_TOKEN ? setReceiveNToken(NATIVE_TOKEN) : setReceiveNToken(W_NATIVE_TOKEN)
   }
 
   const ReceiveNativeToken = () => {
-    // console.log("ReceiveNativeToken receiveNToken: ", receiveNToken);
     if (
       tokenAAddrIsInList === "-" ||
       tokenAAddrIsInList === "0x0000000000000000000000000000000000000000" ||

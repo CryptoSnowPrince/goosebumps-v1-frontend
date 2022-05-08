@@ -19,6 +19,7 @@ import pairAbi from "../../abis/pair";
 import stakingToken from "../../abis/stakingToken";
 import { InfoSVG } from "./InfoSVG";
 import stakingInfo from "../../stakingTokens.json";
+import { logMessage } from '../../utils/helpers';
 
 const StakeEmpire = (props) => {
   //adres değiştirmek için token adı yazan butona basınca popup açmamız gerek
@@ -156,7 +157,7 @@ const StakeEmpire = (props) => {
       setAllowance(newAllowance);
       setMessage("Please Enter Your Stake Amount");
     }
-    console.log(newAllowance);
+    logMessage(newAllowance);
   };
 
   const approve = async (amount, TokenAddress, StakingContract) => {
@@ -180,10 +181,10 @@ const StakeEmpire = (props) => {
         ethers.utils.parseEther(amount)
       );
       const receipt = await tx.wait(tx);
-      console.log("receiptLog: ", receipt);
+      logMessage("receiptLog: ", receipt);
       if (receipt.status === 1) {
         stopLoading();
-        console.log("Approve Status: Success");
+        logMessage("Approve Status: Success");
       } else {
         stopLoading();
         console.error(
@@ -192,10 +193,10 @@ const StakeEmpire = (props) => {
       }
     } catch (error) {
       stopLoading();
-      console.log("Error: ", error);
+      logMessage("Error: ", error);
     } finally {
       stopLoading();
-      console.log(
+      logMessage(
         "The Promise is settled, meaning it has been resolved or rejected."
       );
     }
@@ -219,20 +220,20 @@ const StakeEmpire = (props) => {
       startLoading();
       const tx = await contract.stake(ethers.utils.parseEther(amount));
       const receipt = await tx.wait(tx);
-      console.log("receiptLog: ", receipt);
+      logMessage("receiptLog: ", receipt);
       if (receipt.status === 1) {
         stopLoading();
-        console.log("Stake Status: Success");
+        logMessage("Stake Status: Success");
       } else {
         stopLoading();
         console.error("Stake Status: Failed, please check receiptLog message.");
       }
     } catch (error) {
       stopLoading();
-      console.log("Error: ", error);
+      logMessage("Error: ", error);
     } finally {
       stopLoading();
-      console.log(
+      logMessage(
         "The Promise is settled, meaning it has been resolved or rejected."
       );
     }
@@ -269,10 +270,10 @@ const StakeEmpire = (props) => {
       startLoading();
       const tx = await contract.withdraw(ethers.utils.parseEther(amount));
       const receipt = await tx.wait(tx);
-      console.log("receiptLog: ", receipt);
+      logMessage("receiptLog: ", receipt);
       if (receipt.status === 1) {
         stopLoading();
-        console.log("Withdraw Status: Success");
+        logMessage("Withdraw Status: Success");
       } else {
         stopLoading();
         console.error(
@@ -281,10 +282,10 @@ const StakeEmpire = (props) => {
       }
     } catch (error) {
       stopLoading();
-      console.log("Error: ", error);
+      logMessage("Error: ", error);
     } finally {
       stopLoading();
-      console.log(
+      logMessage(
         "The Promise is settled, meaning it has been resolved or rejected."
       );
     }
@@ -316,10 +317,10 @@ const StakeEmpire = (props) => {
       startLoading();
       const tx = await contract.getReward();
       const receipt = await tx.wait(tx);
-      console.log("receiptLog: ", receipt);
+      logMessage("receiptLog: ", receipt);
       if (receipt.status === 1) {
         stopLoading();
-        console.log("Withdraw Status: Success");
+        logMessage("Withdraw Status: Success");
       } else {
         stopLoading();
         console.error(
@@ -328,10 +329,10 @@ const StakeEmpire = (props) => {
       }
     } catch (error) {
       stopLoading();
-      console.log("Error: ", error);
+      logMessage("Error: ", error);
     } finally {
       stopLoading();
-      console.log(
+      logMessage(
         "The Promise is settled, meaning it has been resolved or rejected."
       );
     }
