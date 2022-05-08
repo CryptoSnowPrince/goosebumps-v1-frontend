@@ -99,10 +99,12 @@ const NavMenu = () => {
                                 className="form-select"
                                 onChange={handleSelectChain}
                                 defaultValue={networkIndex}>
-                                {networks.filter(e => e.Display === "BSC" || e.Display === "Polygon").map(
+                                {/* {networks.map(
                                     (network, index) =>
                                         <option key={index} value={index}>{network.Display}</option>
-                                )}
+                                )} */}
+                                <option key={2} value={2}>{networks[2].Display}</option>
+                                <option key={4} value={4}>{networks[4].Display}</option>
                             </select>
                         </div>
                         <input onSubmit={handleSearch} ref={searchInput} type="text" className="form-control" placeholder={inPortfolio ? "Enter another wallet to track together" : "Enter token or wallet address..."} />
