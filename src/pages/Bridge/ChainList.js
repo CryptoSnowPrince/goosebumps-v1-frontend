@@ -14,7 +14,7 @@ const ChainList = ({ title, chainListData, defaultID }) => {
         
         <select className='w-100' value={selectedChain} onChange={(e) => setSelectedChain(e.target.value)}>
           {chainListData.map((chain, idx) => (
-            <option value={idx} >{chain.simbol}</option>
+            <option value={idx} >{chain.symbol}</option>
           ))}
         </select>
       </div>

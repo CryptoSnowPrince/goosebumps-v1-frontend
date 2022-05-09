@@ -40,5 +40,12 @@
     "Address": "0xf4d2888d29D722226FafA5d9B24F9164c092421E",
     "Decimals": 18,
     "Logo": "/assets/tokens/1/0xf4d2888d29D722226FafA5d9B24F9164c092421E.png"
+  },
+  {
+    "Name": "BridgeTestToken",
+    "Symbol": "BTT",
+    "Address": "0x5c668e913d5b9395a43c075bf87534460cee15f9",
+    "Decimals": 18,
+    "Logo": "/assets/tokens/1/0x5c668e913d5b9395a43c075bf87534460cee15f9.png"
   }
 ]
