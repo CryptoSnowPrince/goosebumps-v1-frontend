@@ -100,15 +100,20 @@ const NavMenu = () => {
                 onChange={handleSelectChain}
                 defaultValue={networkIndex}>
                 {/* {networks.map(
-                                    (network, index) =>
-                                        <option key={index} value={index}>{network.Display}</option>
-                                )} */}
+                  (network, index) =>
+                    <option key={index} value={index}>{network.Display}</option>
+                )} */}
                 <option key={0} value={0}>{networks[0].Display}</option>
                 <option key={2} value={2}>{networks[2].Display}</option>
                 <option key={4} value={4}>{networks[4].Display}</option>
               </select>
             </div>
-            <input onSubmit={handleSearch} ref={searchInput} type="text" className="form-control" placeholder={inPortfolio ? "Enter another wallet to track together" : "Enter token or wallet address..."} />
+            <input onSubmit={handleSearch} ref={searchInput} type="text"
+              className="form-control"
+              placeholder={
+                inPortfolio ?
+                  "Enter another wallet to track together" :
+                  "Enter token or wallet address..."} />
             <button className="src-btn" onClick={handleSearch}>
               <i className="fa fa-search" />
             </button>
@@ -117,23 +122,24 @@ const NavMenu = () => {
             <Nav className="mt-3 mt-lg-0">
               <NavItem>
                 <Link
-                  className={`nav-link mx-lg-2 mx-xl-3 
-                                    ${pathname === '/' ? "active" : ""}`} to="/">Home</Link>
+                  className={`nav-link mx-lg-2 mx-xl-3 ${pathname === '/' ? "active" : ""}`}
+                  to="/">Home</Link>
+              </NavItem>
+              <NavItem>
+                <Link
+                  className={`nav-link mx-lg-2 mx-xl-3 ${pathname === '/portfolio-tracker' ? "active" : ""}`}
+                  to="/portfolio-tracker">Portfolio Tracker</Link>
+              </NavItem>
+              <NavItem>
+                <Link
+                  className={`nav-link mx-lg-2 mx-xl-3 ${pathname === '/charts' ? "active" : ""}`}
+                  to="/charts">Charts</Link>
               </NavItem>
               <NavItem>
                 <Link
                   className={`nav-link mx-lg-2 mx-xl-3 
-                                    ${pathname === '/portfolio-tracker' ? "active" : ""}`} to="/portfolio-tracker">Portfolio Tracker</Link>
-              </NavItem>
-              <NavItem>
-                <Link
-                  className={`nav-link mx-lg-2 mx-xl-3 
-                                    ${pathname === '/charts' ? "active" : ""}`} to="/charts">Charts</Link>
-              </NavItem>
-              <NavItem>
-                <Link
-                  className={`nav-link mx-lg-2 mx-xl-3 
-                                    ${(pathname === '/stake' || pathname === '/farms') ? "active" : ""}`} to="/stake">Stake</Link>
+                  ${(pathname === '/stake' || pathname === '/farms') ? "active" : ""}`}
+                  to="/stake">Stake</Link>
               </NavItem>
               <NavItem>
                 <Link
@@ -149,7 +155,7 @@ const NavMenu = () => {
               <NavItem>
                 <Link
                   className={`nav-link mx-lg-2 mx-xl-3 
-                                    ${pathname === '/bridge' ? "active" : ""}`} to="/bridge">Bridge</Link>
+                  ${pathname === '/bridge' ? "active" : ""}`} to="/bridge">Bridge</Link>
               </NavItem>
             </Nav>
             <Navbar.Text className='ms-lg-2 ms-xl-4'>
