@@ -70,3 +70,4 @@ package-lock.json
 yarn.lock
 .firebaserc
 firebase.json
+.env.example
