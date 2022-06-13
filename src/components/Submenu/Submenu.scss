@@ -1,0 +1,48 @@
+#swap_staking_farms {
+  .nav-link {
+    color: #ffffff;
+    text-transform: capitalize;
+    position: relative;
+    font-size: 16px;
+    line-height: 21px;
+    padding-left: 0;
+    padding-right: 0;
+    padding-bottom: 8px;
+    padding-top: 8px;
+    font-weight: 500;
+  }
+
+  .nav-link::before {
+    content: "";
+    position: absolute;
+    bottom: -1px;
+    right: 0;
+    width: 0;
+    height: 2px;
+    background: #ffffff;
+    opacity: 0;
+    visibility: hidden;
+    -webkit-transition: all ease 0.5s;
+    transition: all ease 0.5s;
+  }
+
+  .nav-link:hover {
+    color: #ffffff;
+    cursor: pointer;
+  }
+
+  .nav-link:hover::before {
+    opacity: 1;
+    visibility: visible;
+    width: 100%;
+    right: auto;
+    left: 0;
+  }
+  .active::before {
+    opacity: 1;
+    width: 100%;
+    visibility: visible;
+    right: auto;
+    left: 0;
+  }
+}

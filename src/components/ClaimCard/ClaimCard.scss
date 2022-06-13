@@ -1,0 +1,20 @@
+#claimcard {
+  background-color: #2a3545;
+  border-radius: 15px;
+  padding: 20px 30px;
+  .title {
+    // font-size: 14px;
+  }
+  .card-amount {
+    font-size: 20px;
+  }
+  .value{
+    font-size: 14px;
+  }
+  .button{
+    font-size: 20px;
+    background-color: #121E30;
+    border: 2px solid #51FFA1;
+    padding: 10px 40px;
+  }
+}

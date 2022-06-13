@@ -1,0 +1,21 @@
+#Filter {
+  input {
+    background: #171717;
+    border: 2px solid #c4c4c4;
+    box-sizing: border-box;
+    border-radius: 9px;
+    padding: 5px 15px;
+    color: #fff;
+  }
+  select {
+    background: #171717;
+    border: 2px solid #c4c4c4;
+    box-sizing: border-box;
+    border-radius: 9px;
+    padding: 7.5px 15px;
+    color: #fff;
+  }
+  option {
+    border-radius: 9px;
+  }
+}

@@ -1,0 +1,21 @@
+#Control {
+  .react-switch{
+    border: 1px solid #C4C4C4;
+  }
+  .button-group {
+    background: #353c46;
+    border: 2px solid #c4c4c4;
+    box-sizing: border-box;
+    border-radius: 35px;
+    button {
+      border-radius: 35px;
+      padding: 2px 20px;
+      background: transparent;
+      color: #FBFBFB;
+    }
+    button.active {
+      background-color: #0E121A;
+      color: #51FFA1;
+    }
+  }
+}

@@ -1,0 +1,51 @@
+[
+  {
+    "Name": "BNB",
+    "Symbol": "BNB",
+    "Address": "-",
+    "Decimals": 18,
+    "Logo": "/assets/tokens/97/0x0000000000000000000000000000000000000000.png"
+  },
+  {
+    "Name": "Wrapped BNB",
+    "Symbol": "WBNB",
+    "Address": "0xae13d989daC2f0dEbFf460aC112a837C89BAa7cd",
+    "Decimals": 18,
+    "Logo": "/assets/tokens/97/0xae13d989daC2f0dEbFf460aC112a837C89BAa7cd.png"
+  },
+  {
+    "Name": "GooseBumps First Token",
+    "Symbol": "GBFT",
+    "Address": "0xA6454bbA55F46Ef488c599c44867DF5eE3D6F543",
+    "Decimals": 18,
+    "Logo": "/assets/tokens/97/0xA6454bbA55F46Ef488c599c44867DF5eE3D6F543.png"
+  },
+  {
+    "Name": "GooseBumps Second Token",
+    "Symbol": "GBST",
+    "Address": "0xA490CfCE72c5d7344A177c6fCAdfBf0991816e93",
+    "Decimals": 18,
+    "Logo": "/assets/tokens/97/0xA490CfCE72c5d7344A177c6fCAdfBf0991816e93.png"
+  },
+  {
+    "Name": "GooseBumps Third Token",
+    "Symbol": "GBTT",
+    "Address": "0x2FC145e7A2e6E1E83C55B7e73422072B70C73A77",
+    "Decimals": 18,
+    "Logo": "/assets/tokens/97/0x2FC145e7A2e6E1E83C55B7e73422072B70C73A77.png"
+  },
+  {
+    "Name": "GooseBumps Firth Token",
+    "Symbol": "GBFT",
+    "Address": "0x238CD26cccc1C714201Fc8bf49d453a39f494209",
+    "Decimals": 18,
+    "Logo": "/assets/tokens/97/0x238CD26cccc1C714201Fc8bf49d453a39f494209.png"
+  },
+  {
+    "Name": "Tether USD",
+    "Symbol": "USDT",
+    "Address": "0x7ef95a0FEE0Dd31b22626fA2e10Ee6A223F8a684",
+    "Decimals": 18,
+    "Logo": "/assets/tokens/97/0x7ef95a0FEE0Dd31b22626fA2e10Ee6A223F8a684.png"
+  }
+]
