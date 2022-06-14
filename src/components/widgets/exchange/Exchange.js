@@ -28,7 +28,6 @@ const Exchange = (props) => {
   const account = useSelector(selector.accountState);
   const web3Provider = useSelector(selector.web3ProviderState);
   const signer = useSelector(selector.signerState);
-  const provider = useSelector(selector.providerState);
 
   const [loading, setLoading] = useState();
   const [ready, setReady] = useState();
