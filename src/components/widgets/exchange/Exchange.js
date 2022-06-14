@@ -337,27 +337,7 @@ const Exchange = (props) => {
         feeRecipient: '0x821965C1fD8B60D4B33E23C5832E2A7662faAADC',
       });
 
-      // const web3 = new Web3(provider);
-      // // console.log("web3: ", web3)
-      // var tx = await web3.eth.sendTransaction({
-      //   from: account,
-      //   to: quote.to,
-      //   data: quote.data,
-      //   value: quote.value,
-      //   gasPrice: quote.gasPrice,
-      //   gas: quote.gas,
-      // });
-
-      //   const transactionHash = await provider.send('eth_sendTransaction', params)
-
-      console.log("quote: ", quote)
-      console.log("signer: ", signer)
-      const newprovider = new ethers.providers.Web3Provider(provider);
-      // get a signer wallet!
-      const newsigner = newprovider.getSigner();
-      console.log("newsigner: ", newsigner)
-
-      var txHash = await newsigner.sendTransaction({
+      var txHash = await signer.sendTransaction({
         from: account,
         to: quote.to,
         data: quote.data,
@@ -365,9 +345,9 @@ const Exchange = (props) => {
         gasPrice: BigNumber.from(quote.gasPrice),
         gasLimit: BigNumber.from(quote.gas),
       });
-      console.log('txHash is ' + txHash);
+      console.log('txHash is ', txHash);
       var ret = await txHash.wait();
-      console.log('ret is ' + ret);
+      console.log('ret is ', ret);
     } catch (error) {
       console.log(error);
     }
