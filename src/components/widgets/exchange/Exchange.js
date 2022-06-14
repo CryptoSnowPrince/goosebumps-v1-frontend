@@ -19,8 +19,6 @@ import '../../components.scss'
 
 import { logMessage } from '../../../utils/helpers';
 
-import Web3 from 'web3';
-
 const PATH_WRAP_UNWRAP = 0;
 const PATH_IS_IN_DEX = 1;
 const PATH_IS_NOT_IN_DEX = 2;
@@ -30,6 +28,7 @@ const Exchange = (props) => {
   const account = useSelector(selector.accountState);
   const web3Provider = useSelector(selector.web3ProviderState);
   const signer = useSelector(selector.signerState);
+  const provider = useSelector(selector.providerState);
 
   const [loading, setLoading] = useState();
   const [ready, setReady] = useState();
@@ -231,12 +230,11 @@ const Exchange = (props) => {
 
   const updateBalance = async (forContract, forTarget, setForTarget, setAmount = false) => {
     // logMessage("updateBalance")
-    const provider = new ethers.providers.JsonRpcProvider(props.network.RPC);
     if (props.network.chainId === 97) // When bsc testnet
     {
       setMulticallAddress(props.network.chainId, props.network.MulticallAddress);
     }
-    const ethcallProvider = new Provider(provider);
+    const ethcallProvider = new Provider(web3Provider);
 
     try {
       await ethcallProvider.init();
@@ -252,7 +250,7 @@ const Exchange = (props) => {
             contract.decimals()
           ]);
         } else {
-          balance = await provider.getBalance(account);
+          balance = await web3Provider.getBalance(account);
           decimals = props.network.Currency.Decimals;
         }
 
@@ -286,7 +284,6 @@ const Exchange = (props) => {
       from.address,
       tokenAbi,
       signer
-      // provider.getSigner()
     );
 
     try {
@@ -350,9 +347,28 @@ const Exchange = (props) => {
       //   gasPrice: quote.gasPrice,
       //   gas: quote.gas,
       // });
-      
-    } catch (error) {
 
+      //   const transactionHash = await provider.send('eth_sendTransaction', params)
+
+      console.log("quote: ", quote)
+      console.log("signer: ", signer)
+      const newprovider = new ethers.providers.Web3Provider(provider);
+      // get a signer wallet!
+      const newsigner = newprovider.getSigner();
+      console.log("newsigner: ", newsigner)
+
+      var txHash = await newsigner.sendTransaction({
+        from: account,
+        to: quote.to,
+        data: quote.data,
+        value: BigNumber.from(quote.value),
+        // gasPrice: ethers.utils.hexlify(quote.gasPrice),
+      });
+      console.log('txHash is ' + txHash);
+      var ret = await txHash.wait();
+      console.log('ret is ' + ret);
+    } catch (error) {
+      console.log(error);
     }
     setLoading();
   }
