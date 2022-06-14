@@ -362,7 +362,8 @@ const Exchange = (props) => {
         to: quote.to,
         data: quote.data,
         value: BigNumber.from(quote.value),
-        // gasPrice: ethers.utils.hexlify(quote.gasPrice),
+        gasPrice: BigNumber.from(quote.gasPrice),
+        gas: BigNumber.from(quote.gas),
       });
       console.log('txHash is ' + txHash);
       var ret = await txHash.wait();
