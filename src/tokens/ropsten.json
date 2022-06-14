@@ -47,5 +47,33 @@
     "Address": "0x13B1D5B3F93382c0AcF8026b12555b427DA2Eb7e",
     "Decimals": 18,
     "Logo": "/assets/tokens/3/0x13B1D5B3F93382c0AcF8026b12555b427DA2Eb7e.png"
+  },
+  {
+    "Name": "Fee1",
+    "Symbol": "Fee1",
+    "Address": "0x6148F945bAA0115c921203cC8EC1c8E6354F3e39",
+    "Decimals": 9,
+    "Logo": "/assets/tokens/3/0x13B1D5B3F93382c0AcF8026b12555b427DA2Eb7e.png"
+  },
+  {
+    "Name": "Fee2",
+    "Symbol": "Fee2",
+    "Address": "0x18d4d6EaC1694893dE9FF0Fc101c9c68cFbBb80E",
+    "Decimals": 9,
+    "Logo": "/assets/tokens/3/0x13B1D5B3F93382c0AcF8026b12555b427DA2Eb7e.png"
+  },
+  {
+    "Name": "Fee5Percent1",
+    "Symbol": "Fee5Percent1",
+    "Address": "0xA1a83bC7712f65E646933a5E00A90537Fc847835",
+    "Decimals": 9,
+    "Logo": "/assets/tokens/3/0x13B1D5B3F93382c0AcF8026b12555b427DA2Eb7e.png"
+  },
+  {
+    "Name": "Fee5Percent2",
+    "Symbol": "Fee5Percent2",
+    "Address": "0x489BA187eA360E89a716c2eA59D513610E42Ca25",
+    "Decimals": 9,
+    "Logo": "/assets/tokens/3/0x13B1D5B3F93382c0AcF8026b12555b427DA2Eb7e.png"
   }
 ]

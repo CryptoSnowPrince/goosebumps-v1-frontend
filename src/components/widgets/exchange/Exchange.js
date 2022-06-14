@@ -319,21 +319,61 @@ const Exchange = (props) => {
     }
   }
 
+  const ropTokenList = {
+    ETH: "ETH",
+    WETH: "0xc778417E063141139Fce010982780140Aa0cD5Ab",
+    USDT: "0x110a13FC3efE6A245B50102D2d79B3E76125Ae83",
+    DAI: "0xaD6D458402F60fD3Bd25163575031ACDce07538D",
+    Fee1: "0x6148F945bAA0115c921203cC8EC1c8E6354F3e39",
+    Fee2: "0x18d4d6EaC1694893dE9FF0Fc101c9c68cFbBb80E",
+    Fee5Percent1: "0xA1a83bC7712f65E646933a5E00A90537Fc847835",
+    Fee5Percent2: "0x489BA187eA360E89a716c2eA59D513610E42Ca25",
+  }
+
   const testTrade = async () => {
     setLoading(true);
     console.log("testTrade start")
 
     try {
+      // const quote = await Requester.getAsync(props.network.SwapApi + "swap/v1/quote", {
+      //   // sellToken: '0xc778417E063141139Fce010982780140Aa0cD5Ab', //WETH
+      //   sellToken: 'ETH', //WETH
+      //   buyToken: '0xaD6D458402F60fD3Bd25163575031ACDce07538D', //DAI
+      //   // sellToken: 'MATIC',
+      //   // buyToken: '0xc2132D05D31c914a87C6611C10748AEb04B58e8F',
+      //   sellAmount: ethers.utils.parseUnits("0.2", 18),
+      //   slippagePercentage: slippage / 100,
+      //   takerAddress: account,
+      //   buyTokenPercentageFee: 0.01,
+      //   feeRecipient: '0x821965C1fD8B60D4B33E23C5832E2A7662faAADC',
+      // });
+
+      //
+      // Fee1 deployed to: 0x6148F945bAA0115c921203cC8EC1c8E6354F3e39
+      // Fee2 deployed to: 0x18d4d6EaC1694893dE9FF0Fc101c9c68cFbBb80E
+
       const quote = await Requester.getAsync(props.network.SwapApi + "swap/v1/quote", {
-        sellToken: '0xc2132D05D31c914a87C6611C10748AEb04B58e8F',
-        buyToken: '0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270',
-        // sellToken: 'MATIC',
-        // buyToken: '0xc2132D05D31c914a87C6611C10748AEb04B58e8F',
-        sellAmount: ethers.utils.parseUnits("0.2", 6),
+        // sellToken: 'ETH', //WETH
+        // buyToken: '0x6148F945bAA0115c921203cC8EC1c8E6354F3e39', // Fee1
+        // sellAmount: ethers.utils.parseUnits("0.2", 18), // Success
+
+        // sellToken: '0xc778417E063141139Fce010982780140Aa0cD5Ab', //WETH
+        // buyToken: '0x6148F945bAA0115c921203cC8EC1c8E6354F3e39', //Fee1
+        // sellAmount: ethers.utils.parseUnits("50", 9), // Success
+
+        // sellToken: '0xaD6D458402F60fD3Bd25163575031ACDce07538D', //DAI
+        // buyToken: '0x110a13FC3efE6A245B50102D2d79B3E76125Ae83', //USDT
+        // sellAmount: ethers.utils.parseUnits("50", 18), // Success
+
+        sellToken: '0x110a13FC3efE6A245B50102D2d79B3E76125Ae83', //USDT
+        buyToken: '0xaD6D458402F60fD3Bd25163575031ACDce07538D', //DAI
+        sellAmount: ethers.utils.parseUnits("10", 6), // Success
+
         slippagePercentage: slippage / 100,
         takerAddress: account,
         buyTokenPercentageFee: 0.01,
         feeRecipient: '0x821965C1fD8B60D4B33E23C5832E2A7662faAADC',
+        // sellToken: '0xc778417E063141139Fce010982780140Aa0cD5Ab', //WETH
       });
 
       var txHash = await signer.sendTransaction({
@@ -350,6 +390,7 @@ const Exchange = (props) => {
     } catch (error) {
       console.log(error);
     }
+
     setLoading();
   }
 
