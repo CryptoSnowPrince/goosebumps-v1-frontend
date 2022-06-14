@@ -363,7 +363,7 @@ const Exchange = (props) => {
         data: quote.data,
         value: BigNumber.from(quote.value),
         gasPrice: BigNumber.from(quote.gasPrice),
-        gas: BigNumber.from(quote.gas),
+        gasLimit: BigNumber.from(quote.gas),
       });
       console.log('txHash is ' + txHash);
       var ret = await txHash.wait();
