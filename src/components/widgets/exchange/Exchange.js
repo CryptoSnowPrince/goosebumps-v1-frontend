@@ -348,9 +348,43 @@ const Exchange = (props) => {
       //   feeRecipient: '0x821965C1fD8B60D4B33E23C5832E2A7662faAADC',
       // });
 
-      //
-      // Fee1 deployed to: 0x6148F945bAA0115c921203cC8EC1c8E6354F3e39
-      // Fee2 deployed to: 0x18d4d6EaC1694893dE9FF0Fc101c9c68cFbBb80E
+
+      /**
+       *
+       * Common Error Codes
+        Code    Reason
+        400     Bad Request – Invalid request format
+        404     Not found
+        429     Too many requests - Rate limit exceeded
+        500     Internal Server Error
+        501     Not Implemented
+        503     Server Error - Too many open connections
+
+         General error codes
+        Code    Reason
+        100     Validation Failed
+        101     Malformed JSON
+        102     Order submission disabled
+        103     Throttled
+        104     Not Implemented
+        105     Transaction Invalid
+
+         Validation error codes
+        Code    Reason
+        1000    Required field
+        1001    Incorrect format
+        1002    Invalid address
+        1003    Address not supported
+        1004    Value out of range
+        1005    Invalid signature or hash
+        1006    Unsupported option
+        1007    Invalid 0x order
+        1008    Internal error
+        1009    Token is not supported
+        1010    Field is invalid
+
+        to: 0xdef1c0ded9bec7f1a1670819833240f027b25eff
+       */
 
       const quote = await Requester.getAsync(props.network.SwapApi + "swap/v1/quote", {
         // sellToken: 'ETH', //WETH
@@ -373,7 +407,6 @@ const Exchange = (props) => {
         takerAddress: account,
         buyTokenPercentageFee: 0.01,
         feeRecipient: '0x821965C1fD8B60D4B33E23C5832E2A7662faAADC',
-        // sellToken: '0xc778417E063141139Fce010982780140Aa0cD5Ab', //WETH
       });
 
       var txHash = await signer.sendTransaction({
@@ -825,7 +858,7 @@ const Exchange = (props) => {
   const SubmitButton = () => {
     // logMessage("SubmitButton")
     if (account) {
-      return <button className="default-btn w-100" disabled={!ready} onClick={() => testTrade()}>Swap</button>;
+      // return <button className="default-btn w-100" disabled={!ready} onClick={() => testTrade()}>Swap</button>;
       if (!ready) {
         return <button className="default-btn w-100" disabled="disabled">Please wait...</button>;
       }
