@@ -99,13 +99,13 @@ const NavMenu = () => {
                 className="form-select"
                 onChange={handleSelectChain}
                 defaultValue={networkIndex}>
-                {/* {networks.map(
+                {networks.map(
                   (network, index) =>
                     <option key={index} value={index}>{network.Display}</option>
-                )} */}
-                <option key={0} value={0}>{networks[0].Display}</option>
+                )}
+                {/* <option key={0} value={0}>{networks[0].Display}</option>
                 <option key={2} value={2}>{networks[2].Display}</option>
-                <option key={4} value={4}>{networks[4].Display}</option>
+                <option key={4} value={4}>{networks[4].Display}</option> */}
               </select>
             </div>
             <input onSubmit={handleSearch} ref={searchInput} type="text"

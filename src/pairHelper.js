@@ -92,7 +92,7 @@ class PairHelper {
                 var price = this.formatUnits(reserves._reserve0, sellDecimals) / this.formatUnits(reserves._reserve1, buyDecimals);
             }
             else {
-                var price = this.formatUnits(reserves._reserve1, buyDecimals) / this.formatUnits(reserves._reserve0, sellDecimals);
+                price = this.formatUnits(reserves._reserve1, buyDecimals) / this.formatUnits(reserves._reserve0, sellDecimals);
             }
 
             if (!(isETH && isUSD) && isUSD) {

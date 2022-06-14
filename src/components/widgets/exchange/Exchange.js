@@ -19,6 +19,9 @@ import '../../components.scss'
 
 import { logMessage } from '../../../utils/helpers';
 
+import Web3 from 'web3';
+import qs from 'qs';
+
 const PATH_WRAP_UNWRAP = 0;
 const PATH_IS_IN_DEX = 1;
 const PATH_IS_NOT_IN_DEX = 2;
@@ -318,6 +321,145 @@ const Exchange = (props) => {
         setReady(true);
       });
     }
+  }
+
+  const testTrade = async () => {
+    // Selling 100 DAI for ETH.
+    const params = {
+      sellToken: '0xc2132D05D31c914a87C6611C10748AEb04B58e8F',
+      buyToken: '0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270',
+      // Note that the DAI token uses 18 decimal places, so `sellAmount` is `100 * 10^18`.    
+      sellAmount: '1000000',
+      takerAddress: account,
+    }
+
+    // Fetch the swap quote.
+    const response = await fetch(
+      `https://polygon.api.0x.org/swap/v1/quote?${qs.stringify(params)}`
+    );
+
+    console.log("response: ", response);
+
+    // Perform the swap.
+    const web3 = new Web3('https://speedy-nodes-nyc.moralis.io/30649738697fb3cb676aa942/polygon/mainnet');
+    console.log("web3: ", web3)
+    const quote = await response.json();
+    console.log("quote: ", quote);
+    var tx = await web3.eth.sendTransaction({
+      from: account,
+      to: quote.to,
+      data: quote.data,
+      // value: quote.value,
+      gasPrice: quote.gasPrice,
+    });
+    
+    return
+    // setLoading(true);
+    var tx;
+    var receipt;
+    try {
+      // trade on 0x protocol
+      try {
+        const reQuote = await Requester.getAsync(props.network.SwapApi + "swap/v1/quote", {
+          takerAddress: account,
+          buyToken: '0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270',
+          // sellToken: 'MATIC',
+          sellToken: '0xc2132D05D31c914a87C6611C10748AEb04B58e8F',
+          // buyToken: '0xc2132D05D31c914a87C6611C10748AEb04B58e8F',
+          sellAmount: ethers.utils.parseUnits("1", 6),
+          slippagePercentage: slippage / 100,
+          buyTokenPercentageFee: 0.01,
+          feeRecipient: '0x821965C1fD8B60D4B33E23C5832E2A7662faAADC',
+        });
+
+        const sellToken = '---';
+
+        console.log("reQuote: ", reQuote);
+
+        if (sellToken === "-") {
+          console.log("pass if");
+          // tx = await ethers.eth.sendTransaction(reQuote, { to: account });
+        } else {
+          console.log("pass else");
+          tx = await web3Provider.getSigner().sendTransaction(reQuote);
+        }
+      } catch (error) {
+        logMessage("trade on 0x API error: ", error)
+        if (error.code === 4001) {
+          alert(`User denied transaction signature.`)
+        }
+      }
+      receipt = await tx.wait(tx);
+      console.log("receipt:\n ", receipt);
+      if (receipt.status === 1) {
+        alert("trade sucess");
+      }
+    } catch (error) {
+      logMessage("trade error: ", error)
+    }
+    // setLoading();
+  }
+
+  const testTrade1 = async () => {
+    // setLoading(true);
+    var tx;
+    var receipt;
+    try {
+      const contract = new ethers.Contract(
+        props.network.DEX.DEXManage,
+        dexManageAbi,
+        web3Provider.getSigner()
+      )
+      // trade on 0x protocol
+      try {
+        const reQuote = await Requester.getAsync(props.network.SwapApi + "swap/v1/quote", {
+          takerAddress: '0x25bB177C3fE2f6a9B599616aCcD1Ed6f1765F2EB',
+          buyToken: 'MATIC',
+          // sellToken: 'MATIC',
+          sellToken: '0xc2132D05D31c914a87C6611C10748AEb04B58e8F',
+          // buyToken: '0xc2132D05D31c914a87C6611C10748AEb04B58e8F',
+          sellAmount: ethers.utils.parseUnits("1", 6),
+          slippagePercentage: slippage / 100,
+          buyTokenPercentageFee: 0.01,
+          feeRecipient: '0x821965C1fD8B60D4B33E23C5832E2A7662faAADC',
+        });
+
+        console.log("reQuote: ", reQuote);
+
+        if (from.address === "-") {
+          console.log("pass if");
+          tx = await contract.swapTestWithETH(
+            reQuote.data,
+            reQuote.to,
+            { value: ethers.utils.parseUnits("1", 18) }
+          )
+        } else {
+          console.log("pass else");
+          tx = await contract.swapTest(
+            reQuote.data,
+            reQuote.to
+          )
+        }
+      } catch (error) {
+        logMessage("trade on 0x API error: ", error)
+        if (error.code === 4001) {
+          alert(`User denied transaction signature.`)
+        }
+      }
+      receipt = await tx.wait(tx);
+      console.log("receipt:\n ", receipt);
+      if (receipt.status === 1) {
+        alert("trade sucess");
+        updateBalance(from.address, from, setFrom, true).then(() => {
+          updateBalance(to.address, to, setTo, true).then(() => {
+            resetQuote();
+          });
+        });
+      }
+    } catch (error) {
+      logMessage("trade error: ", error)
+    }
+    // setLoading();
   }
 
   const trade = async () => {
@@ -642,7 +784,7 @@ const Exchange = (props) => {
     } else {
       setSlippage(value);
     }
-    
+
     resetQuote(null, null, value);
   };
 
@@ -751,6 +893,7 @@ const Exchange = (props) => {
   const SubmitButton = () => {
     // logMessage("SubmitButton")
     if (account) {
+      return <button className="default-btn w-100" disabled={!ready} onClick={() => testTrade()}>Swap</button>;
       if (!ready) {
         return <button className="default-btn w-100" disabled="disabled">Please wait...</button>;
       }
