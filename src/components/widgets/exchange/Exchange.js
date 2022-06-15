@@ -360,7 +360,7 @@ const Exchange = (props) => {
       console.log("xIndex is ", xIndex)
       for (var yIndex = 0; yIndex < ropTokenArray.length; yIndex++) {
         console.log("yIndex is ", yIndex)
-        for (var zIndex = 0; zIndex <= slippageArray.length; zIndex++) {
+        for (var zIndex = 0; zIndex < slippageArray.length; zIndex++) {
           console.log("zIndex is ", zIndex)
 
           try {
@@ -389,7 +389,6 @@ const Exchange = (props) => {
             });
             const receipt = await tx.wait();
             console.log(`${props.network.Explorer}tx/${receipt.transactionHash}`)
-            return;
           } catch (error) {
             console.log(error)
           }
