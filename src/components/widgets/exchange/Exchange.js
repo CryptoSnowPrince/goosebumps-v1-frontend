@@ -361,9 +361,9 @@ const Exchange = (props) => {
 
     try {
       const quote = await Requester.getAsync(props.network.SwapApi + "swap/v1/quote", {
-        sellToken: ropTokenArray[0].address,
-        buyToken: ropTokenArray[6].address,
-        sellAmount: ethers.utils.parseUnits("0.005", ropTokenArray[0].decimals), // Success
+        sellToken: ropTokenArray[3].address,
+        buyToken: ropTokenArray[8].address,
+        sellAmount: ethers.utils.parseUnits(from.amount, ropTokenArray[0].decimals), // Success
         slippagePercentage: slippage / 100,
         takerAddress: account,
         buyTokenPercentageFee: 0.01,
