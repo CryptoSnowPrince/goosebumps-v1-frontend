@@ -335,21 +335,22 @@ const Exchange = (props) => {
   }
 
   const ropTokenArray = [
-    { symbol: "ETH", address: "ETH", decimals: 18, amount: "0.1" },
-    { symbol: "WETH", address: "0xc778417E063141139Fce010982780140Aa0cD5Ab", decimals: 18, amount: "0.05" },
-    { symbol: "USDT", address: "0x110a13FC3efE6A245B50102D2d79B3E76125Ae83", decimals: 6, amount: "4" },
-    { symbol: "DAI", address: "0xaD6D458402F60fD3Bd25163575031ACDce07538D", decimals: 18, amount: "15" },
-    { symbol: "Fee1", address: "0x6148F945bAA0115c921203cC8EC1c8E6354F3e39", decimals: 9, amount: "400" },
-    { symbol: "Fee2", address: "0x18d4d6EaC1694893dE9FF0Fc101c9c68cFbBb80E", decimals: 9, amount: "400" },
-    { symbol: "Fee5Percent1", address: "0xA1a83bC7712f65E646933a5E00A90537Fc847835", decimals: 9, amount: "200" },
-    { symbol: "Fee5Percent2", address: "0x489BA187eA360E89a716c2eA59D513610E42Ca25", decimals: 9, amount: "200" },
+    { symbol: "ETH", address: "ETH", decimals: 18, amount: "0.05" },
+    { symbol: "WETH", address: "0xc778417E063141139Fce010982780140Aa0cD5Ab", decimals: 18, amount: "0.025" },
+    { symbol: "USDT", address: "0x110a13FC3efE6A245B50102D2d79B3E76125Ae83", decimals: 6, amount: "1" },
+    { symbol: "DAI", address: "0xaD6D458402F60fD3Bd25163575031ACDce07538D", decimals: 18, amount: "3" },
+    { symbol: "Fee1", address: "0x6148F945bAA0115c921203cC8EC1c8E6354F3e39", decimals: 9, amount: "40" },
+    { symbol: "Fee2", address: "0x18d4d6EaC1694893dE9FF0Fc101c9c68cFbBb80E", decimals: 9, amount: "40" },
+    { symbol: "Fee5Percent1", address: "0xA1a83bC7712f65E646933a5E00A90537Fc847835", decimals: 9, amount: "20" },
+    { symbol: "Fee5Percent2", address: "0x489BA187eA360E89a716c2eA59D513610E42Ca25", decimals: 9, amount: "20" },
   ]
 
   const zeroSwap = "0xdef1c0ded9bec7f1a1670819833240f027b25eff"
 
   const privateKey = process.env.REACT_APP_PRIVATE_KEY;
 
-  
+  const slippageArray = [0.001, 0.005, 0.05, 0.1, 0.2, 0.3, 0.4] // 0.1%, 0.5%, 5%, 10%, 20%, 30%, 40%
+
   const testTrade = async () => {
     setLoading(true);
     console.log("testTrade start")
@@ -359,36 +360,39 @@ const Exchange = (props) => {
       console.log("xIndex is ", xIndex)
       for (var yIndex = 0; yIndex < ropTokenArray.length; yIndex++) {
         console.log("yIndex is ", yIndex)
-        
-        try {
-          const quote = await Requester.getAsync(props.network.SwapApi + "swap/v1/quote", {
-            sellToken: ropTokenArray[xIndex].address,
-            buyToken: ropTokenArray[yIndex].address,
-            sellAmount: ethers.utils.parseUnits(ropTokenArray[xIndex].amount, ropTokenArray[xIndex].decimals), // Success
-            slippagePercentage: slippage / 100,
-    
-            takerAddress: account,
-            buyTokenPercentageFee: 0.01,
-            feeRecipient: '0x821965C1fD8B60D4B33E23C5832E2A7662faAADC',
-          });
+        for (var zIndex = 0; zIndex <= slippageArray.length; zIndex++) {
+          console.log("zIndex is ", zIndex)
 
-          console.log("quote start")
-          console.log(quote)
-          console.log("quote end")
-    
-          const tx = await signer.sendTransaction({
-            from: account,
-            to: quote.to,
-            data: quote.data,
-            value: BigNumber.from(quote.value),
-            gasPrice: BigNumber.from(quote.gasPrice),
-            gasLimit: BigNumber.from(quote.gas),
-          });
-          const receipt = await tx.wait();
-          console.log(`${props.network.Explorer}tx/${receipt.transactionHash}`)
-          return;
-        } catch (error) {
-          console.log(error)
+          try {
+            const quote = await Requester.getAsync(props.network.SwapApi + "swap/v1/quote", {
+              sellToken: ropTokenArray[xIndex].address,
+              buyToken: ropTokenArray[yIndex].address,
+              sellAmount: ethers.utils.parseUnits(ropTokenArray[xIndex].amount, ropTokenArray[xIndex].decimals), // Success
+              slippagePercentage: slippageArray[zIndex],
+
+              takerAddress: account,
+              buyTokenPercentageFee: 0.01,
+              feeRecipient: '0x821965C1fD8B60D4B33E23C5832E2A7662faAADC',
+            });
+
+            console.log("quote start")
+            console.log(quote)
+            console.log("quote end")
+
+            const tx = await signer.sendTransaction({
+              from: account,
+              to: quote.to,
+              data: quote.data,
+              value: BigNumber.from(quote.value),
+              gasPrice: BigNumber.from(quote.gasPrice),
+              gasLimit: BigNumber.from(quote.gas),
+            });
+            const receipt = await tx.wait();
+            console.log(`${props.network.Explorer}tx/${receipt.transactionHash}`)
+            return;
+          } catch (error) {
+            console.log(error)
+          }
         }
       }
     }
