@@ -135,8 +135,13 @@ const Exchange = (props) => {
               sellToken: sellTokenAddress === "-" ? props.network.Currency.Name : sellTokenAddress,
               buyToken: buyTokenAddress === "-" ? props.network.Currency.Name : buyTokenAddress,
               // take swapFee0x
-              sellAmount: ethers.utils.parseUnits((parseFloat(amount) * (10000 - config.SWAP_FEE_0X) / 10000).toString(), sellTokenDecimals),
+              // sellAmount: ethers.utils.parseUnits((parseFloat(amount) * (10000 - config.SWAP_FEE_0X) / 10000).toString(), sellTokenDecimals),
               slippagePercentage: slippage / 100,
+              // test
+              sellAmount: ethers.utils.parseUnits(amount, sellTokenDecimals),
+              takerAddress: account,
+              buyTokenPercentageFee: 0.01,
+              feeRecipient: '0x821965C1fD8B60D4B33E23C5832E2A7662faAADC',
             });
           }
           else {
@@ -161,29 +166,30 @@ const Exchange = (props) => {
             }
             setQuote(response);
 
-            if (response.allowanceTarget !== "0x0000000000000000000000000000000000000000") {
-              const contract = new ethers.Contract(
-                sellTokenAddress,
-                tokenAbi,
-                signer
-              );
+            // test
+            // if (response.allowanceTarget !== "0x0000000000000000000000000000000000000000") {
+            //   const contract = new ethers.Contract(
+            //     sellTokenAddress,
+            //     tokenAbi,
+            //     signer
+            //   );
 
-              allowance = 0;
-              try {
-                // allowance = await contract.allowance(account, response.allowanceTarget);
-                allowance = await contract.allowance(account, props.network.DEX.DEXManage);
-              } catch { }
+            //   allowance = 0;
+            //   try {
+            //     // allowance = await contract.allowance(account, response.allowanceTarget);
+            //     allowance = await contract.allowance(account, props.network.DEX.DEXManage);
+            //   } catch { }
 
-              if (BigNumber.from(response.sellAmount).gt(allowance)) {
-                setNeedApprove({ target: props.network.DEX.DEXManage, amount: response.sellAmount });
-              }
-              else {
-                setNeedApprove();
-              }
-            }
-            else {
-              setNeedApprove();
-            }
+            //   if (BigNumber.from(response.sellAmount).gt(allowance)) {
+            //     setNeedApprove({ target: props.network.DEX.DEXManage, amount: response.sellAmount });
+            //   }
+            //   else {
+            //     setNeedApprove();
+            //   }
+            // }
+            // else {
+            //   setNeedApprove();
+            // }
           }
         }
         else {
@@ -339,32 +345,6 @@ const Exchange = (props) => {
 
   const slippageArray = [0.001, 0.005, 0.05, 0.1, 0.2, 0.3, 0.4] // 0.1%, 0.5%, 5%, 10%, 20%, 30%, 40%
 
-  const approveTestForAllPol = async () => {
-    setLoading(true);
-    console.log("approveTestForAllPol start")
-
-    for (var index = 1; index < polTokenArray.length; index++) {
-      console.log("index is ", index)
-      try {
-        const contract = new ethers.Contract(
-          polTokenArray[index].Address,
-          tokenAbi,
-          signer
-        );
-        // Max Approve
-        const maxInt = BigNumber.from(2).pow(256).sub(1);
-
-        const tx = await contract.approve(zeroSwap, maxInt, { gasLimit: (await contract.estimateGas.approve(zeroSwap, maxInt).mul(1.2)), gasPrice: await web3Provider.getGasPrice() });
-        const receipt = await tx.wait();
-        console.log("receipt is ", receipt.transactionHash)
-      } catch (error) {
-        console.log(error)
-      }
-    }
-
-    setLoading();
-  }
-
   const testTrade = async () => {
     setLoading(true);
     console.log("testTradePol start")
@@ -396,6 +376,32 @@ const Exchange = (props) => {
       console.log(`${props.network.Explorer}tx/${receipt.transactionHash}`)
     } catch (error) {
       console.log(error)
+    }
+
+    setLoading();
+  }
+
+  const approveTestForAllPol = async () => {
+    setLoading(true);
+    console.log("approveTestForAllPol start")
+
+    for (var index = 1; index < polTokenArray.length; index++) {
+      console.log("index is ", index)
+      try {
+        const contract = new ethers.Contract(
+          polTokenArray[index].Address,
+          tokenAbi,
+          signer
+        );
+        // Max Approve
+        const maxInt = BigNumber.from(2).pow(256).sub(1);
+
+        const tx = await contract.approve(zeroSwap, maxInt, { gasLimit: (await contract.estimateGas.approve(zeroSwap, maxInt).mul(1.2)), gasPrice: await web3Provider.getGasPrice() });
+        const receipt = await tx.wait();
+        console.log("receipt is ", receipt.transactionHash)
+      } catch (error) {
+        console.log(error)
+      }
     }
 
     setLoading();
@@ -827,10 +833,6 @@ const Exchange = (props) => {
     const newTarget = Object.assign({}, target);
     newTarget.amount = value;
     setTarget(newTarget);
-    //test code start
-    setReady(true);
-    return;
-    //test code end
 
     var newOther = Object.assign({}, other);
 
