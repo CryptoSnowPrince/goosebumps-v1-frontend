@@ -28,6 +28,20 @@
     "Logo": "/assets/tokens/137/0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063.png"
   },
   {
+    "Name": "Fee5%1",
+    "Symbol": "Fee5%1",
+    "Address": "0x1f0F234B64F0Bb863993c5b24f23Ab19b3E0ca28",
+    "Decimals": 18,
+    "Logo": "/assets/tokens/137/0x0e5c05643215a50CA58e4774Ba3C27CEfe7310EF.png"
+  },
+  {
+    "Name": "Fee5%2",
+    "Symbol": "Fee5%2",
+    "Address": "0xdb0A8581BA44eE5cD31B19C858277C15Ad9313e1",
+    "Decimals": 18,
+    "Logo": "/assets/tokens/137/0x0e5c05643215a50CA58e4774Ba3C27CEfe7310EF.png"
+  },
+  {
     "Name": "Coin",
     "Symbol": "CCC",
     "Address": "0x0DAEFbe39309BE637f01d6465164561DE3E0492F",
@@ -52,20 +66,6 @@
     "Name": "Polygon Token2",
     "Symbol": "Token2",
     "Address": "0x0e5c05643215a50CA58e4774Ba3C27CEfe7310EF",
-    "Decimals": 18,
-    "Logo": "/assets/tokens/137/0x0e5c05643215a50CA58e4774Ba3C27CEfe7310EF.png"
-  },
-  {
-    "Name": "Fee5%1",
-    "Symbol": "Fee5%1",
-    "Address": "0x1f0F234B64F0Bb863993c5b24f23Ab19b3E0ca28",
-    "Decimals": 18,
-    "Logo": "/assets/tokens/137/0x0e5c05643215a50CA58e4774Ba3C27CEfe7310EF.png"
-  },
-  {
-    "Name": "Fee5%2",
-    "Symbol": "Fee5%2",
-    "Address": "0xdb0A8581BA44eE5cD31B19C858277C15Ad9313e1",
     "Decimals": 18,
     "Logo": "/assets/tokens/137/0x0e5c05643215a50CA58e4774Ba3C27CEfe7310EF.png"
   },
