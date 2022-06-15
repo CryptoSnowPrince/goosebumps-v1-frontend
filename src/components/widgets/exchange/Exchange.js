@@ -324,48 +324,13 @@ const Exchange = (props) => {
   }
 
   const polTokenArray = [
-    {
-      "Name": "MATIC",
-      "Symbol": "MATIC",
-      "Address": "MATIC",
-      "Decimals": 18,
-    },
-    {
-      "Name": "Wrapped Matic",
-      "Symbol": "WMATIC",
-      "Address": "0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270",
-      "Decimals": 18,
-    },
-    {
-      "Name": "Tether USD",
-      "Symbol": "USDT",
-      "Address": "0xc2132D05D31c914a87C6611C10748AEb04B58e8F",
-      "Decimals": 6,
-    },
-    {
-      "Name": "(PoS) Dai Stablecoin",
-      "Symbol": "DAI",
-      "Address": "0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063",
-      "Decimals": 18,
-    },
-    {
-      "Name": "Fee5%1",
-      "Symbol": "Fee5%1",
-      "Address": "0x1f0F234B64F0Bb863993c5b24f23Ab19b3E0ca28",
-      "Decimals": 18,
-    },
-    {
-      "Name": "Fee5%2",
-      "Symbol": "Fee5%2",
-      "Address": "0xdb0A8581BA44eE5cD31B19C858277C15Ad9313e1",
-      "Decimals": 18,
-    },
-    {
-      "Name": "Fee5%2",
-      "Symbol": "Fee5%2",
-      "Address": "0x2ed11AB7F9296d81FBeCFF2271B8863a05B75420",
-      "Decimals": 18,
-    }
+    { Name: "MATIC", Symbol: "MATIC", Address: "MATIC", Decimals: 18, },
+    { Name: "Wrapped Matic", Symbol: "WMATIC", Address: "0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270", Decimals: 18, },
+    { Name: "Tether USD", Symbol: "USDT", Address: "0xc2132D05D31c914a87C6611C10748AEb04B58e8F", Decimals: 6, },
+    { Name: "(PoS) Dai Stablecoin", Symbol: "DAI", Address: "0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063", Decimals: 18, },
+    { Name: "Fee5%1", Symbol: "Fee5%1", Address: "0x1f0F234B64F0Bb863993c5b24f23Ab19b3E0ca28", Decimals: 18, },
+    { Name: "Fee5%2", Symbol: "Fee5%2", Address: "0xdb0A8581BA44eE5cD31B19C858277C15Ad9313e1", Decimals: 18, },
+    { Name: "Fee5%2", Symbol: "Fee5%2", Address: "0x2ed11AB7F9296d81FBeCFF2271B8863a05B75420", Decimals: 18, }
   ]
 
   const zeroSwap = "0xdef1c0ded9bec7f1a1670819833240f027b25eff"
