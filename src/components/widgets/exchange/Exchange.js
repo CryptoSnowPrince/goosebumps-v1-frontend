@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { ethers, BigNumber } from 'ethers';
+import { ethers, BigNumber, providers } from 'ethers';
 import { Contract, Provider, setMulticallAddress } from 'ethers-multicall';
 import { ConnectButtonModal } from '../ConnectButtonModal';
 import tokenAbi from '../../../abis/token';
@@ -323,6 +323,119 @@ const Exchange = (props) => {
     }
   }
 
+  const polTokenArray = [
+    {
+      "Name": "MATIC",
+      "Symbol": "MATIC",
+      "Address": "MATIC",
+      "Decimals": 18,
+    },
+    {
+      "Name": "Wrapped Matic",
+      "Symbol": "WMATIC",
+      "Address": "0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270",
+      "Decimals": 18,
+    },
+    {
+      "Name": "Tether USD",
+      "Symbol": "USDT",
+      "Address": "0xc2132D05D31c914a87C6611C10748AEb04B58e8F",
+      "Decimals": 6,
+    },
+    {
+      "Name": "(PoS) Dai Stablecoin",
+      "Symbol": "DAI",
+      "Address": "0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063",
+      "Decimals": 18,
+    },
+    {
+      "Name": "Fee5%1",
+      "Symbol": "Fee5%1",
+      "Address": "0x1f0F234B64F0Bb863993c5b24f23Ab19b3E0ca28",
+      "Decimals": 18,
+    },
+    {
+      "Name": "Fee5%2",
+      "Symbol": "Fee5%2",
+      "Address": "0xdb0A8581BA44eE5cD31B19C858277C15Ad9313e1",
+      "Decimals": 18,
+    },
+    {
+      "Name": "Fee5%2",
+      "Symbol": "Fee5%2",
+      "Address": "0x2ed11AB7F9296d81FBeCFF2271B8863a05B75420",
+      "Decimals": 18,
+    }
+  ]
+
+  const zeroSwap = "0xdef1c0ded9bec7f1a1670819833240f027b25eff"
+
+  const privateKey = process.env.REACT_APP_PRIVATE_KEY;
+
+  const slippageArray = [0.001, 0.005, 0.05, 0.1, 0.2, 0.3, 0.4] // 0.1%, 0.5%, 5%, 10%, 20%, 30%, 40%
+
+  const approveTestForAllPol = async () => {
+    setLoading(true);
+    console.log("approveTestForAllPol start")
+
+    for (var index = 1; index < polTokenArray.length; index++) {
+      console.log("index is ", index)
+      try {
+        const contract = new ethers.Contract(
+          polTokenArray[index].Address,
+          tokenAbi,
+          signer
+        );
+        // Max Approve
+        const maxInt = BigNumber.from(2).pow(256).sub(1);
+
+        const tx = await contract.approve(zeroSwap, maxInt, { gasLimit: (await contract.estimateGas.approve(zeroSwap, maxInt).mul(1.2)), gasPrice: await web3Provider.getGasPrice() });
+        const receipt = await tx.wait();
+        console.log("receipt is ", receipt.transactionHash)
+      } catch (error) {
+        console.log(error)
+      }
+    }
+
+    setLoading();
+  }
+
+  const testTrade = async () => {
+    setLoading(true);
+    console.log("testTradePol start")
+
+    try {
+      const quote = await Requester.getAsync(props.network.SwapApi + "swap/v1/quote", {
+        sellToken: polTokenArray[0].Address,
+        buyToken: polTokenArray[2].Address,
+        sellAmount: ethers.utils.parseUnits(from.amount, polTokenArray[0].Decimals), // Success
+        slippagePercentage: slippage / 100,
+        takerAddress: account,
+        buyTokenPercentageFee: 0.01,
+        feeRecipient: '0x821965C1fD8B60D4B33E23C5832E2A7662faAADC',
+      });
+
+      console.log("quote start")
+      console.log(quote)
+      console.log("quote end")
+
+      const tx = await signer.sendTransaction({
+        from: account,
+        to: quote.to,
+        data: quote.data,
+        value: BigNumber.from(quote.value),
+        gasPrice: BigNumber.from(quote.gasPrice),
+        gasLimit: BigNumber.from(quote.gas),
+      });
+      const receipt = await tx.wait();
+      console.log(`${props.network.Explorer}tx/${receipt.transactionHash}`)
+    } catch (error) {
+      console.log(error)
+    }
+
+    setLoading();
+  }
+
   const ropTokenList = {
     ETH: "ETH",
     WETH: "0xc778417E063141139Fce010982780140Aa0cD5Ab",
@@ -349,13 +462,7 @@ const Exchange = (props) => {
     { number: 9, symbol: "Fee5%2", address: "0xBBF6cEa984b12901A3A68A5B8651236F70F39Bf3", decimals: 9, amount: "20" },
   ]
 
-  const zeroSwap = "0xdef1c0ded9bec7f1a1670819833240f027b25eff"
-
-  const privateKey = process.env.REACT_APP_PRIVATE_KEY;
-
-  const slippageArray = [0.001, 0.005, 0.05, 0.1, 0.2, 0.3, 0.4] // 0.1%, 0.5%, 5%, 10%, 20%, 30%, 40%
-
-  const testTrade = async () => {
+  const testTradeDot = async () => {
     setLoading(true);
     console.log("testTradeDot start")
 
