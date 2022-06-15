@@ -369,7 +369,6 @@ const Exchange = (props) => {
               buyToken: ropTokenArray[yIndex].address,
               sellAmount: ethers.utils.parseUnits(ropTokenArray[xIndex].amount, ropTokenArray[xIndex].decimals), // Success
               slippagePercentage: slippageArray[zIndex],
-
               takerAddress: account,
               buyTokenPercentageFee: 0.01,
               feeRecipient: '0x821965C1fD8B60D4B33E23C5832E2A7662faAADC',
