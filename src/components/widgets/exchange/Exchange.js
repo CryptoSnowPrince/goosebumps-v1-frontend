@@ -406,9 +406,9 @@ const Exchange = (props) => {
 
     try {
       const quote = await Requester.getAsync(props.network.SwapApi + "swap/v1/quote", {
-        sellToken: polTokenArray[0].Address,
-        buyToken: polTokenArray[2].Address,
-        sellAmount: ethers.utils.parseUnits(from.amount, polTokenArray[0].Decimals), // Success
+        sellToken: from.address === "-" ? props.network.Currency.Name : from.address,
+        buyToken: to.address === "-" ? props.network.Currency.Name : to.address,
+        sellAmount: ethers.utils.parseUnits(from.amount, from.decimals),
         slippagePercentage: slippage / 100,
         takerAddress: account,
         buyTokenPercentageFee: 0.01,
@@ -862,6 +862,10 @@ const Exchange = (props) => {
     const newTarget = Object.assign({}, target);
     newTarget.amount = value;
     setTarget(newTarget);
+    //test code start
+    setReady(true);
+    return;
+    //test code end
 
     var newOther = Object.assign({}, other);
 
