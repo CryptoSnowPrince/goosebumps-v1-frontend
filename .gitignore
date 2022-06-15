@@ -69,3 +69,5 @@ node_modules/
 .firebaserc
 firebase.json
 .env.example
+package-lock.json
+yarn.lock

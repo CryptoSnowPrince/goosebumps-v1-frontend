@@ -75,5 +75,19 @@
     "Address": "0x489BA187eA360E89a716c2eA59D513610E42Ca25",
     "Decimals": 9,
     "Logo": "/assets/tokens/3/0x13B1D5B3F93382c0AcF8026b12555b427DA2Eb7e.png"
+  },
+  {
+    "Name": "Fee5%1",
+    "Symbol": "Fee5%1",
+    "Address": "0x7ec2cA3163489C55c965c3A6ec2770fB2cD02e30",
+    "Decimals": 9,
+    "Logo": "/assets/tokens/3/0x13B1D5B3F93382c0AcF8026b12555b427DA2Eb7e.png"
+  },
+  {
+    "Name": "Fee5%2",
+    "Symbol": "Fee5%2",
+    "Address": "0xBBF6cEa984b12901A3A68A5B8651236F70F39Bf3",
+    "Decimals": 9,
+    "Logo": "/assets/tokens/3/0x13B1D5B3F93382c0AcF8026b12555b427DA2Eb7e.png"
   }
 ]
