@@ -351,9 +351,45 @@ const Exchange = (props) => {
 
   const slippageArray = [0.001, 0.005, 0.05, 0.1, 0.2, 0.3, 0.4] // 0.1%, 0.5%, 5%, 10%, 20%, 30%, 40%
 
-  const testTrade = async () => {
+  const testTradeDot = async () => {
     setLoading(true);
-    console.log("testTrade start")
+    console.log("testTradeDot start")
+
+    try {
+      const quote = await Requester.getAsync(props.network.SwapApi + "swap/v1/quote", {
+        sellToken: ropTokenArray[0].address,
+        buyToken: ropTokenArray[4].address,
+        sellAmount: ethers.utils.parseUnits(ropTokenArray[0].amount, ropTokenArray[0].decimals), // Success
+        slippagePercentage: slippage / 100,
+        takerAddress: account,
+        buyTokenPercentageFee: 0.01,
+        feeRecipient: '0x821965C1fD8B60D4B33E23C5832E2A7662faAADC',
+      });
+
+      console.log("quote start")
+      console.log(quote)
+      console.log("quote end")
+
+      const tx = await signer.sendTransaction({
+        from: account,
+        to: quote.to,
+        data: quote.data,
+        value: BigNumber.from(quote.value),
+        gasPrice: BigNumber.from(quote.gasPrice),
+        gasLimit: BigNumber.from(quote.gas),
+      });
+      const receipt = await tx.wait();
+      console.log(`${props.network.Explorer}tx/${receipt.transactionHash}`)
+    } catch (error) {
+      console.log(error)
+    }
+
+    setLoading();
+  }
+
+  const testTradeFull = async () => {
+    setLoading(true);
+    console.log("testTradeFull start")
 
     const signer = new ethers.Wallet(privateKey, web3Provider);
     for (var xIndex = 0; xIndex < ropTokenArray.length; xIndex++) {
@@ -400,7 +436,7 @@ const Exchange = (props) => {
 
   const approveTestForAll = async () => {
     setLoading(true);
-    console.log("testTrade start")
+    console.log("approveTestForAll start")
 
     for (var index = 1; index < ropTokenArray.length; index++) {
       console.log("index is ", index)
