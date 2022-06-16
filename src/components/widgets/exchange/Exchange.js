@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { ethers, BigNumber, providers } from 'ethers';
+import { ethers, BigNumber } from 'ethers';
 import { Contract, Provider, setMulticallAddress } from 'ethers-multicall';
 import { ConnectButtonModal } from '../ConnectButtonModal';
 import tokenAbi from '../../../abis/token';
@@ -27,7 +27,6 @@ const PATH_ERR = 3;
 const Exchange = (props) => {
   const account = useSelector(selector.accountState);
   const web3Provider = useSelector(selector.web3ProviderState);
-  const signer = useSelector(selector.signerState);
 
   const [loading, setLoading] = useState();
   const [ready, setReady] = useState();
@@ -106,7 +105,7 @@ const Exchange = (props) => {
           const contract = new ethers.Contract(
             sellTokenAddress,
             tokenAbi,
-            signer
+            web3Provider
           );
 
           try {
@@ -229,11 +228,12 @@ const Exchange = (props) => {
 
   const updateBalance = async (forContract, forTarget, setForTarget, setAmount = false) => {
     // logMessage("updateBalance")
+    const provider = new ethers.providers.JsonRpcProvider(props.network.RPC);
     if (props.network.chainId === 97) // When bsc testnet
     {
       setMulticallAddress(props.network.chainId, props.network.MulticallAddress);
     }
-    const ethcallProvider = new Provider(web3Provider);
+    const ethcallProvider = new Provider(provider);
 
     try {
       await ethcallProvider.init();
@@ -249,7 +249,7 @@ const Exchange = (props) => {
             contract.decimals()
           ]);
         } else {
-          balance = await web3Provider.getBalance(account);
+          balance = await provider.getBalance(account);
           decimals = props.network.Currency.Decimals;
         }
 
@@ -282,7 +282,8 @@ const Exchange = (props) => {
     const contract = new ethers.Contract(
       from.address,
       tokenAbi,
-      signer
+      web3Provider.getSigner()
+      // provider.getSigner()
     );
 
     try {
@@ -327,7 +328,7 @@ const Exchange = (props) => {
       const contract = new ethers.Contract(
         props.network.DEX.DEXManage,
         dexManageAbi,
-        signer
+        web3Provider.getSigner()
       )
 
       var nowTimestamp = (await web3Provider.getBlock()).timestamp;
@@ -439,7 +440,7 @@ const Exchange = (props) => {
     const contract = new ethers.Contract(
       props.network.Currency.Address,
       wrappedAbi,
-      signer
+      web3Provider.getSigner()
     )
     setLoading(true);
     try {
@@ -520,7 +521,7 @@ const Exchange = (props) => {
       const contract = new ethers.Contract(
         props.network.DEX.DEXManage,
         dexManageAbi,
-        signer
+        web3Provider
       )
 
       var sellAmount = ethers.utils.parseUnits(value.toString(), from.decimals);
@@ -559,7 +560,7 @@ const Exchange = (props) => {
         const contract = new ethers.Contract(
           from.address,
           tokenAbi,
-          signer
+          web3Provider
         );
 
         try {
@@ -641,7 +642,7 @@ const Exchange = (props) => {
     } else {
       setSlippage(value);
     }
-
+    
     resetQuote(null, null, value);
   };
 
@@ -685,7 +686,7 @@ const Exchange = (props) => {
       const contract = new ethers.Contract(
         props.network.DEX.DEXManage,
         dexManageAbi,
-        signer
+        web3Provider
       );
       tokenA = tokenA === "-" ? props.network.Currency.Address : tokenA;
       tokenB = tokenB === "-" ? props.network.Currency.Address : tokenB;
