@@ -12,6 +12,10 @@
       "Factory": "",
       "Router": ""
     },
+    "Bridge": {
+      "Bridge": "0xcc6001bda09619d89caf99d52ed1e70225028703",
+      "Token": "0x5c668e913d5b9395a43c075bf87534460cee15f9"
+    },
     "Currency": {
       "Name": "ETH",
       "WrappedName": "WETH",
@@ -39,7 +43,7 @@
     "chainId": 3,
     "chainHexId": "0x3",
     "RPC": "https://ropsten.infura.io/v3/687f55defdfe416faa0b388c1332727c",
-    "Explorer": "https://ropsten.etherscan.io",
+    "Explorer": "https://ropsten.etherscan.io/",
     "MulticallAddress": "0x53c43764255c17bd724f74c4ef150724ac50a3ed",
     "SwapApi": "https://ropsten.api.0x.org/",
     "DEX": {
@@ -73,9 +77,13 @@
     "MulticallAddress": "0x41263cba59eb80dc200f3e2544eda4ed6a90e76c",
     "SwapApi": "https://bsc.api.0x.org/",
     "DEX": {
-      "Factory": "0x045e2e2A533dB4559533A71631962836c7802834",
-      "Router": "0x5F227dce0baaFECF49ac4987fB5c07A993d36291",
-      "DEXManage": "0x4D9cE73103C4FA07c4a6Fee7749CE37ec2804722"
+      "Factory": "0x045e2e2a533db4559533a71631962836c7802834",
+      "Router": "0x5f227dce0baafecf49ac4987fb5c07a993d36291",
+      "DEXManage": "0x4d9ce73103c4fa07c4a6fee7749ce37ec2804722"
+    },
+    "Bridge": {
+      "Bridge": "0xcc6001bda09619d89caf99d52ed1e70225028703",
+      "Token": "0x5c668e913d5b9395a43c075bf87534460cee15f9"
     },
     "Currency": {
       "Name": "BNB",
@@ -139,9 +147,9 @@
     "MulticallAddress": "0x11ce4B23bD875D7F5C6a31084f55fDe1e9A87507",
     "SwapApi": "https://polygon.api.0x.org/",
     "DEX": {
-      "Factory": "0xa2A6A700452e4590c175C69C84c09655AbBC942F",
-      "Router": "0x8E49F3b03D2F482af5c564d933f44De7FDD9C746",
-      "DEXManage": "0x34692A435F7B54706a50332AF61f5Be83D5b1a47"
+      "Factory": "0xa2a6a700452e4590c175c69c84c09655abbc942f",
+      "Router": "0x8e49f3b03d2f482af5c564d933f44de7fdd9c746",
+      "DEXManage": "0x34692a435f7b54706a50332af61f5be83d5b1a47"
     },
     "Currency": {
       "Name": "MATIC",

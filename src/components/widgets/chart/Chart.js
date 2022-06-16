@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { UDFCompatibleDatafeed } from './tradingview/udf-compatible-datafeed';
 
 const Chart = (props) => {
+    console.log("unpass")
     const chartViewerRef = useRef();
     const containerRef = useRef();
 
