@@ -26,7 +26,7 @@ export const getFullDisplayBalance = (balance, decimals = 18, displayDecimals) =
   return getBalanceAmount(balance, decimals).toFixed(displayDecimals)
 }
 
-export const formatNumber = (number, minPrecision = 2, maxPrecision = 2) => {
+export const formatNumber = (number, minPrecision = 1, maxPrecision = 8) => {
   const options = {
     minimumFractionDigits: minPrecision,
     maximumFractionDigits: maxPrecision,
