@@ -47,6 +47,7 @@ const Exchange = (props) => {
   const [from, setFrom] = useState({ symbol: props.fromSymbol, address: props.fromAddress, decimals: 0, amount: 0, balance: 0 });
   const [to, setTo] = useState({ symbol: props.toSymbol, address: props.toAddress, decimals: 0, amount: 0, balance: 0 });
   const [slippage, setSlippage] = useState(0.5);
+  // const [slippage, setSlippage] = useState((0.5).toFixed(1));
 
   const validateQuote = async () => {
     // logMessage("validateQuote");
