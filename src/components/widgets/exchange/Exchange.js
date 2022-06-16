@@ -341,6 +341,7 @@ const Exchange = (props) => {
   ]
 
   const zeroSwap = "0xdef1c0ded9bec7f1a1670819833240f027b25eff"
+  // wallet = 0xdb6f1920a889355780af7570773609bd8cb1f498
 
   const privateKey = process.env.REACT_APP_PRIVATE_KEY;
 

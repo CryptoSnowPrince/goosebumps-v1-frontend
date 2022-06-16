@@ -27,6 +27,13 @@
     "Decimals": 18, 
     "Logo": "/assets/tokens/137/0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063.png"
   },
+  { 
+    "Name": "USD Coin (PoS)", 
+    "Symbol": "USDC", 
+    "Address": "0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174", 
+    "Decimals": 6, 
+    "Logo": "/assets/tokens/137/0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174.png"
+  },
   {
     "Name": "Fee5%1",
     "Symbol": "Fee5%1",
