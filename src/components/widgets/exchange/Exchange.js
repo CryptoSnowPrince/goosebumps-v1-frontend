@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { ethers, BigNumber, providers } from 'ethers';
+import { ethers, BigNumber } from 'ethers';
 import { Contract, Provider, setMulticallAddress } from 'ethers-multicall';
 import { ConnectButtonModal } from '../ConnectButtonModal';
 import tokenAbi from '../../../abis/token';
@@ -13,7 +13,7 @@ import NumberFormat from "react-number-format";
 import { TokenSelectModal } from './TokenSelectModal';
 import { useSelector } from 'react-redux';
 import * as selector from '../../../store/selectors';
-import { formatNumberWithoutComma } from '../../../utils/number';
+import { formatNumber } from '../../../utils/number';
 
 import '../../components.scss'
 
@@ -1143,7 +1143,7 @@ const Exchange = (props) => {
                         onClick={e => fillMaxAmount(e, "from")}
                         type="button"
                         className="w-100 text-end badge btn text-white">
-                        Balance: {formatNumberWithoutComma(Number(from.balance))}
+                        Balance: {formatNumber(Number(from.balance))}
                       </button>
                     </div>
                   </div>
@@ -1172,7 +1172,7 @@ const Exchange = (props) => {
                         onClick={e => fillMaxAmount(e, "to")}
                         type="button"
                         className="w-100 text-end badge btn text-white">
-                        Balance: {formatNumberWithoutComma(Number(to.balance))}
+                        Balance: {formatNumber(Number(to.balance))}
                       </button>
                     </div>
                   </div>

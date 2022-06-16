@@ -10,7 +10,7 @@ import { LiquidityHeader } from "../../components/LiquidityHeader/LiquidityHeade
 import tokenAbi from '../../abis/token';
 import factoryAbi from '../../abis/factory';
 import routerAbi from '../../abis/router';
-import { formatNumberWithoutComma } from '../../utils/number';
+import { formatNumber } from '../../utils/number';
 import * as selector from '../../store/selectors';
 
 import '../../components/components.scss'
@@ -517,7 +517,7 @@ const LiquidityAddBody = (props) => {
                         data-balance={tokenA.balance}
                         onClick={e => fillMaxAmount(e, "tokenA")}
                         type="button" className="w-100 text-end badge btn text-white">
-                        Balance: {formatNumberWithoutComma(Number(tokenA.balance))}
+                        Balance: {formatNumber(Number(tokenA.balance))}
                       </button>
                     </div>
                   </div>
@@ -553,7 +553,7 @@ const LiquidityAddBody = (props) => {
                         data-balance={tokenB.balance}
                         onClick={e => fillMaxAmount(e, "tokenB")}
                         type="button" className="w-100 text-end badge btn text-white">
-                        Balance: {formatNumberWithoutComma(Number(tokenB.balance))}
+                        Balance: {formatNumber(Number(tokenB.balance))}
                       </button>
                     </div>
                   </div>

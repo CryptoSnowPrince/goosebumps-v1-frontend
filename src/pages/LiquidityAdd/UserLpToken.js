@@ -7,7 +7,7 @@ import "./userLpToken.scss"
 
 import pairAbi from '../../abis/pair.json';
 import tokenAbi from '../../abis/token.json';
-import { formatNumberWithoutComma } from '../../utils/number';
+import { formatNumber } from '../../utils/number';
 import { logMessage } from '../../utils/helpers';
 
 /**
@@ -163,14 +163,14 @@ const UserLpToken = (props) => {
               </div>
               <div>{tokenASymbol}{"-"}{tokenBSymbol} {"LP"}</div>
             </div>
-            <div className='fs-6'>{formatNumberWithoutComma(Number(lpBalance), 1, 5)}</div>
+            <div className='fs-6'>{formatNumber(Number(lpBalance), 1, 5)}</div>
           </div>
           <div className='mt-2 d-flex justify-content-between'>
             <div className='d-flex align-items-center'>
               <div style={{ color: "#04C0D7" }}>Share of Pool:</div>
             </div>
             <div style={{ color: "#40FF97" }}>
-              {formatNumberWithoutComma(Number(lpBalance / lpTotalSupply * 100), 1, 5)}%
+              {formatNumber(Number(lpBalance / lpTotalSupply * 100), 1, 5)}%
             </div>
           </div>
           <div className='mt-2 d-flex justify-content-between  mt-2'>
@@ -179,7 +179,7 @@ const UserLpToken = (props) => {
                 Pooled {tokenASymbol}:
               </div>
             </div>
-            <div style={{ color: "#40FF97" }}>{formatNumberWithoutComma(Number(tokenABalance * lpBalance / lpTotalSupply), 1, 5)}</div>
+            <div style={{ color: "#40FF97" }}>{formatNumber(Number(tokenABalance * lpBalance / lpTotalSupply), 1, 5)}</div>
           </div>
           <div className='mt-2 d-flex justify-content-between  mt-2'>
             <div className='d-flex align-items-center'>
@@ -187,7 +187,7 @@ const UserLpToken = (props) => {
                 Pooled {tokenBSymbol}:
               </div>
             </div>
-            <div style={{ color: "#40FF97" }}>{formatNumberWithoutComma(Number(tokenBBalance * lpBalance / lpTotalSupply), 1, 5)}</div>
+            <div style={{ color: "#40FF97" }}>{formatNumber(Number(tokenBBalance * lpBalance / lpTotalSupply), 1, 5)}</div>
           </div>
         </div>
         : ""}
