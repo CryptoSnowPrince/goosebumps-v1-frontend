@@ -13,7 +13,7 @@ import NumberFormat from "react-number-format";
 import { TokenSelectModal } from './TokenSelectModal';
 import { useSelector } from 'react-redux';
 import * as selector from '../../../store/selectors';
-import { formatNumberWithoutComma } from '../../../utils/number';
+import { formatNumber } from '../../../utils/number';
 
 import '../../components.scss'
 
@@ -814,7 +814,7 @@ const Exchange = (props) => {
                         onClick={e => fillMaxAmount(e, "from")}
                         type="button"
                         className="w-100 text-end badge btn text-white">
-                        Balance: {formatNumberWithoutComma(Number(from.balance))}
+                        Balance: {formatNumber(Number(from.balance))}
                       </button>
                     </div>
                   </div>
@@ -843,7 +843,7 @@ const Exchange = (props) => {
                         onClick={e => fillMaxAmount(e, "to")}
                         type="button"
                         className="w-100 text-end badge btn text-white">
-                        Balance: {formatNumberWithoutComma(Number(to.balance))}
+                        Balance: {formatNumber(Number(to.balance))}
                       </button>
                     </div>
                   </div>

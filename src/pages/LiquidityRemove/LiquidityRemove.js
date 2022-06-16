@@ -21,7 +21,7 @@ import '../Liquidity/Liquidity.scss'
 
 import * as selector from '../../store/selectors';
 import networks from '../../networks.json'
-import { formatNumberWithoutComma } from '../../utils/number';
+import { formatNumber } from '../../utils/number';
 
 import config from '../../constants/config'
 import { logMessage } from '../../utils/helpers';
@@ -524,7 +524,7 @@ const LiquidityRemove = () => {
                       <div style={{ color: "#40FF97" }}>
                         {
                           parseFloat(lpTotalSupply) > 0 ?
-                            formatNumberWithoutComma(Number(tokenABalance * lpBalance / lpTotalSupply * removeAmount / 100), 1, 5) :
+                            formatNumber(Number(tokenABalance * lpBalance / lpTotalSupply * removeAmount / 100), 1, 5) :
                             0
                         }
                       </div>
@@ -545,7 +545,7 @@ const LiquidityRemove = () => {
                       <div style={{ color: "#40FF97" }}>
                         {
                           parseFloat(lpTotalSupply) > 0 ?
-                            formatNumberWithoutComma(Number(tokenBBalance * lpBalance / lpTotalSupply * removeAmount / 100), 1, 5) :
+                            formatNumber(Number(tokenBBalance * lpBalance / lpTotalSupply * removeAmount / 100), 1, 5) :
                             0
                         }
                       </div>
@@ -633,7 +633,7 @@ const LiquidityRemove = () => {
                     <div style={{ color: "#40FF97" }}>
                       {
                         parseFloat(tokenABalance) > 0 ?
-                          `${formatNumberWithoutComma(Number(tokenBBalance / tokenABalance), 1, 5)} ${tokenBSymbol}` :
+                          `${formatNumber(Number(tokenBBalance / tokenABalance), 1, 5)} ${tokenBSymbol}` :
                           0
                       }
                     </div>
@@ -645,7 +645,7 @@ const LiquidityRemove = () => {
                     <div style={{ color: "#40FF97" }}>
                       {
                         parseFloat(tokenBBalance) > 0 ?
-                          `${formatNumberWithoutComma(Number(tokenABalance / tokenBBalance), 1, 5)} ${tokenASymbol}` :
+                          `${formatNumber(Number(tokenABalance / tokenBBalance), 1, 5)} ${tokenASymbol}` :
                           0
                       }
                     </div>
