@@ -72,7 +72,7 @@
     "Name": "bsc",
     "chainId": 56,
     "chainHexId": "0x38",
-    "RPC": "https://speedy-nodes-nyc.moralis.io/03eb35954a0b7ed092444a8e/bsc/mainnet",
+    "RPC": "https://bsc-dataseed1.defibit.io/",
     "Explorer": "https://bscscan.com/",
     "MulticallAddress": "0x41263cba59eb80dc200f3e2544eda4ed6a90e76c",
     "SwapApi": "https://bsc.api.0x.org/",
