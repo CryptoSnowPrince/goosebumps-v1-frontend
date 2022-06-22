@@ -39,7 +39,7 @@ const PortfolioTracker = () => {
   const fetchLiveInfo = async (tokens) => {
     if (!tokens) {
       tokens = await Requester.postAsync(
-        "http://135.181.152.229:3001/api/Portfolio/GetTrades",
+        "http://127.0.0.1:3001/api/Portfolio/GetTrades",
         { network: network.Name },
         addresses
       );

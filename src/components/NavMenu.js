@@ -65,19 +65,15 @@ const NavMenu = () => {
 
   const handleSearch = async () => {
     const isToken = await Requester.getAsync(
-      "http://135.181.152.229:3001/api/Search/IsToken",
+      "http://127.0.0.1:3001/api/Search/IsToken",
       { address: searchInput.current.value, network: networkName }
     );
     if (isToken) {
       navigate(`/charts/${networkName}/${searchInput.current.value}`);
     } else {
-      if (inPortfolio) {
-        navigate(window.location.pathname + "," + searchInput.current.value);
-      } else {
-        navigate(
-          `/portfolio-tracker/${networkName}/${searchInput.current.value}`
-        );
-      }
+      navigate(
+        `/portfolio-tracker/${networkName}/${searchInput.current.value}`
+      );
     }
     searchInput.current.value = "";
   };

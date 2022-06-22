@@ -461,7 +461,7 @@ const Info = (props) => {
       <div className="row mt-2">
         <div className="text-truncate">
           <span className="float-end ps-1">
-            <i className="fa fa-clone"></i>{" "}
+            {/* <i className="fa fa-clone"></i>{" "} */}
             <a
               href={
                 props.network.Explorer +

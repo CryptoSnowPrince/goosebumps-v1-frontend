@@ -9,7 +9,7 @@ import { ethers } from "ethers";
 
 async function getInfo(address, network, pairAddress) {
   const pairs = await Requester.getAsync(
-    "http://135.181.152.229:3001/api/Charts/GetPairs",
+    "http://127.0.0.1:3001/api/Charts/GetPairs",
     { address: address, network: network.Name }
   );
   if (pairAddress == null) {
@@ -30,7 +30,7 @@ async function getInfo(address, network, pairAddress) {
   };
 
   const cmc = await Requester.getAsync(
-    "http://135.181.152.229:3001/api/Charts/GetCMCInfo",
+    "http://127.0.0.1:3001/api/Charts/GetCMCInfo",
     { address: ethers.utils.getAddress(address), network: network.Name }
   );
 

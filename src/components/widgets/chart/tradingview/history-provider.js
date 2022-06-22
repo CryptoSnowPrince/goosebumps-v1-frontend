@@ -22,7 +22,7 @@ export class HistoryProvider {
     this._lastResolution = resolution;
 
     // if (periodParams.countBack !== undefined) {
-    //     requestParams.countBack = periodParams.countBack;
+    //   requestParams.countBack = periodParams.countBack;
     // }
 
     return this.getOHLC(requestParams);
@@ -31,7 +31,7 @@ export class HistoryProvider {
   getOHLC(requestParams) {
     return new Promise((resolve, reject) => {
       Requester.getAsync(
-        "http://135.181.152.229:3001/api/Charts/GetOHLC",
+        "http://127.0.0.1:3001/api/Charts/GetOHLC",
         requestParams
       )
         .then((response) => {

@@ -172,52 +172,50 @@ const LatestTrades = (props) => {
   }
 
   if (init) {
-    setInit(false);
     const now = parseInt(new Date().getTime() / 1000);
-    Requester.getAsync(
-      "http://135.181.152.229:3001/api/Charts/GetLatestTrades",
-      {
-        token0: props.pair.buyCurrency.address,
-        token1: props.pair.sellCurrency.address,
-        pair: props.pair.smartContract.address.address,
-        network: props.network.Name,
-        startTime: now - 24 * 60 * 60,
-        endTime: now,
-        limit: 20,
-      }
-    ).then((response) => {
+    Requester.getAsync("http://127.0.0.1:3001/api/Charts/GetLatestTrades", {
+      token0: props.pair.buyCurrency.address,
+      token1: props.pair.sellCurrency.address,
+      pair: props.pair.smartContract.address.address,
+      network: props.network.Name,
+      startTime: now - 24 * 60 * 60,
+      endTime: now,
+      limit: 20,
+    }).then((response) => {
       setTrades(response);
       setLastTradesRequest(now);
       setLoading(false);
+      setInit(false);
     });
   }
 
-  // useEffect(() => {
-  //   const tick = async () => {
-  //     if (!loading) {
-  //       const now = parseInt(new Date().getTime() / 1000);
-  //       const response = await Requester.getAsync(
-  //         "http://135.181.152.229:3001/api/Charts/GetLatestTrades",
-  //         {
-  //           token0: props.pair.buyCurrency.address,
-  //           token1: props.pair.sellCurrency.address,
-  //           pair: props.pair.smartContract.address.address,
-  //           network: props.network.Name,
-  //           startTime: lastTradesRequest,
-  //           endTime: now,
-  //         }
-  //       );
+  useEffect(() => {
+    const tick = async () => {
+      if (!init && !loading) {
+        // const now = parseInt(new Date().getTime() / 1000);
+        // const response = await Requester.getAsync(
+        //   "http://127.0.0.1:3001/api/Charts/GetLatestTrades",
+        //   {
+        //     token0: props.pair.buyCurrency.address,
+        //     token1: props.pair.sellCurrency.address,
+        //     pair: props.pair.smartContract.address.address,
+        //     network: props.network.Name,
+        //     startTime: lastTradesRequest,
+        //     endTime: now,
+        //   }
+        // );
 
-  //       if (response != null && response.length) {
-  //         setTrades(response.concat(trades.trades).slice(0, 20));
-  //         setLastTradesRequest(now);
-  //       }
-  //     }
-  //     id = setTimeout(tick, 3000);
-  //   };
-  //   let id = setTimeout(tick, 3000);
-  //   return () => clearTimeout(id);
-  // });
+        // if (response != null && response.length) {
+        //   setTrades(response.concat(trades.trades).slice(0, 20));
+        //   setLastTradesRequest(now);
+        // }
+        console.log("ready");
+      }
+      id = setTimeout(tick, 3000);
+    };
+    let id = setTimeout(tick, 3000);
+    return () => clearTimeout(id);
+  });
 
   if (loading) {
     return (
