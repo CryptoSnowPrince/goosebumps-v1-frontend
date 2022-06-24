@@ -2,23 +2,29 @@
   .first {
     background-color: #18283a;
   }
+
   .second {
     background-color: #0e121a;
   }
+
   .top-border {
     border-radius: 17px 17px 0 0;
   }
+
   .bottom-border {
     border-radius: 0 0 17px 17px;
   }
+
   .top-bottom-border {
     border-radius: 17px;
   }
+
   .first {
     .title {
       font-size: 26px;
     }
   }
+
   .token-avatar {
     width: 50px;
     height: 50px;
@@ -26,14 +32,17 @@
     border-radius: 50%;
     margin-right: 20px;
   }
+
   @media (max-width: 548px) {
     .first {
       .title {
         font-size: 20px;
       }
+
       .title1 {
         font-size: 15px;
       }
+
       .token-avatar {
         width: 40px;
         height: 40px;
@@ -43,14 +52,17 @@
       }
     }
   }
+
   @media (max-width: 440px) {
     .first {
       .title {
         font-size: 16px;
       }
+
       .title1 {
         font-size: 13px;
       }
+
       .token-avatar {
         width: 30px;
         height: 30px;
@@ -60,14 +72,17 @@
       }
     }
   }
+
   @media (max-width: 340px) {
     .first {
       .title {
         font-size: 13px;
       }
+
       .title1 {
         font-size: 10px;
       }
+
       .token-avatar {
         width: 25px;
         height: 25px;
@@ -75,22 +90,28 @@
         border-radius: 50%;
         margin-right: 7px;
       }
+
       .apr {
         font-size: 12px;
       }
     }
   }
+
   .profit {
     font-size: 13px;
   }
+
   .token-amount {
     font-size: 17px;
   }
+
   .token-value {
     font-size: 15px;
   }
+
   .one {
     color: #04c0d7;
+
     button {
       color: #fff;
       padding: 2px 20px 2px 15px;
@@ -100,6 +121,7 @@
       border-radius: 29px;
     }
   }
+
   .two,
   .three {
     background: #0e121a;
@@ -107,6 +129,7 @@
     box-sizing: border-box;
     border-radius: 11px;
     flex: 1;
+
     button {
       background: #121e30;
       border: 2px solid #51ffa1;
@@ -115,16 +138,20 @@
       padding: 10px;
     }
   }
+
   .three {
     button {
       border: 2px solid #04c0d7;
     }
   }
+
   .third {
     background-color: #18283a;
+
     .title {
       font-size: 22px;
     }
+
     button {
       color: #fff;
       padding: 1px 10px 1px 10px;
@@ -133,6 +160,7 @@
       box-sizing: border-box;
       border-radius: 29px;
     }
+
     .multi-reward-button {
       color: #fff;
       padding: 1px 10px 1px 10px;
@@ -140,6 +168,7 @@
       box-sizing: border-box;
       border-radius: 29px;
     }
+
     button.one {
       background: #121e30;
       border: 2px solid #51ffa1;
@@ -147,6 +176,7 @@
       border-radius: 7px;
       padding: 10px;
     }
+
     button.two {
       background: #121e30;
       border: 2px solid #04c0d7;
@@ -155,8 +185,10 @@
       padding: 10px;
     }
   }
+
   .fourth {
     background-color: #20334f;
+
     .detail {
       color: #04c0d7;
     }

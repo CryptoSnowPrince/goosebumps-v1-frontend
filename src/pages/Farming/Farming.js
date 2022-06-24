@@ -6,10 +6,10 @@ import Help from '../../components/Help/Help'
 import ClaimCard from '../../components/ClaimCard/ClaimCard'
 import Control from '../../components/Control/Control'
 import Filter from '../../components/Filter/Filter'
-import TokenItem from '../../components/TokenItemFarms/TokenItemFarms'
+import FarmingCard from '../../components/FarmingCard/FarmingCard'
 
 const Farming = () => {
-  const TokenItems = [
+  const FarmingCardsProps = [
     {},
     {},
     {},
@@ -32,8 +32,8 @@ const Farming = () => {
           <Filter />
         </div>
         <div className='row' id='TokenItemFarm'>
-          {TokenItems.map((token, idx) => (
-            <TokenItem key={idx} showMode={showMode} />
+          {FarmingCardsProps.map((token, idx) => (
+            <FarmingCard key={idx} showMode={showMode} />
           ))}
         </div>
       </div>

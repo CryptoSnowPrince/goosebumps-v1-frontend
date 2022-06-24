@@ -1,13 +1,19 @@
 import React, { useState } from 'react';
 import { BiHelpCircle } from 'react-icons/bi';
+import { useSelector } from 'react-redux';
+import { accountState, web3ProviderState, signerState } from '../../store/selectors';
 
-import "./TokenItem.scss"
+import "./StakingCard.scss"
 
-const TokenItem = ({ showMode }) => {
+const StakingCard = (props) => {
+  const account = useSelector(accountState);
+  const web3Provider = useSelector(web3ProviderState);
+  const signer = useSelector(signerState);
+
   const [detailShow, setDetailShow] = useState(false);
   return (
     <>
-      {!showMode ? (
+      {!props.showMode ? (
         <>
           <div className={`d-flex justify-content-between mt-3  py-2 px-2 px-md-3 px-lg-4 first align-items-center ${detailShow ? `top-border` : `top-bottom-border`}`}>
             <div className='d-flex justify-content-between align-items-center '>
@@ -191,4 +197,4 @@ const TokenItem = ({ showMode }) => {
   );
 }
 
-export default TokenItem;
+export default StakingCard;

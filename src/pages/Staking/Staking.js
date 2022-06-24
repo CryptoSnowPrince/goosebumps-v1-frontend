@@ -6,10 +6,10 @@ import Help from '../../components/Help/Help'
 import ClaimCard from '../../components/ClaimCard/ClaimCard'
 import Control from '../../components/Control/Control'
 import Filter from '../../components/Filter/Filter'
-import TokenItem from '../../components/TokenItem/TokenItem'
+import StakingCard from '../../components/StakingCard/StakingCard'
 
 const Staking = () => {
-  const TokenItems = [
+  const StakingCardsProps = [
     {},
     {},
     {},
@@ -32,8 +32,8 @@ const Staking = () => {
           <Filter />
         </div>
         <div className='row' id='TokenItem'>
-          {TokenItems.map((token, idx) => (
-            <TokenItem key={idx} showMode={showMode} />
+          {StakingCardsProps.map((token, idx) => (
+            <StakingCard key={idx} showMode={showMode} />
           ))}
         </div>
       </div>

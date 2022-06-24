@@ -1,18 +1,18 @@
 //import { useEthers } from '@usedapp/core'
-import React, {useCallback} from 'react';
+import React, { useCallback } from 'react';
 import { useSelector } from 'react-redux';
-import * as selector from '../../store/selectors';
-import * as connectWallet from './connectWallet';
+import { accountState } from '../../store/selectors';
+import { Connect, Disconnect } from './connectWallet';
 
 const ConnectButtonModal = () => {
-    const account = useSelector(selector.accountState);
+    const account = useSelector(accountState);
 
     const disconnect = useCallback(async function () {
-        connectWallet.Disconnect()
+        Disconnect()
     }, []);
 
     const connect = useCallback(async function () {
-        connectWallet.Connect()
+        Connect()
     }, []);
 
 
