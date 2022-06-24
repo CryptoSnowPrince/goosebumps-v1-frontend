@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { BiHelpCircle } from 'react-icons/bi';
 import { useSelector } from 'react-redux';
 import { accountState, web3ProviderState, signerState } from '../../store/selectors';
+import { ConnectButtonModal } from '../../components/widgets/ConnectButtonModal';
 
 import "./StakingCard.scss"
 
@@ -11,6 +12,40 @@ const StakingCard = (props) => {
   const signer = useSelector(signerState);
 
   const [detailShow, setDetailShow] = useState(false);
+
+  const StakingButton = () => {
+    // logMessage("StakingButton")
+    if (account) {
+      return <button className="default-btn w-100" disabled="disabled">Please wait...</button>;
+      // if (!ready) {
+      //   return <button className="default-btn w-100" disabled="disabled">Please wait...</button>;
+      // }
+      // else if (!(from.amount > 0 || to.amount > 0)) {
+      //   return <button className="default-btn w-100" disabled="disabled">Enter an amount</button>;
+      // }
+      // else if (error) {
+      //   return <button className="default-btn w-100" disabled>{error}</button>;
+      // }
+      // else if (needApprove) {
+      //   return <button className="default-btn w-100" disabled={!ready} onClick={() => approve(from.address)}>Approve</button>;
+      // }
+      // else if (isPath === PATH_WRAP_UNWRAP) {
+      //   return <button className="default-btn w-100" disabled={!ready} onClick={() => wrapping()}>
+      //     {to.address === "-" ? "Unwrap" : "Wrap"}
+      //   </button>;
+      // }
+      // else if (!confirmed) {
+      //   return <button className="default-btn w-100" disabled={!ready} onClick={() => confirm()}>Confirm</button>;
+      // }
+      // else {
+      //   return <button className="default-btn w-100" disabled={!ready} onClick={() => trade()}>Swap</button>;
+      // }
+    }
+    else {
+      return <ConnectButtonModal />;
+    }
+  };
+
   return (
     <>
       {!props.showMode ? (
@@ -101,7 +136,7 @@ const StakingCard = (props) => {
             <div className='three p-4 p-md-4'>
               <div>Start Farming</div>
               <div className='mt-2'>
-                <button className='w-100 default-btn'>Connect Wallet</button>
+                <StakingButton />
               </div>
             </div>
           </div>
