@@ -8,6 +8,9 @@ class numberHelper {
 
         return plus;
     }
+    static calculatePricescaleNew(price) {
+        return price;
+    }
 
     static calculateTokenscale(price) {
         let pricescale = 3 - this.calculatePricescale(price, 0);
