@@ -1,5 +1,6 @@
 import { getErrorMessage } from "../../../../utils/helpers";
 import { Requester } from "./../../../../requester";
+import config from '../../../../constants/config'
 
 export class HistoryProvider {
   constructor(pair, network) {
@@ -34,7 +35,7 @@ export class HistoryProvider {
   getOHLC(requestParams) {
     return new Promise((resolve, reject) => {
       Requester.getAsync(
-        "https://135.181.152.229/api/Charts/GetOHLC",
+        `${config.API_SERVER}api/Charts/GetOHLC`,
         requestParams
       )
         .then((response) => {

@@ -4,6 +4,7 @@ import NumberFormat from "react-number-format";
 import ReactTooltip from "react-tooltip";
 import ago from "s-ago";
 import numberHelper from "./../../numberHelper";
+import config from '../../constants/config'
 
 const renderContent = (trades, network) => {
   return (
@@ -174,7 +175,7 @@ const LatestTrades = (props) => {
   if (init) {
     setInit(false);
     const now = parseInt(new Date().getTime() / 1000);
-    Requester.getAsync("https://135.181.152.229/api/Charts/GetLatestTrades", {
+    Requester.getAsync(`${config.API_SERVER}api/Charts/GetLatestTrades`, {
       token0: props.pair.buyCurrency.address,
       token1: props.pair.sellCurrency.address,
       pair: props.pair.smartContract.address.address,
@@ -194,7 +195,7 @@ const LatestTrades = (props) => {
       if (!init && !loading) {
         const now = parseInt(new Date().getTime() / 1000);
         const response = await Requester.getAsync(
-          "https://135.181.152.229/api/Charts/GetLatestTrades",
+          `${config.API_SERVER}api/Charts/GetLatestTrades`,
           {
             token0: props.pair.buyCurrency.address,
             token1: props.pair.sellCurrency.address,

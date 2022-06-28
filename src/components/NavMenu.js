@@ -9,6 +9,7 @@ import networks from "../networks.json";
 import { Requester } from "./../requester";
 import * as action from "../store/actions";
 import * as selector from "../store/selectors";
+import config from '../constants/config'
 import { logMessage } from "../utils/helpers";
 
 const NavMenu = () => {
@@ -66,7 +67,7 @@ const NavMenu = () => {
 
   const handleSearch = async () => {
     const isToken = await Requester.getAsync(
-      "https://135.181.152.229/api/Search/IsToken",
+      `${config.API_SERVER}api/Search/IsToken`,
       { address: searchInput.current.value, network: networkName }
     );
     if (isToken) {

@@ -8,10 +8,11 @@ import { Exchange } from "./widgets/exchange/Exchange";
 import linq from "linq";
 import networks from "./../networks";
 import { ethers } from "ethers";
+import config from '../constants/config'
 
 async function getInfo(address, network, pairAddress) {
   const pairs = await Requester.getAsync(
-    "https://135.181.152.229/api/Charts/GetPairs",
+    `${config.API_SERVER}api/Charts/GetPairs`,
     { address: address, network: network.Name }
   );
   if (pairAddress == null) {
@@ -32,7 +33,7 @@ async function getInfo(address, network, pairAddress) {
   };
 
   const cmc = await Requester.getAsync(
-    "https://135.181.152.229/api/Charts/GetCMCInfo",
+    `${config.API_SERVER}api/Charts/GetCMCInfo`,
     { address: ethers.utils.getAddress(address), network: network.Name }
   );
 

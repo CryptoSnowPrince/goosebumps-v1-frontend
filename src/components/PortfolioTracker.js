@@ -7,6 +7,7 @@ import { TradesModal } from "./widgets/TradesModal";
 import PairHelper from "./../pairHelper";
 import numberHelper from "./../numberHelper";
 import NumberFormat from "react-number-format";
+import config from '../constants/config'
 
 const PortfolioTracker = () => {
   const navigate = useNavigate();
@@ -39,7 +40,7 @@ const PortfolioTracker = () => {
   const fetchLiveInfo = async (tokens) => {
     if (!tokens) {
       tokens = await Requester.postAsync(
-        "https://135.181.152.229/api/Portfolio/GetTrades",
+        `${config.API_SERVER}api/Portfolio/GetTrades`,
         { network: network.Name },
         addresses
       );
