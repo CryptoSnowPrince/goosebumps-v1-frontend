@@ -48,8 +48,9 @@ const Chart = (props) => {
         "symbol_search_hot_key",
         "header_compare",
       ],
-      timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-      //locale: Intl.DateTimeFormat().resolvedOptions().locale
+      timezone: "Etc/UTC",
+      // timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+      // locale: Intl.DateTimeFormat().resolvedOptions().locale,
     });
 
     return () => tvWidget?.remove();

@@ -3,7 +3,7 @@ import { HistoryProvider } from "./history-provider";
 import pairHelper from "../../../../pairHelper";
 
 export class UDFCompatibleDatafeed {
-  constructor(pair, network, updateFrequency = 1000) {
+  constructor(pair, network, updateFrequency = 20 * 1000) {
     this._pair = pair;
     this._network = network;
     this._historyProvider = new HistoryProvider(pair, network);
@@ -27,8 +27,6 @@ export class UDFCompatibleDatafeed {
           "8h",
           "12h",
           "1D",
-          "1W",
-          "1M",
         ],
         supports_marks: false,
         supports_timescale_marks: false,
@@ -42,14 +40,18 @@ export class UDFCompatibleDatafeed {
         onResolve({
           ticker: symbolName,
           name: symbolName,
+          currency_name: "USD",
           has_empty_bars: true,
-          pricescale: 10 ** pricescale,
-          volume_precision: 2,
+          pricescale: 10 ** 6,
+          //   pricescale: 10 ** pricescale,
+          volume_precision: 1,
           type: "crypto",
           session: "24x7",
           minmov: 1,
           has_intraday: true,
-          timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+          has_weekly_and_monthly: false,
+          timezone: "Etc/UTC",
+          // timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
           supported_resolutions: [
             "1",
             "5",
@@ -60,8 +62,6 @@ export class UDFCompatibleDatafeed {
             "8h",
             "12h",
             "1D",
-            "1W",
-            "1M",
           ],
         });
       });

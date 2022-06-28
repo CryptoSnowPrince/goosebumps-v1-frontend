@@ -12,6 +12,7 @@ export class HistoryProvider {
       token0: this._pair.buyCurrency.address,
       token1: this._pair.sellCurrency.address,
       pair: this._pair.smartContract.address.address,
+      exchange: this._pair.exchange.address.address,
       startTime: periodParams.from,
       endTime: periodParams.to,
       interval: resolution,
@@ -20,6 +21,8 @@ export class HistoryProvider {
     };
 
     this._lastResolution = resolution;
+
+    console.log(periodParams);
 
     // if (periodParams.countBack !== undefined) {
     //   requestParams.countBack = periodParams.countBack;
@@ -31,7 +34,7 @@ export class HistoryProvider {
   getOHLC(requestParams) {
     return new Promise((resolve, reject) => {
       Requester.getAsync(
-        "http://127.0.0.1:3001/api/Charts/GetOHLC",
+        "https://135.181.152.229/api/Charts/GetOHLC",
         requestParams
       )
         .then((response) => {

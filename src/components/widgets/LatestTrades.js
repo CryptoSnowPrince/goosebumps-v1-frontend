@@ -172,8 +172,9 @@ const LatestTrades = (props) => {
   }
 
   if (init) {
+    setInit(false);
     const now = parseInt(new Date().getTime() / 1000);
-    Requester.getAsync("http://127.0.0.1:3001/api/Charts/GetLatestTrades", {
+    Requester.getAsync("https://135.181.152.229/api/Charts/GetLatestTrades", {
       token0: props.pair.buyCurrency.address,
       token1: props.pair.sellCurrency.address,
       pair: props.pair.smartContract.address.address,
@@ -185,35 +186,36 @@ const LatestTrades = (props) => {
       setTrades(response);
       setLastTradesRequest(now);
       setLoading(false);
-      setInit(false);
     });
   }
 
   useEffect(() => {
     const tick = async () => {
       if (!init && !loading) {
-        // const now = parseInt(new Date().getTime() / 1000);
-        // const response = await Requester.getAsync(
-        //   "http://127.0.0.1:3001/api/Charts/GetLatestTrades",
-        //   {
-        //     token0: props.pair.buyCurrency.address,
-        //     token1: props.pair.sellCurrency.address,
-        //     pair: props.pair.smartContract.address.address,
-        //     network: props.network.Name,
-        //     startTime: lastTradesRequest,
-        //     endTime: now,
-        //   }
-        // );
+        const now = parseInt(new Date().getTime() / 1000);
+        const response = await Requester.getAsync(
+          "https://135.181.152.229/api/Charts/GetLatestTrades",
+          {
+            token0: props.pair.buyCurrency.address,
+            token1: props.pair.sellCurrency.address,
+            pair: props.pair.smartContract.address.address,
+            network: props.network.Name,
+            startTime: lastTradesRequest,
+            endTime: now,
+          }
+        );
 
-        // if (response != null && response.length) {
-        //   setTrades(response.concat(trades.trades).slice(0, 20));
-        //   setLastTradesRequest(now);
-        // }
+        if (response != null && response.length) {
+          // old source
+          // setTrades(response.concat(trades).slice(0, 20));
+          setTrades(response.concat(trades));
+          setLastTradesRequest(now);
+        }
         console.log("ready");
       }
-      id = setTimeout(tick, 3000);
+      // id = setTimeout(tick, 3000);
     };
-    let id = setTimeout(tick, 3000);
+    let id = setTimeout(tick, 60000);
     return () => clearTimeout(id);
   });
 
