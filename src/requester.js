@@ -6,7 +6,7 @@ export class Requester {
 
     return fetch(urlPath, {
       method: "GET",
-      credentials: "same-origin",
+      // credentials: "same-origin",
       headers: {
         "Content-Type": "application/json",
       },
@@ -19,7 +19,7 @@ export class Requester {
 
     return fetch(urlPath, {
       method: "POST",
-      credentials: "same-origin",
+      // credentials: "same-origin",
       headers: {
         "Content-Type": "application/json",
       },
