@@ -118,24 +118,24 @@ const Charts = (props) => {
                       network={network}
                     />
                   </div>
-                  <div
+                  {/* <div
                     className="d-none d-xl-block col-auto hider fa fa-arrow-right"
                     ref={hideExchangeRef}
                     onClick={onHideExchange}
-                  ></div>
+                  ></div> */}
                 </div>
               </div>
               <div
                 className="col-xl-5 order-3 order-xl-2 mt-4 mt-xl-0 ps-xl-0"
                 ref={exchangeRef}
               >
-                <Exchange
+                {/* <Exchange
                   network={network}
                   fromSymbol={info.pair.sellCurrency.symbol}
                   fromAddress={info.pair.sellCurrency.address}
                   toSymbol={info.pair.buyCurrency.symbol}
                   toAddress={info.pair.buyCurrency.address}
-                />
+                /> */}
               </div>
               <div className="col-12 order-2 order-xl-3 mt-4">
                 <LatestTrades pair={info.pair} network={network} />
