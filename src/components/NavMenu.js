@@ -1,5 +1,6 @@
 import React, { useRef, useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { ethers } from 'ethers';
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { Navbar, Container, Nav, NavItem } from "react-bootstrap";
 import { ConnectButtonModal } from "./widgets/ConnectButtonModal";
@@ -114,6 +115,11 @@ const NavMenu = () => {
               </select>
             </div>
             <input
+              onChange={(e) => {
+                if (ethers.utils.isAddress(e.target.value)) {
+                  handleSearch()
+                }
+              }}
               onSubmit={handleSearch}
               ref={searchInput}
               type="text"
@@ -135,9 +141,8 @@ const NavMenu = () => {
             <Nav className="mt-3 mt-lg-0">
               <NavItem>
                 <Link
-                  className={`nav-link mx-lg-2 mx-xl-3 ${
-                    pathname === "/" ? "active" : ""
-                  }`}
+                  className={`nav-link mx-lg-2 mx-xl-3 ${pathname === "/" ? "active" : ""
+                    }`}
                   to="/"
                 >
                   Home
@@ -145,9 +150,8 @@ const NavMenu = () => {
               </NavItem>
               <NavItem>
                 <Link
-                  className={`nav-link mx-lg-2 mx-xl-3 ${
-                    pathname === "/portfolio-tracker" ? "active" : ""
-                  }`}
+                  className={`nav-link mx-lg-2 mx-xl-3 ${pathname === "/portfolio-tracker" ? "active" : ""
+                    }`}
                   to="/portfolio-tracker"
                 >
                   Portfolio Tracker
@@ -155,9 +159,8 @@ const NavMenu = () => {
               </NavItem>
               <NavItem>
                 <Link
-                  className={`nav-link mx-lg-2 mx-xl-3 ${
-                    pathname === "/charts" ? "active" : ""
-                  }`}
+                  className={`nav-link mx-lg-2 mx-xl-3 ${pathname === "/charts" ? "active" : ""
+                    }`}
                   to="/charts"
                 >
                   Charts
@@ -166,11 +169,10 @@ const NavMenu = () => {
               <NavItem>
                 <Link
                   className={`nav-link mx-lg-2 mx-xl-3 
-                  ${
-                    pathname === "/stake" || pathname === "/farms"
+                  ${pathname === "/stake" || pathname === "/farms"
                       ? "active"
                       : ""
-                  }`}
+                    }`}
                   to="/stake"
                 >
                   Stake
@@ -179,16 +181,15 @@ const NavMenu = () => {
               <NavItem>
                 <Link
                   className={`nav-link mx-lg-2 mx-xl-3 
-                                    ${
-                                      pathname === "/dex" ||
-                                      pathname === "/liquidity" ||
-                                      pathname === "/liquidityAdd" ||
-                                      pathname.indexOf("/liquidityRemove") !==
-                                        -1 ||
-                                      pathname === "/liquidityFindToken"
-                                        ? "active"
-                                        : ""
-                                    }`}
+                                    ${pathname === "/dex" ||
+                      pathname === "/liquidity" ||
+                      pathname === "/liquidityAdd" ||
+                      pathname.indexOf("/liquidityRemove") !==
+                      -1 ||
+                      pathname === "/liquidityFindToken"
+                      ? "active"
+                      : ""
+                    }`}
                   to="/dex"
                 >
                   DEX
