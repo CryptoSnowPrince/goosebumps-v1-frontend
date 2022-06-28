@@ -65,7 +65,7 @@ const NavMenu = () => {
 
   const handleSearch = async () => {
     const isToken = await Requester.getAsync(
-      "http://127.0.0.1:3001/api/Search/IsToken",
+      "https://135.181.152.229/api/Search/IsToken",
       { address: searchInput.current.value, network: networkName }
     );
     if (isToken) {

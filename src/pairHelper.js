@@ -86,17 +86,14 @@ class PairHelper {
 
     let responses = await ethcallProvider.all(calls);
     const ethUsdReserves = responses[responses.length - 1];
-    console.log(responses);
     let result = {
       infos: [],
       ethPrice:
         this.formatUnits(ethUsdReserves._reserve1, network.USD.Decimals) /
         this.formatUnits(ethUsdReserves._reserve0, network.Currency.Decimals),
     };
-    console.log(calls);
     const callCounts = (calls.length - 1) / pairs.length;
 
-    console.log(callCounts);
     pairs.map((pair, index) => {
       const isETH =
         pair.sellCurrency.address === network.Currency.Address ||
@@ -148,7 +145,6 @@ class PairHelper {
             responses[index * callCounts + 6 + i],
             buyDecimals
           );
-          console.log(responses[index * callCounts + 5 + i]);
         }
         result.infos.push({
           reserv: reserv,

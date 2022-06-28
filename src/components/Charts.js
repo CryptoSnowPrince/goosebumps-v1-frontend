@@ -11,7 +11,7 @@ import { ethers } from "ethers";
 
 async function getInfo(address, network, pairAddress) {
   const pairs = await Requester.getAsync(
-    "http://127.0.0.1:3001/api/Charts/GetPairs",
+    "https://135.181.152.229/api/Charts/GetPairs",
     { address: address, network: network.Name }
   );
   if (pairAddress == null) {
@@ -32,7 +32,7 @@ async function getInfo(address, network, pairAddress) {
   };
 
   const cmc = await Requester.getAsync(
-    "http://127.0.0.1:3001/api/Charts/GetCMCInfo",
+    "https://135.181.152.229/api/Charts/GetCMCInfo",
     { address: ethers.utils.getAddress(address), network: network.Name }
   );
 
@@ -101,7 +101,7 @@ const Charts = (props) => {
         <div className="row">
           <div className="col-lg-3">
             <div className="overflow-hidden">
-              {/* <Info info={info} network={network} /> */}
+              <Info info={info} network={network} />
             </div>
           </div>
           <div className="col-lg-9 mt-4 mt-lg-0">
@@ -129,16 +129,16 @@ const Charts = (props) => {
                 className="col-xl-5 order-3 order-xl-2 mt-4 mt-xl-0 ps-xl-0"
                 ref={exchangeRef}
               >
-                {/* <Exchange
+                <Exchange
                   network={network}
                   fromSymbol={info.pair.sellCurrency.symbol}
                   fromAddress={info.pair.sellCurrency.address}
                   toSymbol={info.pair.buyCurrency.symbol}
                   toAddress={info.pair.buyCurrency.address}
-                /> */}
+                />
               </div>
               <div className="col-12 order-2 order-xl-3 mt-4">
-                {/* <LatestTrades pair={info.pair} network={network} /> */}
+                <LatestTrades pair={info.pair} network={network} />
               </div>
             </div>
           </div>
