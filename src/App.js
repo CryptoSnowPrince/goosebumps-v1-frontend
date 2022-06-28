@@ -29,7 +29,7 @@ const App = () => {
     <Layout>
       <Routes>
         <Route exact path='/' element={<Home />} />
-        <Route exact path='/stake' element={<Staking />} />
+        {/* <Route exact path='/stake' element={<Staking />} />
         <Route exact path='/liquidity' element={<Liquidity />} />
         <Route exact path='/liquidityAdd' element={<LiquidityAdd />} />
         <Route exact path='/liquidityRemove' element={<LiquidityRemove />}>
@@ -37,7 +37,18 @@ const App = () => {
         </Route>
         <Route exact path='/liquidityFindToken' element={<LiquidityFindToken />} />
         <Route exact path='/farms' element={<Farming />} />
-        <Route exact path='/bridge' element={<Bridge />} />
+        <Route exact path='/bridge' element={<Bridge />} /> */}
+        
+        <Route exact path='/stake' element={<Home />} />
+        <Route exact path='/liquidity' element={<Home />} />
+        <Route exact path='/liquidityAdd' element={<Home />} />
+        <Route exact path='/liquidityRemove' element={<Home />}>
+          <Route path='/liquidityRemove/:lpAddress' element={<Home />} />
+        </Route>
+        <Route exact path='/liquidityFindToken' element={<Home />} />
+        <Route exact path='/farms' element={<Home />} />
+        <Route exact path='/bridge' element={<Home />} />
+
         <Route path='/portfolio-tracker' element={<PortfolioTracker />}>
           <Route path='/portfolio-tracker/:networkName/:addresses' element={<PortfolioTracker />} />
         </Route>
@@ -46,7 +57,8 @@ const App = () => {
             <Route path='/charts/:networkName/:address/:pairAddress' element={<Charts />} />
           </Route>
         </Route>
-        <Route path='/dex' element={<DEX />} />
+        {/* <Route path='/dex' element={<DEX />} /> */}
+        <Route path='/dex' element={<Home />} />
       </Routes>
     </Layout>
   )
