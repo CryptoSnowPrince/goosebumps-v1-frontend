@@ -108,7 +108,8 @@ const Charts = (props) => {
             <div className="row">
               <div
                 ref={exchangeContainerRef}
-                className={"mb-4 mb-xl-0 order-1 col-xl-7"}
+                className={"mb-4 mb-xl-0 order-1 col-12"}
+                // className={"mb-4 mb-xl-0 order-1 col-xl-7"}
               >
                 <div className="row h-100 m-0">
                   <div className="col p-0">
