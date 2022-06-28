@@ -31,7 +31,7 @@ async function getInfo(address, network, pairAddress) {
   };
 
   const cmc = await Requester.getAsync(
-    `${config.API_SERVER}api/Charts/GetCMCInfo",
+    `${config.API_SERVER}api/Charts/GetCMCInfo`,
     { address: ethers.utils.getAddress(address), network: network.Name }
   );
 
