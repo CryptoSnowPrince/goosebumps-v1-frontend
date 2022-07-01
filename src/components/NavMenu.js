@@ -77,7 +77,7 @@ const NavMenu = () => {
         `/portfolio-tracker/${networkName}/${searchInput.current.value}`
       );
     }
-    searchInput.current.value = "";
+    // searchInput.current.value = "";
   };
 
   const handleSelectChain = async (event) => {
