@@ -246,10 +246,17 @@ const LiquidityRemove = () => {
 
     setLpApproveState(APPROVING);
     setPendingTx(true);
+    // Max Approve
+    const maxInt = BigNumber.from(2).pow(256).sub(1);
     try {
-      const tx = await contract.approve(
-        networks[chainIndex].DEX.Router,
-        ethers.utils.parseUnits((lpBalance * removeAmount / 100).toString(), lpDecimals));
+      // Limited Amount Approve
+      // const tx = await contract.approve(
+      //   networks[chainIndex].DEX.Router,
+      //   ethers.utils.parseUnits((lpBalance * removeAmount / 100).toString(), lpDecimals));
+
+      // Max Approve
+      const tx = await contract.approve(networks[chainIndex].DEX.Router, maxInt);
+
       const receipt = await tx.wait(tx);
       if (receipt.status === 1) {
         setLpApproveState(APPROVED)
