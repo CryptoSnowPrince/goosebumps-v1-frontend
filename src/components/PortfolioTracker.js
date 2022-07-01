@@ -8,6 +8,7 @@ import PairHelper from "./../pairHelper";
 import numberHelper from "./../numberHelper";
 import NumberFormat from "react-number-format";
 import config from '../constants/config'
+import { logMessage } from '../utils/helpers';
 
 const PortfolioTracker = () => {
   const navigate = useNavigate();
@@ -18,9 +19,9 @@ const PortfolioTracker = () => {
   const [currentParams, setParams] = useState();
   const network = params.networkName
     ? linq
-        .from(networks)
-        .where((x) => x.Name === params.networkName)
-        .single()
+      .from(networks)
+      .where((x) => x.Name === params.networkName)
+      .single()
     : null;
 
   const addresses = params.addresses?.split(",");
@@ -38,6 +39,7 @@ const PortfolioTracker = () => {
   };
 
   const fetchLiveInfo = async (tokens) => {
+    logMessage("fetchLiveInfo");
     if (!tokens) {
       tokens = await Requester.postAsync(
         `${config.API_SERVER}api/Portfolio/GetTrades`,
@@ -45,6 +47,7 @@ const PortfolioTracker = () => {
         addresses
       );
     }
+    logMessage("addresses: ", addresses);
     const infos = await PairHelper.getTokenInfos(
       linq
         .from(tokens)
@@ -78,8 +81,10 @@ const PortfolioTracker = () => {
           return buyPrice;
         });
 
-        trade.avarageBuyPriceOfHoldings = trade.buyPrices.length
-          ? linq
+        logMessage("trade.buyPrices: ", trade.buyPrices)
+        try {
+          trade.avarageBuyPriceOfHoldings = trade.buyPrices.length
+            ? linq
               .from(trade.buyPrices)
               .select((x) => x.priceUSD * x.amount)
               .toArray()
@@ -89,26 +94,32 @@ const PortfolioTracker = () => {
               .select((x) => x.amount)
               .toArray()
               .reduce((a, b) => a + b)
-          : 0;
+            : 0;
+        } catch (error) {
+          logMessage(error)
+          trade.avarageBuyPriceOfHoldings = 0;
+        }
 
         trade.profit =
           trade.transactionType === 2 || trade.transactionType === 4
             ? ((100 - localStorage.getItem("slippage_" + trade.tx)) / 100 ||
-                0) *
-                (trade.priceUSD * trade.tokenAmount) -
-              trade.avarageBuyPriceOfHoldings * trade.tokenAmount
+              0) *
+            (trade.priceUSD * trade.tokenAmount) -
+            trade.avarageBuyPriceOfHoldings * trade.tokenAmount
             : 0;
 
         return trade;
       });
-      console.log(item);
+      logMessage(item);
       const buysAndIns = linq
         .from(item.trades)
         .where((x) => x.transactionType === 1 || x.transactionType === 3);
 
-      item.avarageBuyPriceOfHoldings =
-        item.info.balance > 0
-          ? buysAndIns
+      logMessage("buysAndIns: ", buysAndIns)
+      try {
+        item.avarageBuyPriceOfHoldings =
+          item.info.balance > 0
+            ? buysAndIns
               .select((x) => x.priceUSD * x.holdingAmount)
               .toArray()
               .reduce((a, b) => a + b) /
@@ -116,19 +127,36 @@ const PortfolioTracker = () => {
               .select((x) => x.holdingAmount)
               .toArray()
               .reduce((a, b) => a + b)
-          : 0;
-      item.info.profit = {
-        holdings:
-          item.info.isETH && item.info.balance > 0
-            ? item.info.balance * item.info.price * infos.ethPrice -
+            : 0;
+      } catch (error) {
+        logMessage(error)
+        item.avarageBuyPriceOfHoldings = 0
+      }
+      logMessage("item.trades: ", item.trades)
+      try {
+        item.info.profit = {
+          holdings:
+            item.info.isETH && item.info.balance > 0
+              ? item.info.balance * item.info.price * infos.ethPrice -
               item.avarageBuyPriceOfHoldings * item.info.balance
-            : 0,
-        sold: linq
-          .from(item.trades)
-          .select((x) => x.profit)
-          .toArray()
-          .reduce((x, y) => x + y),
-      };
+              : 0,
+          sold: linq
+            .from(item.trades)
+            .select((x) => x.profit)
+            .toArray()
+            .reduce((x, y) => x + y),
+        };
+      } catch (error) {
+        logMessage(error)
+        item.info.profit = {
+          holdings:
+            item.info.isETH && item.info.balance > 0
+              ? item.info.balance * item.info.price * infos.ethPrice -
+              item.avarageBuyPriceOfHoldings * item.info.balance
+              : 0,
+          sold: 0,
+        };
+      }
 
       item.info.pricescale = numberHelper.calculatePricescale(
         item.info.isETH ? item.info.price * infos.ethPrice : item.info.price
