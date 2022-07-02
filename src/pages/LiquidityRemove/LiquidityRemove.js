@@ -348,7 +348,7 @@ const LiquidityRemove = () => {
       };
     }
     reUpdateLpInfo()
-  }, [chainIndex, lpAddress, account, updateLpInfo])
+  }, [chainIndex, lpAddress, account])
 
   useEffect(() => {
     if (ethers.utils.isAddress(params.lpAddress)) {
@@ -358,7 +358,7 @@ const LiquidityRemove = () => {
 
   useEffect(() => {
     isApproved();
-  }, [removeAmount, lpBalance, isApproved])
+  }, [removeAmount, lpBalance])
 
   useEffect(() => {
     switch (receiveNToken) {
