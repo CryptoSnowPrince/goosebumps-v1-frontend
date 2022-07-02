@@ -64,10 +64,10 @@ const LiquidityRemove = () => {
 
   const [lpAddress, setLpAddress] = useState("")
 
-  const [lpBalance, setLpBalance] = useState(0);
-  const [lpTotalSupply, setLpTotalSupply] = useState(0);
-  const [tokenABalance, setTokenABalance] = useState(0);
-  const [tokenBBalance, setTokenBBalance] = useState(0);
+  const [lpBalance, setLpBalance] = useState(BigNumber(0));
+  const [lpTotalSupply, setLpTotalSupply] = useState(BigNumber(0));
+  const [tokenABalance, setTokenABalance] = useState(BigNumber(0));
+  const [tokenBBalance, setTokenBBalance] = useState(BigNumber(0));
   const [tokenASymbol, setTokenASymbol] = useState("");
   const [tokenBSymbol, setTokenBSymbol] = useState("");
   // to remove liquidity
@@ -100,7 +100,6 @@ const LiquidityRemove = () => {
       if (ethers.utils.isAddress(account) && ethers.utils.isAddress(lpAddress) && lpAddress !== "0x0000000000000000000000000000000000000000") {
         var lpBalance = null;
         var lpTotalSupply = 0;
-        var lpDecimals = 0;
         var tokenAAddress = "";
         var tokenBAddress = "";
         var tokenABalance = null;
@@ -111,16 +110,15 @@ const LiquidityRemove = () => {
         var tokenBDecimals = 0;
 
         const contract = new Contract(lpAddress, pairAbi);
-        [lpBalance, lpTotalSupply, lpDecimals, tokenAAddress, tokenBAddress] = await ethcallProvider.all([
+        [lpBalance, lpTotalSupply, tokenAAddress, tokenBAddress] = await ethcallProvider.all([
           contract.balanceOf(account),
           contract.totalSupply(),
-          contract.decimals(),
           contract.token0(),
           contract.token1(),
         ]);
 
-        setLpBalance(ethers.utils.formatUnits(lpBalance, lpDecimals));
-        setLpTotalSupply(ethers.utils.formatUnits(lpTotalSupply, lpDecimals));
+        setLpBalance(lpBalance);
+        setLpTotalSupply(lpTotalSupply);
 
         const tokenAContract = new Contract(tokenAAddress, tokenAbi);
         const tokenBContract = new Contract(tokenBAddress, tokenAbi);
@@ -163,8 +161,8 @@ const LiquidityRemove = () => {
           tokenBContract.decimals(),
         ])
 
-        setTokenABalance(ethers.utils.formatUnits(tokenABalance, tokenADecimals));
-        setTokenBBalance(ethers.utils.formatUnits(tokenBBalance, tokenBDecimals));
+        setTokenABalance(tokenABalance);
+        setTokenBBalance(tokenBBalance);
 
         setTokenADecimals(tokenADecimals);
         setTokenBDecimals(tokenBDecimals);
@@ -176,10 +174,10 @@ const LiquidityRemove = () => {
           tokenBAddress.toLowerCase() === networks[chainIndex].Currency.Address.toLowerCase() ? networks[chainIndex].Currency.Name : tokenBSymbol
         )
       } else {
-        setLpBalance(0);
-        setLpTotalSupply(0);
-        setTokenABalance(0);
-        setTokenBBalance(0);
+        setLpBalance(BigNumber(0));
+        setLpTotalSupply(BigNumber(0));
+        setTokenABalance(BigNumber(0));
+        setTokenBBalance(BigNumber(0));
         setTokenASymbol("");
         setTokenBSymbol("");
         setTokenAAddr("");
@@ -190,10 +188,10 @@ const LiquidityRemove = () => {
         setTokenBAddrIsInList("");
       }
     } catch (error) {
-      setLpBalance(0);
-      setLpTotalSupply(0);
-      setTokenABalance(0);
-      setTokenBBalance(0);
+      setLpBalance(BigNumber(0));
+      setLpTotalSupply(BigNumber(0));
+      setTokenABalance(BigNumber(0));
+      setTokenBBalance(BigNumber(0));
       setTokenASymbol("");
       setTokenBSymbol("");
       setTokenAAddr("");
@@ -207,7 +205,7 @@ const LiquidityRemove = () => {
   };
 
   const isApproved = async () => {
-    if (!ethers.utils.isAddress(lpAddress) || parseFloat(lpBalance) <= 0 || parseFloat(removeAmount) <= 0) {
+    if (!ethers.utils.isAddress(lpAddress) || BigNumber.from(lpBalance).lte(0) || parseFloat(removeAmount) <= 0) {
       setLpApproveState(NOT_NEED_APPROVE)
       return;
     }
@@ -221,8 +219,7 @@ const LiquidityRemove = () => {
     setReady(false);
     try {
       var allowance = await contract.allowance(account, networks[chainIndex].DEX.Router);
-      if (BigNumber.from(ethers.utils.parseUnits((lpBalance * removeAmount / 100).toString(), lpDecimals))
-        .gt(allowance)) {
+      if ((BigNumber.from(lpBalance).mul(removeAmount).div(100)).gt(allowance)) {
         setLpApproveState(NEED_APPROVE)
       }
       else {
@@ -252,7 +249,7 @@ const LiquidityRemove = () => {
       // Limited Amount Approve
       // const tx = await contract.approve(
       //   networks[chainIndex].DEX.Router,
-      //   ethers.utils.parseUnits((lpBalance * removeAmount / 100).toString(), lpDecimals));
+      //   BigNumber.from(lpBalance).mul(removeAmount).div(100);
 
       // Max Approve
       const tx = await contract.approve(networks[chainIndex].DEX.Router, maxInt);
@@ -289,9 +286,9 @@ const LiquidityRemove = () => {
         var tx = await routerContract.removeLiquidity(
           tokenAAddr,
           tokenBAddr,
-          ethers.utils.parseUnits((lpBalance * removeAmount * 10).toString(), lpDecimals - 3), // fix
-          ethers.utils.parseUnits((tokenABalance * lpBalance * removeAmount * (100 - slippageTolerance) * 100 / lpTotalSupply).toString(), tokenADecimals - 6),
-          ethers.utils.parseUnits((tokenBBalance * lpBalance * removeAmount * (100 - slippageTolerance) * 100 / lpTotalSupply).toString(), tokenBDecimals - 6),
+          BigNumber.from(lpBalance).mul(removeAmount).div(100),
+          BigNumber.from(tokenABalance).mul(lpBalance).mul(removeAmount * (100 - slippageTolerance) / 10000).div(lpTotalSupply),
+          BigNumber.from(tokenBBalance).mul(lpBalance).mul(removeAmount * (100 - slippageTolerance) / 10000).div(lpTotalSupply),
           account,
           nowTimestamp + config.SWAP_DEADLINE, // deadline: 20 mins
         )
@@ -303,9 +300,9 @@ const LiquidityRemove = () => {
 
           tx = await routerContract.removeLiquidityETH(
             tokenBAddr,
-            ethers.utils.parseUnits((lpBalance * removeAmount * 10).toString(), lpDecimals - 3), // fix
-            ethers.utils.parseUnits((tokenBBalance * lpBalance * removeAmount * (100 - slippageTolerance) * 100 / lpTotalSupply).toString(), tokenBDecimals - 6),
-            ethers.utils.parseUnits((tokenABalance * lpBalance * removeAmount * (100 - slippageTolerance) * 100 / lpTotalSupply).toString(), tokenADecimals - 6),
+            BigNumber.from(lpBalance).mul(removeAmount).div(100),
+            BigNumber.from(tokenBBalance).mul(lpBalance).mul(removeAmount * (100 - slippageTolerance) / 10000).div(lpTotalSupply),
+            BigNumber.from(tokenABalance).mul(lpBalance).mul(removeAmount * (100 - slippageTolerance) / 10000).div(lpTotalSupply),
             account,
             nowTimestamp + config.SWAP_DEADLINE, // deadline: 20 mins
           )
@@ -317,9 +314,9 @@ const LiquidityRemove = () => {
 
           tx = await routerContract.removeLiquidityETH(
             tokenAAddr,
-            ethers.utils.parseUnits((lpBalance * removeAmount * 10).toString(), lpDecimals - 3), // fix
-            ethers.utils.parseUnits((tokenABalance * lpBalance * removeAmount * (100 - slippageTolerance) * 100 / lpTotalSupply).toString(), tokenADecimals - 6),
-            ethers.utils.parseUnits((tokenBBalance * lpBalance * removeAmount * (100 - slippageTolerance) * 100 / lpTotalSupply).toString(), tokenBDecimals - 6),
+            BigNumber.from(lpBalance).mul(removeAmount).div(100),
+            BigNumber.from(tokenABalance).mul(lpBalance).mul(removeAmount * (100 - slippageTolerance) / 10000).div(lpTotalSupply),
+            BigNumber.from(tokenBBalance).mul(lpBalance).mul(removeAmount * (100 - slippageTolerance) / 10000).div(lpTotalSupply),
             account,
             nowTimestamp + config.SWAP_DEADLINE, // deadline: 20 mins
           )
@@ -477,7 +474,7 @@ const LiquidityRemove = () => {
     <>
       <div className="dex">
         <DEXSubmenu />
-        {(parseFloat(lpBalance) > 0 && tokenASymbol !== "" && tokenBSymbol !== "") ?
+        {(BigNumber.from(lpBalance).gt(0) && tokenASymbol !== "" && tokenBSymbol !== "") ?
           <div id='liquidity' className={`${pendingTx ? "loading-state" : ""}`} >
             <LiquidityHeader
               title={`Remove ${tokenASymbol}-${tokenBSymbol} liquidity`}
@@ -530,8 +527,8 @@ const LiquidityRemove = () => {
                       </div>
                       <div style={{ color: "#40FF97" }}>
                         {
-                          parseFloat(lpTotalSupply) > 0 ?
-                            formatNumber(Number(tokenABalance * lpBalance / lpTotalSupply * removeAmount / 100), 1, 5) :
+                          BigNumber.from(lpTotalSupply).gt(0) ?
+                            formatNumber(BigNumber.from(tokenABalance).mul(lpBalance).div(lpTotalSupply).mul(removeAmount / 100).toNumber(), 1, 5) :
                             0
                         }
                       </div>
@@ -551,8 +548,8 @@ const LiquidityRemove = () => {
                       </div>
                       <div style={{ color: "#40FF97" }}>
                         {
-                          parseFloat(lpTotalSupply) > 0 ?
-                            formatNumber(Number(tokenBBalance * lpBalance / lpTotalSupply * removeAmount / 100), 1, 5) :
+                          BigNumber.from(lpTotalSupply).gt(0) ?
+                            formatNumber(BigNumber.from(tokenBBalance).mul(lpBalance).div(lpTotalSupply).mul(removeAmount / 100).toNumber(), 1, 5) :
                             0
                         }
                       </div>
@@ -639,8 +636,8 @@ const LiquidityRemove = () => {
                     </div>
                     <div style={{ color: "#40FF97" }}>
                       {
-                        parseFloat(tokenABalance) > 0 ?
-                          `${formatNumber(Number(tokenBBalance / tokenABalance), 1, 5)} ${tokenBSymbol}` :
+                        BigNumber.from(tokenABalance).gt(0) ?
+                          `${formatNumber(BigNumber.from(tokenBBalance).div(tokenABalance).toNumber(), 1, 5)} ${tokenBSymbol}` :
                           0
                       }
                     </div>
@@ -651,8 +648,8 @@ const LiquidityRemove = () => {
                     </div>
                     <div style={{ color: "#40FF97" }}>
                       {
-                        parseFloat(tokenBBalance) > 0 ?
-                          `${formatNumber(Number(tokenABalance / tokenBBalance), 1, 5)} ${tokenASymbol}` :
+                        BigNumber.from(tokenBBalance).gt(0) ?
+                          `${formatNumber(BigNumber.from(tokenABalance).div(tokenBBalance).toNumber(), 1, 5)} ${tokenASymbol}` :
                           0
                       }
                     </div>
