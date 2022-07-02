@@ -41,6 +41,7 @@ const lpDecimals = 18;
 const LiquidityRemove = () => {
   const account = useSelector(selector.accountState);
   const web3Provider = useSelector(selector.web3ProviderState);
+  const singer = useSelector(selector.signerState);
   const chainIndex = useSelector(selector.chainIndex);
 
   const [removeAmount, setRemoveAmount] = useState(50);
@@ -87,12 +88,11 @@ const LiquidityRemove = () => {
 
   const updateLpInfo = async () => {
     // logMessage("LiquidityRemove updateLpInfo")
-    const provider = new ethers.providers.JsonRpcProvider(networks[chainIndex].RPC);
     if (networks[chainIndex].chainId === 97) // When bsc testnet
     {
       setMulticallAddress(networks[chainIndex].chainId, networks[chainIndex].MulticallAddress);
     }
-    const ethcallProvider = new Provider(provider);
+    const ethcallProvider = new Provider(web3Provider);
 
     try {
       await ethcallProvider.init();
@@ -215,7 +215,7 @@ const LiquidityRemove = () => {
     const contract = new ethers.Contract(
       lpAddress,
       tokenAbi,
-      web3Provider
+      singer
     );
 
     setReady(false);
@@ -239,7 +239,7 @@ const LiquidityRemove = () => {
     const contract = new ethers.Contract(
       lpAddress,
       tokenAbi,
-      web3Provider.getSigner()
+      singer
     );
 
     setReady(false);
@@ -275,7 +275,7 @@ const LiquidityRemove = () => {
     const routerContract = new ethers.Contract(
       networks[chainIndex].DEX.Router,
       routerAbi,
-      web3Provider.getSigner()
+      singer
     );
 
     setReloadUserLp(1);
@@ -289,7 +289,7 @@ const LiquidityRemove = () => {
         var tx = await routerContract.removeLiquidity(
           tokenAAddr,
           tokenBAddr,
-          ethers.utils.parseUnits((lpBalance * removeAmount / 100).toString(), lpDecimals),
+          ethers.utils.parseUnits((lpBalance * removeAmount * 10).toString(), lpDecimals - 3), // fix
           ethers.utils.parseUnits((tokenABalance * lpBalance / lpTotalSupply * removeAmount * (100 - slippageTolerance) / 10000).toString(), tokenADecimals),
           ethers.utils.parseUnits((tokenBBalance * lpBalance / lpTotalSupply * removeAmount * (100 - slippageTolerance) / 10000).toString(), tokenBDecimals),
           account,
@@ -303,7 +303,7 @@ const LiquidityRemove = () => {
 
           tx = await routerContract.removeLiquidityETH(
             tokenBAddr,
-            ethers.utils.parseUnits((lpBalance * removeAmount / 100).toString(), lpDecimals),
+            ethers.utils.parseUnits((lpBalance * removeAmount * 10).toString(), lpDecimals - 3), // fix
             ethers.utils.parseUnits((tokenBBalance * lpBalance / lpTotalSupply * removeAmount * (100 - slippageTolerance) / 10000).toString(), tokenBDecimals),
             ethers.utils.parseUnits((tokenABalance * lpBalance / lpTotalSupply * removeAmount * (100 - slippageTolerance) / 10000).toString(), tokenADecimals),
             account,
@@ -317,7 +317,7 @@ const LiquidityRemove = () => {
 
           tx = await routerContract.removeLiquidityETH(
             tokenAAddr,
-            ethers.utils.parseUnits((lpBalance * removeAmount / 100).toString(), lpDecimals),
+            ethers.utils.parseUnits((lpBalance * removeAmount * 10).toString(), lpDecimals - 3), // fix
             ethers.utils.parseUnits((tokenABalance * lpBalance / lpTotalSupply * removeAmount * (100 - slippageTolerance) / 10000).toString(), tokenADecimals),
             ethers.utils.parseUnits((tokenBBalance * lpBalance / lpTotalSupply * removeAmount * (100 - slippageTolerance) / 10000).toString(), tokenBDecimals),
             account,
