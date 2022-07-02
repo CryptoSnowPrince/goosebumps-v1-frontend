@@ -417,7 +417,7 @@ const LiquidityRemove = () => {
       default:
         break;
     }
-  }, [receiveNToken, chainIndex, tokenAAddrIsInList, tokenBAddrIsInList])
+  }, [receiveNToken])
 
   const SubmitButton = () => {
     // logMessage("SubmitButton")
@@ -636,7 +636,7 @@ const LiquidityRemove = () => {
                       {
                         (BigNumber.isBigNumber(tokenABalance) && BigNumber.isBigNumber(tokenBBalance) && (tokenABalance).gt(0)) ?
                           `${formatNumber(Number(
-                            (ethers.utils.formatUnits(tokenBBalance, tokenBDecimals))/(ethers.utils.formatUnits(tokenABalance, tokenADecimals))
+                            (ethers.utils.formatUnits(tokenBBalance, tokenBDecimals)) / (ethers.utils.formatUnits(tokenABalance, tokenADecimals))
                           ), 1, 5)} ${tokenBSymbol}` :
                           0
                       }
@@ -650,7 +650,7 @@ const LiquidityRemove = () => {
                       {
                         (BigNumber.isBigNumber(tokenABalance) && BigNumber.isBigNumber(tokenBBalance) && (tokenBBalance).gt(0)) ?
                           `${formatNumber(Number(
-                            (ethers.utils.formatUnits(tokenABalance, tokenADecimals))/(ethers.utils.formatUnits(tokenBBalance, tokenBDecimals))
+                            (ethers.utils.formatUnits(tokenABalance, tokenADecimals)) / (ethers.utils.formatUnits(tokenBBalance, tokenBDecimals))
                           ), 1, 5)} ${tokenASymbol}` :
                           0
                       }
