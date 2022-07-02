@@ -290,8 +290,8 @@ const LiquidityRemove = () => {
           tokenAAddr,
           tokenBAddr,
           ethers.utils.parseUnits((lpBalance * removeAmount * 10).toString(), lpDecimals - 3), // fix
-          ethers.utils.parseUnits((tokenABalance * lpBalance / lpTotalSupply * removeAmount * (100 - slippageTolerance) / 10).toString(), tokenADecimals - 3),
-          ethers.utils.parseUnits((tokenBBalance * lpBalance / lpTotalSupply * removeAmount * (100 - slippageTolerance) / 10).toString(), tokenBDecimals - 3),
+          ethers.utils.parseUnits((tokenABalance * lpBalance * removeAmount * (100 - slippageTolerance) * 100 / lpTotalSupply).toString(), tokenADecimals - 6),
+          ethers.utils.parseUnits((tokenBBalance * lpBalance * removeAmount * (100 - slippageTolerance) * 100 / lpTotalSupply).toString(), tokenBDecimals - 6),
           account,
           nowTimestamp + config.SWAP_DEADLINE, // deadline: 20 mins
         )
@@ -304,8 +304,8 @@ const LiquidityRemove = () => {
           tx = await routerContract.removeLiquidityETH(
             tokenBAddr,
             ethers.utils.parseUnits((lpBalance * removeAmount * 10).toString(), lpDecimals - 3), // fix
-            ethers.utils.parseUnits((tokenBBalance * lpBalance / lpTotalSupply * removeAmount * (100 - slippageTolerance) / 10).toString(), tokenBDecimals - 3),
-            ethers.utils.parseUnits((tokenABalance * lpBalance / lpTotalSupply * removeAmount * (100 - slippageTolerance) / 10).toString(), tokenADecimals - 3),
+            ethers.utils.parseUnits((tokenBBalance * lpBalance * removeAmount * (100 - slippageTolerance) * 100 / lpTotalSupply).toString(), tokenBDecimals - 6),
+            ethers.utils.parseUnits((tokenABalance * lpBalance * removeAmount * (100 - slippageTolerance) * 100 / lpTotalSupply).toString(), tokenADecimals - 6),
             account,
             nowTimestamp + config.SWAP_DEADLINE, // deadline: 20 mins
           )
@@ -318,8 +318,8 @@ const LiquidityRemove = () => {
           tx = await routerContract.removeLiquidityETH(
             tokenAAddr,
             ethers.utils.parseUnits((lpBalance * removeAmount * 10).toString(), lpDecimals - 3), // fix
-            ethers.utils.parseUnits((tokenABalance * lpBalance / lpTotalSupply * removeAmount * (100 - slippageTolerance) / 10).toString(), tokenADecimals - 3),
-            ethers.utils.parseUnits((tokenBBalance * lpBalance / lpTotalSupply * removeAmount * (100 - slippageTolerance) / 10).toString(), tokenBDecimals - 3),
+            ethers.utils.parseUnits((tokenABalance * lpBalance * removeAmount * (100 - slippageTolerance) * 100 / lpTotalSupply).toString(), tokenADecimals - 6),
+            ethers.utils.parseUnits((tokenBBalance * lpBalance * removeAmount * (100 - slippageTolerance) * 100 / lpTotalSupply).toString(), tokenBDecimals - 6),
             account,
             nowTimestamp + config.SWAP_DEADLINE, // deadline: 20 mins
           )
