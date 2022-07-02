@@ -22,7 +22,7 @@ const LiquidityFindToken = () => {
   const chainIndex = useSelector(selector.chainIndex);
   const account = useSelector(selector.accountState);
 
-  const [newPool, setNewPool] = useState(false);
+  // const [newPool, setNewPool] = useState(false);
   const [lpAddress, setLpAddress] = useState("")
   const [lpBalance, setLpBalance] = useState(0)
   const [ready, setReady] = useState(true)
@@ -114,15 +114,15 @@ const LiquidityFindToken = () => {
       const pairAddress = await contract.getPair(tokenAAddress, tokenBAddress)
       setLpAddress(pairAddress);
       if (pairAddress === "0x0000000000000000000000000000000000000000") {
-        setNewPool(true)
+        // setNewPool(true)
       } else {
         const tokenAContract = new ethers.Contract(tokenAAddress, tokenAbi, provider);
         const tokenABalance = await tokenAContract.balanceOf(pairAddress);
 
         if (parseInt(tokenABalance._hex) > 0) {
-          setNewPool(false)
+          // setNewPool(false)
         } else {
-          setNewPool(true)
+          // setNewPool(true)
         }
 
         const pairContract = new ethers.Contract(pairAddress, pairAbi, provider);
@@ -148,7 +148,7 @@ const LiquidityFindToken = () => {
 
       }
     } catch (error) {
-      setNewPool(false)
+      // setNewPool(false)
       setLpAddress("");
       setLpBalance(0);
       logMessage("get Pair Address err: ", error)

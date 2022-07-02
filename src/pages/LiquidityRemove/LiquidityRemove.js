@@ -36,8 +36,6 @@ const W_NATIVE_TOKEN = 1;
 const GENERAL_TOKEN = 2;
 const INITIAL_TOKEN = 3;
 
-const lpDecimals = 18;
-
 const LiquidityRemove = () => {
   const account = useSelector(selector.accountState);
   const web3Provider = useSelector(selector.web3ProviderState);
@@ -350,7 +348,7 @@ const LiquidityRemove = () => {
       };
     }
     reUpdateLpInfo()
-  }, [chainIndex, lpAddress, account])
+  }, [chainIndex, lpAddress, account, updateLpInfo])
 
   useEffect(() => {
     if (ethers.utils.isAddress(params.lpAddress)) {
@@ -360,7 +358,7 @@ const LiquidityRemove = () => {
 
   useEffect(() => {
     isApproved();
-  }, [removeAmount, lpBalance])
+  }, [removeAmount, lpBalance, isApproved])
 
   useEffect(() => {
     switch (receiveNToken) {
@@ -419,7 +417,7 @@ const LiquidityRemove = () => {
       default:
         break;
     }
-  }, [receiveNToken])
+  }, [receiveNToken, chainIndex, tokenAAddrIsInList, tokenBAddrIsInList])
 
   const SubmitButton = () => {
     // logMessage("SubmitButton")
