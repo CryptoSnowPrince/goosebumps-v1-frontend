@@ -1,5 +1,5 @@
 import { getErrorMessage } from "../../../../utils/helpers";
-import { Requester } from "./../../../../requester";
+import { Requester } from "../../../../requester";
 
 export class HistoryProvider {
   constructor(pair, network) {

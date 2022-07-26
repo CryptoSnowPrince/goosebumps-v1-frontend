@@ -6,7 +6,7 @@ import { Info } from "./widgets/chart/Info";
 import { LatestTrades } from "./widgets/LatestTrades";
 import { Exchange } from "./widgets/exchange/Exchange";
 import linq from "linq";
-import networks from "./../networks";
+import networks from "../networks";
 import { ethers } from "ethers";
 
 async function getInfo(address, network, pairAddress) {

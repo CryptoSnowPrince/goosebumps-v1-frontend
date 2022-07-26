@@ -3,7 +3,7 @@ import { Requester } from "../../requester";
 import NumberFormat from "react-number-format";
 import ReactTooltip from "react-tooltip";
 import ago from "s-ago";
-import numberHelper from "./../../numberHelper";
+import numberHelper from "../../numberHelper";
 
 const renderContent = (trades, network) => {
   return (

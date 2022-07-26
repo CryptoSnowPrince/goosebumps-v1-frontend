@@ -2,10 +2,10 @@ import React, { useState, useEffect } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import linq from "linq";
 import { Requester } from "../requester";
-import networks from "./../networks";
+import networks from "../networks";
 import { TradesModal } from "./widgets/TradesModal";
-import PairHelper from "./../pairHelper";
-import numberHelper from "./../numberHelper";
+import PairHelper from "../pairHelper";
+import numberHelper from "../numberHelper";
 import NumberFormat from "react-number-format";
 
 const PortfolioTracker = () => {

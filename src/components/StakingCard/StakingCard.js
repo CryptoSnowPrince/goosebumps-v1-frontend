@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { BiHelpCircle } from 'react-icons/bi';
 import { useSelector } from 'react-redux';
 import { accountState, web3ProviderState, signerState } from '../../store/selectors';
-import { ConnectButtonModal } from '../../components/widgets/ConnectButtonModal';
+import { ConnectButtonModal } from '../widgets/ConnectButtonModal';
 
 import "./StakingCard.scss"
 
