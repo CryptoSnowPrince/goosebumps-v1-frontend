@@ -69,4 +69,3 @@ node_modules/
 package-lock.json
 yarn.lock
 .firebaserc
-firebase.json
