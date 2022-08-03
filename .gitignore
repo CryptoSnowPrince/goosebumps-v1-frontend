@@ -68,3 +68,4 @@ node_modules/
 .vscode/settings.json
 package-lock.json
 .firebaserc
+firebase.json
